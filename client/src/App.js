@@ -10,6 +10,8 @@ import {
   Route
 } from 'react-router-dom'
 
+import Footer from './components/Footer'
+
 // import store from './store'
 import Index from './components/Index.js'
 
@@ -20,7 +22,7 @@ class App extends Component {
         <div className="App">
           <Router>
             <div>
-              <Route exact path="/" component={Index}/>
+              <Route exact path="/" component={Footer}/>
               {/* <Route exact path="/home" component={Home}/> */}
             </div>
           </Router>
