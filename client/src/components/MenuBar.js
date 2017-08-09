@@ -9,6 +9,8 @@ const MenuBar = () => {
             <li className="is-active"><a>Take Absent</a></li>
             <li><a>Data Absent</a></li>
             <li><a>Add New Student</a></li>
+            <li><a>My Profile</a></li>
+            <li><a>Log Out</a></li>
           </ul>
         </div>
       </div>
