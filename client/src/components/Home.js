@@ -23,7 +23,7 @@ export default class App extends Component {
           <div style={{width: "70%", margin: "auto", paddingTop: "20px", paddingBottom: "20px"}}>
             <div className="field">
               <h2 className="title is-2">Hi, { this.state.currUser }</h2>
-              <p className="subtitle is-3">Who do you want to absent?</p>
+              <p className="subtitle is-3">Mau absen kelas mana nih?</p>
             </div>
             <div className="" style={{backgroundColor: "#ff7070", borderRadius: "5px", display: "flex", justifyContent: "space-around", padding: "10px"}}>
               <div className="">
@@ -53,7 +53,7 @@ export default class App extends Component {
               <div className="">
                 <div className="select">
                   <select id="pertemuan">
-                    <option>Pertemuan Ke</option>
+                    <option>Encounter</option>
                     { this.state.pertemuanList.map( (x, idx) => {
                       return (
                         <option key={idx} value={x}> { x } </option>
@@ -87,20 +87,27 @@ export default class App extends Component {
   }
 
   absenGo(e) {
-    let self = this;
-    let files = e.target.files || e.dataTransfer.files;
-    if (!files.length) {
-      return;
-    }
-    let storage = firebase.storage()
-    let storageRef = storage.ref(`/fotoAbsen/${e.target.files[0].name}`)
-    storageRef.put(e.target.files[0])
-    .then(function() {
-      storageRef.getDownloadURL().then(function(url) {
-        self.setState({
-          hasilGo: `mengabsen kelas ${document.getElementById("kelas").value}, mata pelajaran ${document.getElementById("subject").value}, pertemuan ke-${document.getElementById("pertemuan").value}\nimage url : ${url}`
-        })
-      })
+    var imageCapture;
+    imageCapture.takePhoto()
+    .then(blob => createImageBitmap(blob))
+    .then(imageBitmap => {
+      console.log(imageBitmap);
     })
+    .catch(error => console.log(error));
+    // let self = this;
+    // let files = e.target.files || e.dataTransfer.files;
+    // if (!files.length) {
+    //   return;
+    // }
+    // let storage = firebase.storage()
+    // let storageRef = storage.ref(`/fotoAbsen/${e.target.files[0].name}`)
+    // storageRef.put(e.target.files[0])
+    // .then(function() {
+    //   storageRef.getDownloadURL().then(function(url) {
+    //     self.setState({
+    //       hasilGo: `mengabsen kelas ${document.getElementById("kelas").value}, mata pelajaran ${document.getElementById("subject").value}, pertemuan ke-${document.getElementById("pertemuan").value}\nimage url : ${url}`
+    //     })
+    //   })
+    // })
   }
 }
