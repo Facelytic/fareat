@@ -22,3 +22,33 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+
+.login {
+  padding: 30px;
+  /*height: 400px;*/
+  width: auto;
+  /*border-radius: 10px;*/
+}
+.column is-8 is-offset-2 {
+  justify-content: flex-end;
+  /*align-items: flex-end;*/
+  /*align-self: flex-end;*/
+  /*text-align: right;*/
+}
+.button {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.input {
+  border-radius: 10px;
+}
+.columns {
+  margin-top: 10px;
+}
+
+.main {
+  padding: 50px;
+  margin-top: 12.5px;
+}
