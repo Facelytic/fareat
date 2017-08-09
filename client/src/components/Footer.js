@@ -2,8 +2,8 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <footer>
-      <div className="columns">
+    <div className="Footer">
+      <div className="columns" style={{margin: 0}}>
         <div className="column is-12">
           <p className="getintouch">Get in touch! We`d love to hear from you.</p>
           <div className="columns">
@@ -18,7 +18,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
+    </div>
   )
 }
 

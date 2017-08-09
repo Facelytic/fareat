@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import * as firebase from 'firebase'
 
 import Header from './Header'
+import Footer from './Footer'
+import MenuBar from './MenuBar'
 
 export default class App extends Component {
   constructor() {
@@ -17,9 +19,10 @@ export default class App extends Component {
 
   render() {
     return (
-      <div style={{backgroundColor: "#ECF0F1"}}>
+      <div>
         <Header></Header>
-        <div style={{width: "80%", margin: "auto", padding: "3%"}}>
+        <MenuBar></MenuBar>
+        <div style={{backgroundColor: "#ECF0F1", width: "80%", margin: "auto", padding: "3%"}}>
           <div style={{width: "70%", margin: "auto", paddingTop: "20px", paddingBottom: "20px"}}>
             <div className="field">
               <h2 className="title is-2">Hi, { this.state.currUser }</h2>
@@ -82,6 +85,7 @@ export default class App extends Component {
             <p className="title is-4">{this.state.hasilGo}</p>
           </div>
         </div>
+        {/* <Footer></Footer> */}
       </div>
     );
   }

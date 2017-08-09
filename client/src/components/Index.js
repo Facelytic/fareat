@@ -5,10 +5,11 @@ import {
 
 import bg from '../bg.jpg'
 import Header from './Header'
+import Footer from './Footer'
 
 const Index = () => {
   return (
-    <div>
+    <div className="index">
       <Header></Header>
       <div className="main" style={styles.body}>
         <div className="columns">
@@ -65,6 +66,7 @@ const Index = () => {
           </div>
         </div>
       </div>
+      <Footer></Footer>
     </div>
   )
 }
@@ -77,7 +79,7 @@ const styles = {
   body: {
     // backgroundImage: "url(http://i.imgur.com/bGV9S8C.jpg)",
     backgroundColor: "#ECF0F1",
-    height:'500px',
+    height:'600px',
     width: 'auto',
     // backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
