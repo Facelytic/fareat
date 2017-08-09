@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import 'bulma/css/bulma.css';
+
 import logo from './logo.svg';
 import './App.css';
 
