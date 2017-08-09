@@ -3,6 +3,7 @@ import * as firebase from 'firebase'
 
 import Header from './Header'
 import Footer from './Footer'
+import MenuBar from './MenuBar'
 
 export default class App extends Component {
   constructor() {
@@ -18,9 +19,10 @@ export default class App extends Component {
 
   render() {
     return (
-      <div style={{backgroundColor: "#ECF0F1"}}>
+      <div>
         <Header></Header>
-        <div style={{width: "80%", margin: "auto", padding: "3%"}}>
+        <MenuBar></MenuBar>
+        <div style={{backgroundColor: "#ECF0F1", width: "80%", margin: "auto", padding: "3%"}}>
           <div style={{width: "70%", margin: "auto", paddingTop: "20px", paddingBottom: "20px"}}>
             <div className="field">
               <h2 className="title is-2">Hi, { this.state.currUser }</h2>
@@ -89,20 +91,27 @@ export default class App extends Component {
   }
 
   absenGo(e) {
-    let self = this;
-    let files = e.target.files || e.dataTransfer.files;
-    if (!files.length) {
-      return;
-    }
-    let storage = firebase.storage()
-    let storageRef = storage.ref(`/fotoAbsen/${e.target.files[0].name}`)
-    storageRef.put(e.target.files[0])
-    .then(function() {
-      storageRef.getDownloadURL().then(function(url) {
-        self.setState({
-          hasilGo: `mengabsen kelas ${document.getElementById("kelas").value}, mata pelajaran ${document.getElementById("subject").value}, pertemuan ke-${document.getElementById("pertemuan").value}\nimage url : ${url}`
-        })
-      })
+    var imageCapture;
+    imageCapture.takePhoto()
+    .then(blob => createImageBitmap(blob))
+    .then(imageBitmap => {
+      const canvas = document.querySelector('#takePhotoCanvas');
+      console.log(imageBitmap);
     })
+    // let self = this;
+    // let files = e.target.files || e.dataTransfer.files;
+    // if (!files.length) {
+    //   return;
+    // }
+    // let storage = firebase.storage()
+    // let storageRef = storage.ref(`/fotoAbsen/${e.target.files[0].name}`)
+    // storageRef.put(e.target.files[0])
+    // .then(function() {
+    //   storageRef.getDownloadURL().then(function(url) {
+    //     self.setState({
+    //       hasilGo: `mengabsen kelas ${document.getElementById("kelas").value}, mata pelajaran ${document.getElementById("subject").value}, pertemuan ke-${document.getElementById("pertemuan").value}\nimage url : ${url}`
+    //     })
+    //   })
+    // })
   }
 }
