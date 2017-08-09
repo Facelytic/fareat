@@ -17,21 +17,16 @@ export default class App extends Component {
 
   render() {
     return (
-      <div style={{backgroundColor: "#ECF0F1", height: "100vh"}}>
+      <div style={{backgroundColor: "#ECF0F1"}}>
         <Header></Header>
-        <div style={{width: "80%", border: "2px black solid", margin: "auto", padding: "3%"}}>
-          <h2 className="title is-2">Hi, { this.state.currUser }</h2>
-          <div style={{height: "100px", width: "100px", backgroundColor: "black"}}></div>
-
-          {/* <div className="columns">
-            <h2 className="title is-2">Hi, { this.state.currUser }</h2>
-          </div>
-          <div style={{width: "50%", margin: "auto", paddingTop: "20px", paddingBottom: "20px"}}>
+        <div style={{width: "80%", margin: "auto", padding: "3%"}}>
+          <div style={{width: "70%", margin: "auto", paddingTop: "20px", paddingBottom: "20px"}}>
             <div className="field">
+              <h2 className="title is-2">Hi, { this.state.currUser }</h2>
               <p className="subtitle is-3">Who do you want to absent?</p>
             </div>
-            <div className="columns field" style={{backgroundColor: "#ff7070", borderRadius: "5px"}}>
-              <div className="column">
+            <div className="" style={{backgroundColor: "#ff7070", borderRadius: "5px", display: "flex", justifyContent: "space-around", padding: "10px"}}>
+              <div className="">
                 <div className="select">
                   <select id="subject">
                     <option>Select Subject</option>
@@ -43,7 +38,7 @@ export default class App extends Component {
                   </select>
                 </div>
               </div>
-              <div className="column">
+              <div className="">
                 <div className="select">
                   <select id="kelas">
                     <option>Select Class</option>
@@ -55,7 +50,7 @@ export default class App extends Component {
                   </select>
                 </div>
               </div>
-              <div className="column">
+              <div className="">
                 <div className="select">
                   <select id="pertemuan">
                     <option>Pertemuan Ke</option>
@@ -67,7 +62,7 @@ export default class App extends Component {
                   </select>
                 </div>
               </div>
-              <div className="column">
+              <div className="">
                 <div className="field">
                   <div className="file is-danger">
                     <label className="file-label" style={{border: "2px white solid", borderRadius: "5px"}}>
@@ -85,7 +80,7 @@ export default class App extends Component {
           </div>
           <div>
             <p className="title is-4">{this.state.hasilGo}</p>
-          </div> */}
+          </div>
         </div>
       </div>
     );
