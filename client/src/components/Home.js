@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import * as firebase from 'firebase'
 
 import Header from './Header'
+import Footer from './Footer'
 
 export default class App extends Component {
   constructor() {
@@ -87,6 +88,7 @@ export default class App extends Component {
             <p className="title is-4">{this.state.hasilGo}</p>
           </div> */}
         </div>
+        {/* <Footer></Footer> */}
       </div>
     );
   }
