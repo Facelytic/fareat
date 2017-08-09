@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase'
 
+import Header from './Header'
+
 export default class App extends Component {
   constructor() {
     super()
@@ -15,73 +17,76 @@ export default class App extends Component {
 
   render() {
     return (
-      <div>
-      <div style={{height: "20vh", backgroundColor: "#000", width: "100%", textAlign: "center"}}>
-        <h1 className="title is-1" style={{color: "white"}}>HEADER</h1>
-      </div>
-      <div style={{backgroundColor: "#ECF0F1", height: "80vh"}}>
-        <h2 className="title is-2">Hi, { this.state.currUser }</h2>
-        <div style={{width: "50%", margin: "auto", paddingTop: "20px", paddingBottom: "20px"}}>
-          <div className="field">
-            <p className="subtitle is-3">Who do you want to absent?</p>
+      <div style={{backgroundColor: "#ECF0F1", height: "100vh"}}>
+        <Header></Header>
+        <div style={{width: "80%", border: "2px black solid", margin: "auto", padding: "3%"}}>
+          <h2 className="title is-2">Hi, { this.state.currUser }</h2>
+          <div style={{height: "100px", width: "100px", backgroundColor: "black"}}></div>
+
+          {/* <div className="columns">
+            <h2 className="title is-2">Hi, { this.state.currUser }</h2>
           </div>
-          <div className="columns field" style={{backgroundColor: "#ff7070", borderRadius: "5px"}}>
-            <div className="column">
-              <div className="select">
-                <select id="subject">
-                  <option>Select Subject</option>
-                  { this.state.subjectList.map( (x, idx) => {
-                    return (
-                      <option key={idx} value={x}> { x } </option>
-                    )
-                  })}
-                </select>
-              </div>
+          <div style={{width: "50%", margin: "auto", paddingTop: "20px", paddingBottom: "20px"}}>
+            <div className="field">
+              <p className="subtitle is-3">Who do you want to absent?</p>
             </div>
-            <div className="column">
-              <div className="select">
-                <select id="kelas">
-                  <option>Select Class</option>
-                  { this.state.classList.map( (x, idx) => {
-                    return (
-                      <option key={idx} value={x}> { x } </option>
-                    )
-                  })}
-                </select>
+            <div className="columns field" style={{backgroundColor: "#ff7070", borderRadius: "5px"}}>
+              <div className="column">
+                <div className="select">
+                  <select id="subject">
+                    <option>Select Subject</option>
+                    { this.state.subjectList.map( (x, idx) => {
+                      return (
+                        <option key={idx} value={x}> { x } </option>
+                      )
+                    })}
+                  </select>
+                </div>
               </div>
-            </div>
-            <div className="column">
-              <div className="select">
-                <select id="pertemuan">
-                  <option>Pertemuan Ke</option>
-                  { this.state.pertemuanList.map( (x, idx) => {
-                    return (
-                      <option key={idx} value={x}> { x } </option>
-                    )
-                  })}
-                </select>
+              <div className="column">
+                <div className="select">
+                  <select id="kelas">
+                    <option>Select Class</option>
+                    { this.state.classList.map( (x, idx) => {
+                      return (
+                        <option key={idx} value={x}> { x } </option>
+                      )
+                    })}
+                  </select>
+                </div>
               </div>
-            </div>
-            <div className="column">
-              <div className="field">
-                <div className="file is-danger">
-                  <label className="file-label" style={{border: "2px white solid", borderRadius: "5px"}}>
-                    <input className="file-input" type="file" name="resume" onChange={(e) => this.absenGo(e)}/>
-                    <span className="file-cta">
-                      <span className="file-label">
-                        Absent!
+              <div className="column">
+                <div className="select">
+                  <select id="pertemuan">
+                    <option>Pertemuan Ke</option>
+                    { this.state.pertemuanList.map( (x, idx) => {
+                      return (
+                        <option key={idx} value={x}> { x } </option>
+                      )
+                    })}
+                  </select>
+                </div>
+              </div>
+              <div className="column">
+                <div className="field">
+                  <div className="file is-danger">
+                    <label className="file-label" style={{border: "2px white solid", borderRadius: "5px"}}>
+                      <input className="file-input" type="file" name="resume" onChange={(e) => this.absenGo(e)}/>
+                      <span className="file-cta">
+                        <span className="file-label">
+                          Absent!
+                        </span>
                       </span>
-                    </span>
-                  </label>
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          <div>
+            <p className="title is-4">{this.state.hasilGo}</p>
+          </div> */}
         </div>
-        <div>
-          <p className="title is-4">{this.state.hasilGo}</p>
-        </div>
-      </div>
       </div>
     );
   }

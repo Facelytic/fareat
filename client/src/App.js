@@ -10,7 +10,7 @@ import {
   BrowserRouter as Router,
   Route
 } from 'react-router-dom'
-
+import './App.css';
 // import store from './store'
 import Index from './components/Index.js'
 
@@ -33,7 +33,7 @@ class App extends Component {
           <Router>
             <div>
               <Route exact path="/" component={Index}/>
-              {/* <Route exact path="/home" component={Home}/> */}
+              <Route exact path="/home" component={Home}/>
             </div>
           </Router>
         </div>
