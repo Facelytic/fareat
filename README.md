@@ -22,6 +22,6 @@ it will directly open your browser with address localhost:3000
 
 
 ### author
-[erwinwahyura] (https://github.com/erwinwahyura)
-[sidikriders] (https://github.com/sidikriders)
-[1000pilar] (https://github.com/1000pilar)
+1. [erwinwahyura](https://github.com/erwinwahyura)
+2. [sidikriders](https://github.com/sidikriders)
+3. [1000pilar](https://github.com/1000pilar)
