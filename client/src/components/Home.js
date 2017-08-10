@@ -5,6 +5,7 @@ import Webcam from 'react-webcam'
 import Header from './Header'
 import Footer from './Footer'
 import MenuBar from './MenuBar'
+import FaceCompare from './FaceCompare'
 
 export default class App extends Component {
   setRef = (webcam) => {
@@ -31,11 +32,13 @@ export default class App extends Component {
         <MenuBar></MenuBar>
         <div style={{backgroundColor: "#ECF0F1", width: "80%", margin: "auto", padding: "3%"}}>
           <div style={{width: "70%", margin: "auto", paddingTop: "20px", paddingBottom: "20px"}}>
+            {/* TAKING PICTURE */}
             { this.state.isTakingPicture ?
               <div className="field" style={{}}>
                 <Webcam audio={false}
                 ref={this.setRef}
-                screenshotFormat="image/jpeg"></Webcam>
+                screenshotFormat="image/jpeg">
+                </Webcam>
                 <p className="button is-danger" style={{width: "15%", margin: "1%"}} onClick={() => this.takePictureGo()}><i className="fa fa-camera"></i></p>
               </div> :
               <div className="field">
@@ -108,6 +111,7 @@ export default class App extends Component {
           </div>
         </div>
         {/* <Footer></Footer> */}
+        <FaceCompare></FaceCompare>
       </div>
     );
   }
