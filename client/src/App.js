@@ -15,6 +15,7 @@ import './App.css';
 import Footer from './components/Footer'
 // import store from './store'
 import Index from './components/Index.js'
+import SignIn from './components/SignIn.js'
 
 class App extends Component {
   constructor() {
@@ -36,6 +37,7 @@ class App extends Component {
             <div>
               <Route exact path="/" component={Index}/>
               <Route exact path="/home" component={Home}/>
+              <Route exact path="/signin" component={SignIn}/>
             </div>
           </Router>
         </div>

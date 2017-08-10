@@ -6,6 +6,8 @@ import {
 import bg from '../bg.jpg'
 import Header from './Header'
 import Footer from './Footer'
+import SignIn from './SignIn'
+import SignUp from './SignUp'
 
 const Index = () => {
   return (
@@ -19,49 +21,8 @@ const Index = () => {
           </div>
           <div className="column is-5">
             <div className="column is-8 is-offset-4">
-              <div className="login" style={styles.login}>
-                <h1 style={styles.h1}>Start Today</h1>
-                <br/>
-                <div className="field">
-                  <p className="control has-icons-left">
-                    <input className="input" type="text" placeholder="Name"/>
-                    <span className="icon is-small is-left">
-                      <i className="fa fa-user-circle-o"></i>
-                    </span>
-                  </p>
-                </div>
-                <div className="field">
-                  <p className="control has-icons-left">
-                    <input className="input" type="text" placeholder="Username"/>
-                    <span className="icon is-small is-left">
-                      <i className="fa fa-user-circle-o"></i>
-                    </span>
-                  </p>
-                </div>
-                <div className="field">
-                  <p className="control has-icons-left">
-                    <input className="input" type="password" placeholder="Password"/>
-                    <span className="icon is-small is-left">
-                      <i className="fa fa-lock"></i>
-                    </span>
-                  </p>
-                </div>
-                <div className="field">
-                  <p className="control has-icons-left has-icons-right">
-                    <input className="input" type="email" placeholder="Email"/>
-                    <span className="icon is-small is-left">
-                      <i className="fa fa-envelope"></i>
-                    </span>
-                    <span className="icon is-small is-right">
-                      <i className="fa fa-check"></i>
-                    </span>
-                  </p>
-                  <hr/>
-                  <a className="button">
-                    Sign Up!
-                  </a>
-                </div>
-              </div>
+              <SignUp></SignUp>
+              {/* <SignIn></SignIn> */}
             </div>
           </div>
         </div>
