@@ -26,7 +26,7 @@ export default class App extends Component {
           <div style={{width: "70%", margin: "auto", paddingTop: "20px", paddingBottom: "20px"}}>
             <div className="field">
               <h2 className="title is-2">Hi, { this.state.currUser }</h2>
-              <p className="subtitle is-3">Who do you want to absent?</p>
+              <p className="subtitle is-3">Mau absen kelas mana nih?</p>
             </div>
             <div className="" style={{backgroundColor: "#ff7070", borderRadius: "5px", display: "flex", justifyContent: "space-around", padding: "10px"}}>
               <div className="">
@@ -56,7 +56,7 @@ export default class App extends Component {
               <div className="">
                 <div className="select">
                   <select id="pertemuan">
-                    <option>Pertemuan Ke</option>
+                    <option>Encounter</option>
                     { this.state.pertemuanList.map( (x, idx) => {
                       return (
                         <option key={idx} value={x}> { x } </option>
@@ -95,9 +95,9 @@ export default class App extends Component {
     imageCapture.takePhoto()
     .then(blob => createImageBitmap(blob))
     .then(imageBitmap => {
-      const canvas = document.querySelector('#takePhotoCanvas');
       console.log(imageBitmap);
     })
+    .catch(error => console.log(error));
     // let self = this;
     // let files = e.target.files || e.dataTransfer.files;
     // if (!files.length) {
