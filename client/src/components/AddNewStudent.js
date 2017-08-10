@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import * as firebase from 'firebase'
 import Webcam from 'react-webcam'
 import * as Chance from 'chance'
+import * as AWS from 'aws-sdk'
+import * as fs from 'fs'
+
 
 import Header from './Header'
 import Footer from './Footer'
@@ -100,12 +103,32 @@ export default class AddNewStudent extends Component {
     );
   }
 
-  postNewStudentGoGo() {
-    if (this.state.newStudentPhoto === "" || this.state.newStudentName === "" || this.state.newStudentBatch === "") {
-      alert("tolong di isi semua dlu ya")
-    } else {
-      alert(`mengepost new student:\nName : ${this.state.newStudentName}\nBatch : ${this.state.newStudentBatch}\nPhoto URL: ${this.state.newStudentPhoto}`)
-    }
+  postNewStudentGoGo(file) {
+    // let bufferMan = new Buffer('https://firebasestorage.googleapis.com/v0/b/freat-7b322.appspot.com/o/fotoAbsen%2F57028?alt=media&token=4a40fb2d-e704-4cb9-98f0-ccf8ad73d4b7', 'base64')
+    // console.log(bufferMan);
+    AWS.config.update({region:'us-east-1'});
+    AWS.config.accessKeyId = "AKIAIPAHAKTLBJIGW2JQ";
+    AWS.config.secretAccessKey = "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";
+    var rekognition = new AWS.Rekognition();
+    let params = {
+      SimilarityThreshold: 90,
+      SourceImage: {
+        Bytes: file
+      },
+      TargetImage: {
+        Bytes: file
+      }
+    };
+
+    rekognition.compareFaces(params, function (err, data) {
+      if (err) console.log(err, err.stack); // an error occurred
+      else     console.log(data);           // successful response
+    });
+    // if (this.state.newStudentPhoto === "" || this.state.newStudentName === "" || this.state.newStudentBatch === "") {
+    //   alert("tolong di isi semua dlu ya")
+    // } else {
+    //   alert(`mengepost new student:\nName : ${this.state.newStudentName}\nBatch : ${this.state.newStudentBatch}\nPhoto URL: ${this.state.newStudentPhoto}`)
+    // }
   }
 
   clearImage() {
@@ -130,14 +153,15 @@ export default class AddNewStudent extends Component {
       this.setState({
         newStudentPhoto: 'loading'
       })
-      var image64 = await this.webcam.getScreenshot()
 
+      var image64 = await this.webcam.getScreenshot()
       var block = image64.split(";");
       var contentType = block[0].split(":")[1];
       var realData = block[1].split(",")[1];
 
       var blob = await this.b64toBlob(realData, contentType)
-      this.absenGo(blob)
+      this.postNewStudentGoGo(blob)
+      // this.absenGo(blob)
     } catch (error) {
       console.error('ERROR: ', error);
     }
