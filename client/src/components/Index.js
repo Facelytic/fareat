@@ -39,6 +39,7 @@ const styles = {
   },
   body: {
     backgroundImage: "url(https://i.imgur.com/zYbQnZT.jpg)",
+    // 'WebkitFilter': 'invert(0.4)',
     // backgroundColor: "#ECF0F1",
     height:'600px',
     width: 'auto',
