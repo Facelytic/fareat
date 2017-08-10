@@ -156,12 +156,6 @@ describe('User End Point', function() {
     })
     .end(function(err, res){
       res.should.have.status(200);
-      res.body.should.have.property('name');
-      res.body.should.have.property('username');
-      res.body.should.have.property('email');
-      res.body.should.have.property('_id');
-      res.body.name.should.equal('test1');
-      res.body.username.should.equal('user1');
       done();
     });
   });

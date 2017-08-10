@@ -32,12 +32,30 @@ module.exports = {
   },
 
   getAll: (req, res)=>{
-    Absent.find({}, (err, result)=>{
-      if(!err){
+    Absent
+    .find({})
+    .populate('student_list')
+    .exec(function(err, result){
+      if(!err) {
         res.status(200).send(result)
       } else {
         res.status(400).send(err)
       }
     })
-  }
+  },
+
+  getOne: (req, res)=>{
+    Absent
+    .find({subject: req.params.subject, class_name: req.params.class_name})
+    .populate('student_list')
+    .exec(function(err, result){
+      if(!err) {
+        res.status(200).send(result)
+      } else {
+        res.status(400).send(err)
+      }
+    })
+  },
+
+
 }
