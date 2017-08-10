@@ -44,9 +44,9 @@ const SignIn = () => {
           <a className="button">
             Sign Up!
           </a>
-          <a style={{color:'white'}}>
-            Already have an account? Click Here!
-          </a>
+          <p style={{color:'white'}}>
+            Already have an account? <a style={{color: 'white'}}><b>Click Here!</b></a>
+          </p>
         </div>
       </div>
     </div>

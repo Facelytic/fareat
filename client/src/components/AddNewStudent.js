@@ -76,7 +76,7 @@ export default class AddNewStudent extends Component {
                 }
               </div>
               <div className="field" style={{width: '50%', margin: 'auto'}}>
-                <p className="button is-danger">Submit</p>
+                <p className="button is-danger" onClick={() => this.postNewStudentGoGo()}>Submit</p>
                 <img src='../logo.svg' alt=""/>
               </div>
             </div>
@@ -98,6 +98,14 @@ export default class AddNewStudent extends Component {
         {/* <Footer></Footer> */}
       </div>
     );
+  }
+
+  postNewStudentGoGo() {
+    if (this.state.newStudentPhoto === "" || this.state.newStudentName === "" || this.state.newStudentBatch === "") {
+      alert("tolong di isi semua dlu ya")
+    } else {
+      alert(`mengepost new student:\nName : ${this.state.newStudentName}\nBatch : ${this.state.newStudentBatch}\nPhoto URL: ${this.state.newStudentPhoto}`)
+    }
   }
 
   clearImage() {
