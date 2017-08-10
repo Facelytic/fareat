@@ -7,27 +7,16 @@ var AbsentSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'Student'
     },
-    pertemuan_1: {
-      type: String,
-    },
-    pertemuan_2: {
-      type: String,
-    },
-    pertemuan_3: {
-      type: String,
-    },
-    pertemuan_4: {
-      type: String,
-    },
-    pertemuan_5: {
-      type: String,
-    }
+    pertemuan_1: String,
+    pertemuan_2: String,
+    pertemuan_3: String,
+    pertemuan_4: String,
+    pertemuan_5: String,
+    pertemuan_6: String,
+    pertemuan_7: String
   }],
-  photo: {
-    type: String,
-    require: true
-  },
   subject: String,
+  class_name: String,
   user_id:{
     type: Schema.Types.ObjectId,
     ref: 'User'
