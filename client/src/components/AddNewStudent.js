@@ -46,7 +46,7 @@ export default class AddNewStudent extends Component {
                   <input className="input" type="text" placeholder="Fullname" onChange={(e) => this.setState({newStudentName: e.target.value})}/>
                 </div>
               </div>
-              <br />
+              {/* <br />
               <div className="field" style={{width: '50%', margin: 'auto'}}>
                 <div className="control label" style={{textAlign: 'left'}}>
                   <label className="label">Batch</label>
@@ -54,7 +54,7 @@ export default class AddNewStudent extends Component {
                 <div className="control">
                   <input className="input" type="text" placeholder="Batch Name" onChange={(e) => this.setState({newStudentBatch: e.target.value})}/>
                 </div>
-              </div>
+              </div> */}
               <br />
               <div className="field">
                 <p className="label">Photo</p>
