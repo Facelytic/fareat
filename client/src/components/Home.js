@@ -109,7 +109,7 @@ export default class App extends Component {
           </div>
         </div>
         {/* <Footer></Footer> */}
-        <FaceCompare></FaceCompare>
+        {/* <FaceCompare></FaceCompare> */}
       </div>
     );
   }
