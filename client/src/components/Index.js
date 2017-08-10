@@ -38,12 +38,12 @@ const styles = {
     marginRight: '10%',
   },
   body: {
-    // backgroundImage: "url(http://i.imgur.com/bGV9S8C.jpg)",
-    backgroundColor: "#ECF0F1",
+    backgroundImage: "url(https://i.imgur.com/zYbQnZT.jpg)",
+    // backgroundColor: "#ECF0F1",
     height:'600px',
     width: 'auto',
     // backgroundRepeat: 'no-repeat',
-    backgroundSize: 'contain',
+    // backgroundSize: '100% 100%',
     filter: 'gray',
   },
   login: {
