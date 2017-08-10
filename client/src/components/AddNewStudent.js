@@ -104,12 +104,19 @@ export default class AddNewStudent extends Component {
   }
 
   postNewStudentGoGo(file) {
+    console.log(file);
+    var reader1 = new window.FileReader()
+    var reader2 = new window.FileReader()
+    reader2.readAsDataURL(file)
+    reader2.onloadend = function() {
+      console.log('base64 dr internet', reader2.result);
+    }
     // let bufferMan = new Buffer('https://firebasestorage.googleapis.com/v0/b/freat-7b322.appspot.com/o/fotoAbsen%2F57028?alt=media&token=4a40fb2d-e704-4cb9-98f0-ccf8ad73d4b7', 'base64')
     // console.log(bufferMan);
-    AWS.config.update({region:'us-east-1'});
-    AWS.config.accessKeyId = "AKIAIPAHAKTLBJIGW2JQ";
-    AWS.config.secretAccessKey = "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";
-    var rekognition = new AWS.Rekognition();
+    // AWS.config.update({region:'us-east-1'});
+    // AWS.config.accessKeyId = "AKIAIPAHAKTLBJIGW2JQ";
+    // AWS.config.secretAccessKey = "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";
+    // var rekognition = new AWS.Rekognition();
     let params = {
       SimilarityThreshold: 90,
       SourceImage: {
@@ -120,10 +127,10 @@ export default class AddNewStudent extends Component {
       }
     };
 
-    rekognition.compareFaces(params, function (err, data) {
-      if (err) console.log(err, err.stack); // an error occurred
-      else     console.log(data);           // successful response
-    });
+    // rekognition.compareFaces(params, function (err, data) {
+    //   if (err) console.log(err, err.stack); // an error occurred
+    //   else     console.log(data);           // successful response
+    // });
     // if (this.state.newStudentPhoto === "" || this.state.newStudentName === "" || this.state.newStudentBatch === "") {
     //   alert("tolong di isi semua dlu ya")
     // } else {
@@ -160,8 +167,27 @@ export default class AddNewStudent extends Component {
       var realData = block[1].split(",")[1];
 
       var blob = await this.b64toBlob(realData, contentType)
+      this.absenGo(realData)
+
+
+      // ini untuk faceCpmarison dari url firebase
       this.postNewStudentGoGo(blob)
-      // this.absenGo(blob)
+
+      // Ini contok kode untuk face comparison
+
+      // var binaryImg = atob(realData);
+      // var length = binaryImg.length;
+      // var ab = new ArrayBuffer(length);
+      // var ua = new Uint8Array(ab);
+      // for (var i = 0; i < length; i++) {
+      //   ua[i] = binaryImg.charCodeAt(i);
+      // }
+      //
+      // var blob = new Blob([ab], {
+      //   type: "image/jpeg"
+      // });
+
+      // this.postNewStudentGoGo(ab)
     } catch (error) {
       console.error('ERROR: ', error);
     }
@@ -197,8 +223,8 @@ export default class AddNewStudent extends Component {
     let id = chance.guid()
     let self = this;
     let storage = firebase.storage()
-    let storageRef = storage.ref(`/fotoSiswa/${file.size + id}`)
-    storageRef.put(file)
+    let storageRef = storage.ref(`/fotoSiswa/${id}`)
+    storageRef.putString(file)
     .then(function() {
       storageRef.getDownloadURL().then(function(url) {
         console.log('cek firebase\nURL: ', url);
