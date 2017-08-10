@@ -1,5 +1,5 @@
 var Absent = require('../models/absent')
-
+var AWS = require('aws-sdk')
 module.exports = {
   create : (req, res)=>{
     console.log(JSON.stringify(req.body.student_id));
@@ -57,5 +57,26 @@ module.exports = {
     })
   },
 
+  compareGo: (req, res) => {
+    var params = {
+     SimilarityThreshold: 90,
+     SourceImage: {
+      Name: 'https://firebasestorage.googleapis.com/v0/b/freat-7b322.appspot.com/o/fotoAbsen%2F88128?alt=media&token=cee46e34-7836-4d34-a186-c6d7bfb059d3'
+     },
+     TargetImage: {
+       Name: 'https://firebasestorage.googleapis.com/v0/b/freat-7b322.appspot.com/o/fotoAbsen%2F52252?alt=media&token=f9cd31b7-84c3-43fc-af2e-0d357bd6f3af'
+      // S3Object: {
+      //  Bucket: "mybucket",
+      //  Name: "mytargetimage"
+      // }
+     }
+    };
+    var rekognition = new AWS.Rekognition();
+    rekognition.compareFaces(params, function (err, data) {
+      if (err) console.log(err, err.stack); // an error occurred
+      else     console.log(data);           // successful response
+    });
 
+
+  }
 }
