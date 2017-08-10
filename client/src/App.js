@@ -3,8 +3,6 @@ import 'bulma/css/bulma.css';
 import * as firebase from 'firebase'
 
 // import logo from './logo.svg';
-import Home from './components/Home'
-
 import { Provider } from 'react-redux'
 import {
   BrowserRouter as Router,
@@ -16,6 +14,8 @@ import Footer from './components/Footer'
 // import store from './store'
 import Index from './components/Index.js'
 import SignIn from './components/SignIn.js'
+import Home from './components/Home'
+import AddNewStudent from './components/AddNewStudent'
 
 class App extends Component {
   constructor() {
@@ -38,6 +38,7 @@ class App extends Component {
               <Route exact path="/" component={Index}/>
               <Route exact path="/home" component={Home}/>
               <Route exact path="/signin" component={SignIn}/>
+              <Route exact path="/add-new-student" component={AddNewStudent}/>
             </div>
           </Router>
         </div>

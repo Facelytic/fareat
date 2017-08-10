@@ -30,15 +30,16 @@ export default class App extends Component {
       <div>
         <Header></Header>
         <MenuBar></MenuBar>
-        <div style={{backgroundColor: "#ECF0F1", width: "80%", margin: "auto", padding: "3%"}}>
+        <div style={{backgroundColor: "#ECF0F1", width: "80%", margin: "auto", padding: "3%", height: "90vh"}}>
           <div style={{width: "70%", margin: "auto", paddingTop: "20px", paddingBottom: "20px"}}>
             {/* TAKING PICTURE */}
             { this.state.isTakingPicture ?
               <div className="field" style={{}}>
                 <Webcam audio={false}
-                ref={this.setRef}
-                screenshotFormat="image/jpeg">
-                </Webcam>
+                  width={821}
+                  height={615}
+                  ref={this.setRef}
+                  screenshotFormat="image/jpeg"></Webcam>
                 <p className="button is-danger" style={{width: "15%", margin: "1%"}} onClick={() => this.takePictureGo()}><i className="fa fa-camera"></i></p>
               </div> :
               <div className="field">
@@ -106,9 +107,6 @@ export default class App extends Component {
               </div>
             </div>
           </div>
-          <div>
-            <p className="title is-4">{this.state.hasilGo}</p>
-          </div>
         </div>
         {/* <Footer></Footer> */}
         <FaceCompare></FaceCompare>
@@ -160,20 +158,16 @@ export default class App extends Component {
   }
 
   absenGo(file) {
-    // let self = this;
-    // let files = e.target.files || e.dataTransfer.files;
-    // if (!files.length) {
-    //   return;
-    // }
+    let self = this;
     let storage = firebase.storage()
     let storageRef = storage.ref(`/fotoAbsen/${file.size}`)
     storageRef.put(file)
     .then(function() {
       storageRef.getDownloadURL().then(function(url) {
         console.log('cek firebase\nURL: ', url);
-        // self.setState({
-        //   hasilGo: `mengabsen kelas ${document.getElementById("kelas").value}, mata pelajaran ${document.getElementById("subject").value}, pertemuan ke-${document.getElementById("pertemuan").value}\nimage url : ${url}`
-        // })
+        self.setState({
+          hasilGo: `mengabsen kelas ${document.getElementById("kelas").value}, mata pelajaran ${document.getElementById("subject").value}, pertemuan ke-${document.getElementById("pertemuan").value}\nimage url : ${url}`
+        })
       })
     })
   }

@@ -1,5 +1,6 @@
 var Absent = require('../models/absent')
 var AWS = require('aws-sdk')
+
 module.exports = {
   create : (req, res)=>{
     console.log(JSON.stringify(req.body.student_id));
@@ -58,19 +59,26 @@ module.exports = {
   },
 
   compareGo: (req, res) => {
+    AWS.config.update({region:'ap-southeast-1'});
+    AWS.config = new AWS.Config();
+    AWS.config.accessKeyId = "AKIAIPAHAKTLBJIGW2JQ";
+    AWS.config.secretAccessKey = "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";
     var params = {
-     SimilarityThreshold: 90,
-     SourceImage: {
-      Name: 'https://firebasestorage.googleapis.com/v0/b/freat-7b322.appspot.com/o/fotoAbsen%2F88128?alt=media&token=cee46e34-7836-4d34-a186-c6d7bfb059d3'
-     },
-     TargetImage: {
-       Name: 'https://firebasestorage.googleapis.com/v0/b/freat-7b322.appspot.com/o/fotoAbsen%2F52252?alt=media&token=f9cd31b7-84c3-43fc-af2e-0d357bd6f3af'
-      // S3Object: {
-      //  Bucket: "mybucket",
-      //  Name: "mytargetimage"
-      // }
+    SimilarityThreshold: 90,
+    SourceImage: {
+     S3Object: {
+      Bucket: "fareateam/absent",
+      Name: "pp.jpeg"
      }
-    };
+    },
+    TargetImage: {
+     S3Object: {
+      Bucket: "fareateam/photo",
+      Name: "pp.jpeg"
+     }
+    }
+   };
+
     var rekognition = new AWS.Rekognition();
     rekognition.compareFaces(params, function (err, data) {
       if (err) console.log(err, err.stack); // an error occurred
