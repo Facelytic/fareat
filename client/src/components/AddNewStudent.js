@@ -3,6 +3,7 @@ import * as firebase from 'firebase'
 import Webcam from 'react-webcam'
 import * as Chance from 'chance'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 // import * as AWS from 'aws-sdk'
 
 
@@ -66,7 +67,7 @@ export default class AddNewStudent extends Component {
                   <label className="label">Class</label>
                 </div>
                 <div className="control">
-                  <div className="select">
+                  <div className="select is-fullwidth">
                     <select onChange={(e) => this.setState({newStudentClass: e.target.value})}>
                       <option>Select Class Name</option>
                       { this.state.classList.map( x => {
@@ -76,6 +77,9 @@ export default class AddNewStudent extends Component {
                       })}
                     </select>
                   </div>
+                </div>
+                <div style={{textAlign: 'left'}}>
+                  <Link to="/new-class">create new class</Link>
                 </div>
               </div>
               {/* <br />
@@ -138,7 +142,7 @@ export default class AddNewStudent extends Component {
 
   postNewStudentGoGo() {
     let self = this;
-    if (this.state.newStudentName === "" || this.state.newStudentPhoto === "" || this.state.newStudentClass === 'Select Class Name') {
+    if (this.state.newStudentName === "" || this.state.newStudentPhoto === "" || this.state.newStudentClass === 'Select Class Name' || this.state.newStudentClass === '') {
       this.setState({
         msg: "please fill all requirements before submitting",
         colorMsg: "red"

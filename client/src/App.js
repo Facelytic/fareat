@@ -40,7 +40,7 @@ class App extends Component {
               <Route exact path="/home" component={Home}/>
               <Route exact path="/signin" component={SignIn}/>
               <Route exact path="/add-new-student" component={AddNewStudent}/>
-              <Route exact path="/new-absent" component={NewAbsent}/>
+              <Route exact path="/create-new-absent" component={NewAbsent}/>
               <Route exact path="/new-class" component={InsertClass}/>
             </div>
           </Router>

@@ -35,7 +35,7 @@ export default class NewAbsent extends Component {
       <div>
         <Header></Header>
         <MenuBar></MenuBar>
-        <div style={{backgroundColor: "#ECF0F1", border: "2px solid black", width: "80%", margin: 'auto', padding: "20px 0"}}>
+        <div style={{backgroundColor: "#ECF0F1", width: "80%", margin: 'auto', padding: "20px 0"}}>
           <div className="field">
             <p className="title is-3">Create New Absent</p>
           </div>
@@ -43,7 +43,7 @@ export default class NewAbsent extends Component {
             <p className="subtitle is-4">please fill all the data yaa</p>
           </div>
           <p className="subtitle is-6" style={{color: this.state.msg.color}}>{this.state.msg.msg}</p>
-          <div className='field columns' style={{border: "1px solid black", width: '50%', margin: 'auto'}}>
+          <div className='field columns' style={{width: '50%', margin: 'auto'}}>
             <div className='column'>
               <div>
                 <label className='label'>Subject</label>
@@ -68,7 +68,7 @@ export default class NewAbsent extends Component {
               </div>
             </div>
           </div>
-          <div className='field columns' style={{border: "1px solid black", width: '20%', margin: 'auto'}}>
+          <div className='field columns' style={{width: '20%', margin: 'auto'}}>
             <div className='column'>
               <p className="button is-danger" onClick={() => this.createAbsentGoGo()}>Create</p>
             </div>
@@ -90,23 +90,41 @@ export default class NewAbsent extends Component {
       let self = this;
       axios.get('http://localhost:3000/api/students/class/'+this.state.newAbsentClassName+'/'+this.state.currUser._id)
       .then(response => {
-        axios.post('http://localhost:3000/api/absents', {
-          student_id: response.data,
-          subject: self.state.newAbsentSubject,
-          class_name: self.state.newAbsentClassName,
-          user_id: self.state.currUser._id
-        })
-        .then(rezponse => {
-          self.setState({
-            msg: {
-              msg: 'Create absent success!',
-              color: "#20e8b2"
+        if (response.data.length > 0) {
+          axios.post('http://localhost:3000/api/absents', {
+            student_id: response.data,
+            subject: self.state.newAbsentSubject,
+            class_name: self.state.newAbsentClassName,
+            user_id: self.state.currUser._id
+          })
+          .then(rezponse => {
+            if (rezponse.data === 'sudah ada') {
+              this.setState({
+                msg: {
+                  msg: `Absent for "${this.state.newAbsentClassName}", subject "${this.state.newAbsentSubject}" is already exist`,
+                  color: "red"
+                }
+              })
+            } else {
+              this.setState({
+                msg: {
+                  msg: "Create absent success!",
+                  color: "#20e8b2"
+                }
+              })
             }
           })
-        })
-        .catch(err => {
-          alert('ERROR: POSTING ABSENT')
-        })
+          .catch(err => {
+            alert('ERROR: POSTING ABSENT')
+          })
+        } else {
+          this.setState({
+            msg: {
+              msg: `"${this.state.newAbsentClassName}" any student yet`,
+              color: "red"
+            }
+          })
+        }
       })
       .catch(err => {
         alert('ERROR: GETTING STUDENT')
@@ -114,6 +132,7 @@ export default class NewAbsent extends Component {
       })
     }
   }
+
 
   getClassListCurrUser() {
     axios.get('http://localhost:3000/api/classList/user/'+this.state.currUser._id)
