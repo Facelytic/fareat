@@ -16,7 +16,8 @@ import Index from './components/Index.js'
 import SignIn from './components/SignIn.js'
 import Home from './components/Home'
 import AddNewStudent from './components/AddNewStudent'
-
+import NewAbsent from './components/NewAbsent'
+import InsertClass from './components/InsertClass'
 class App extends Component {
   constructor() {
     super()
@@ -39,6 +40,8 @@ class App extends Component {
               <Route exact path="/home" component={Home}/>
               <Route exact path="/signin" component={SignIn}/>
               <Route exact path="/add-new-student" component={AddNewStudent}/>
+              <Route exact path="/new-absent" component={NewAbsent}/>
+              <Route exact path="/new-class" component={InsertClass}/>
             </div>
           </Router>
         </div>

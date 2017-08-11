@@ -6,6 +6,14 @@ var StudentSchema = new Schema({
   photo: {
     type: String,
     require: true
+  },
+  class: {
+    type: String,
+    require: true
+  },
+  user_id:{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
   }
 })
 

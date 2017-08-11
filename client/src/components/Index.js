@@ -53,7 +53,7 @@ const styles = {
     marginRight: '10%',
   },
   body: {
-    backgroundImage: "url(https://i.imgur.com/zYbQnZT.jpg)",
+    backgroundImage: "url(https://lh5.googleusercontent.com/KAbUcOhHjdDlI_YtBH4pv4vnyyuEVFaUyIT-wgMDGgqLrzoJw6sdn5IUk4GcDEgBdiJO3s0ahcN4sg=w1600-h810)",
     // 'WebkitFilter': 'invert(0.4)',
     // backgroundColor: "#ECF0F1",
     height:'600px',

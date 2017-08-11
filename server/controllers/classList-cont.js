@@ -1,15 +1,13 @@
-var Student = require('../models/student')
+var ClassList = require('../models/classList')
 
 module.exports = {
   create : (req, res)=>{
-    var createStudent = new Student({
+    var createClassList = new ClassList({
       name: req.body.name,
-      photo: req.body.photo,
-      class: req.body.className,
       user_id: req.body.user_id
     })
 
-    createStudent.save((err, student)=>{
+    createClassList.save((err, student)=>{
       if(!err) {
         res.status(200).send(student)
       } else {
@@ -18,7 +16,7 @@ module.exports = {
     })
   },
   getAll : (req, res)=>{
-    Student.find({}, (err, result)=>{
+    ClassList.find({}, (err, result)=>{
       if(!err) {
         res.status(200).send(result)
       } else {
@@ -27,7 +25,7 @@ module.exports = {
     })
   },
   getOne: (req, res)=>{
-    Student.findOne({_id: req.params.id}, function(err, result){
+    ClassList.findOne({_id: req.params.id}, function(err, result){
       if(!err){
         res.status(200).send(result)
       } else {
@@ -36,16 +34,7 @@ module.exports = {
     })
   },
   getByUser: (req, res) => {
-    Student.find({user_id: req.params.id}, (err, result)=>{
-      if(!err) {
-        res.status(200).send(result)
-      } else {
-        res.status(400).send(err)
-      }
-    })
-  },
-  getByClass: (req, res) => {
-    Student.find({class: req.params.name, user_id: req.params.id}, (err, result)=>{
+    ClassList.find({user_id: req.params.id}, (err, result) => {
       if(!err) {
         res.status(200).send(result)
       } else {
@@ -54,13 +43,13 @@ module.exports = {
     })
   },
   update: (req, res)=>{
-    Student.findOne({_id: req.params.id}, (err, result)=>{
+    ClassList.findOne({_id: req.params.id}, (err, result)=>{
       if(!err) {
-        var updateStudent = {
+        var updateClassList = {
           name: req.body.name || result.name,
           photo: req.body.photo || result.photo
         }
-        Student.findOneAndUpdate({_id: req.params.id}, {$set: updateStudent}, {new: true}, (err, data)=>{
+        ClassList.findOneAndUpdate({_id: req.params.id}, {$set: updateClassList}, {new: true}, (err, data)=>{
           if(!err) {
             res.status(200).send(data)
           } else {
@@ -74,7 +63,7 @@ module.exports = {
   },
 
   delete: (req, res)=>{
-    Student.remove({_id: req.params.id}, function(err,removed) {
+    ClassList.remove({_id: req.params.id}, function(err,removed) {
       if(!err) {
         res.status(200).send({REMOVED: removed})
       } else {

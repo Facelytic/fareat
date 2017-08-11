@@ -70,8 +70,6 @@ const styles = {
   }
 }
 
-
-
 const mapDispatchToProps = (dispatch) => {
   return {
     getFlag: () => dispatch(Get_Flag_SignIn())
