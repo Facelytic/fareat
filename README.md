@@ -30,10 +30,7 @@ Route | HTTP | Description
 Route | HTTP | Description
 ----- | ---- | -----------
 /api/absents | GET | Get all absents info
-/api/absents/:subject/:class_name | GET
- | Get one absent info By subject and class_name
+/api/absents/:subject/:class_name | GET | Get one absent info By subject and class_name
  /api/absents/ | POST | Create absent
  /api/absents/:student_id | PUT | Update absents By student_id
  /api/absents/:id | DELETE | Delete absent by Id
-
- 
