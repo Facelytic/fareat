@@ -1,4 +1,5 @@
 var Absent = require('../models/absent')
+var AWS = require('aws-sdk')
 
 module.exports = {
   create : (req, res)=>{
@@ -55,6 +56,7 @@ module.exports = {
       }
     })
   },
+
 
   update: (req, res)=>{
     Absent.findOne({student_list: {$elemMatch: {student_id:req.params.student_id}}}, (err, result)=>{

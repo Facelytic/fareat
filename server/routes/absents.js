@@ -9,5 +9,4 @@ router.get('/:subject/:class_name', absentCont.getOne)
 router.put('/:student_id', absentCont.update)
 router.delete('/:id', absentCont.delete)
 
-
 module.exports = router

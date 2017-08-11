@@ -1,8 +1,9 @@
 # fareat
-implementing face recognition for absent
+
+implementing face recognition for absent using comsume api such as face comparison and face analysis
 
 
-## API router
+## API EndPoint
 
 1. Users
 
@@ -34,3 +35,22 @@ Route | HTTP | Description
  /api/absents/ | POST | Create absent
  /api/absents/:student_id | PUT | Update absents By student_id
  /api/absents/:id | DELETE | Delete absent by Id
+
+
+
+## How To Install
+clone the repository first and do step by step below 
+```bash
+npm install
+npm start / yarn start
+```
+it will directly open your browser with address localhost:3000
+
+
+
+
+### author
+1. [erwinwahyura](https://github.com/erwinwahyura)
+2. [sidikriders](https://github.com/sidikriders)
+3. [1000pilar](https://github.com/1000pilar)
+
