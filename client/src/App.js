@@ -11,7 +11,7 @@ import {
 
 import './App.css';
 import Footer from './components/Footer'
-// import store from './store'
+import store from './store'
 import Index from './components/Index.js'
 import SignIn from './components/SignIn.js'
 import Home from './components/Home'
@@ -31,7 +31,7 @@ class App extends Component {
 
   render() {
     return (
-      // <Provider store={store}>
+      <Provider store={store}>
         <div className="App">
           <Router>
             <div>
@@ -42,7 +42,7 @@ class App extends Component {
             </div>
           </Router>
         </div>
-      // </Provider>
+      </Provider>
     );
   }
 
