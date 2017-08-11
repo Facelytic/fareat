@@ -83,11 +83,9 @@ module.exports = {
   update: (req, res)=>{
     Absent.findOne({student_list: {$elemMatch: {student_id:req.params.student_id}}}, (err, result)=>{
       if(!err){
-        console.log('result', result);
         let StudentDiDuga = result.student_list.find( x => {
-          return x.student_id === req.params.student_id
+          return x.student_id == req.params.student_id
         })
-        console.log('StudentDiDuga', StudentDiDuga);
         var query = {
           student_list: [{
             student_id: req.params.student_id,
@@ -103,7 +101,6 @@ module.exports = {
           class_name: result.class_name,
           user_id: result.user_id
         }
-        console.log('query', query);
         Absent.findOneAndUpdate({student_list: {$elemMatch: {student_id:req.params.student_id}}}, {$set: query}, {new: true}, (err, data)=>{
           if(!err) {
             res.status(200).send(data)
