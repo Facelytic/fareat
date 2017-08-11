@@ -3,7 +3,7 @@ var AWS = require('aws-sdk')
 
 module.exports = {
   create : (req, res)=>{
-    let students = req.body.student_ids.map(x => {
+    let students = req.body.student_id.map(x => {
       return {
         student_id: x._id,
         pertemuan_1: '',

@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import {
   Link
 } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
 import store from '../store'
 import { Get_Flag_SignIn } from '../actions'
@@ -18,7 +19,13 @@ import SignUp from './SignUp'
 const Index = (props) => {
     return (
       <div>
-      <Provider store={store}>
+        {
+          props.checkFlagLogin ?
+          <div>
+            <Redirect to="/home"/>
+          </div>
+          : <Redirect to="/"/>
+        }
         <div className="index">
           <Header></Header>
           <div className="main" style={styles.body}>
@@ -42,7 +49,6 @@ const Index = (props) => {
           </div>
           <Footer></Footer>
         </div>
-      </Provider>
     </div>
     )
 }
@@ -53,7 +59,7 @@ const styles = {
     marginRight: '10%',
   },
   body: {
-    backgroundImage: "url(https://lh5.googleusercontent.com/KAbUcOhHjdDlI_YtBH4pv4vnyyuEVFaUyIT-wgMDGgqLrzoJw6sdn5IUk4GcDEgBdiJO3s0ahcN4sg=w1600-h810)",
+    backgroundImage: "url(http://i.imgur.com/sSQMnSM.jpg)",
     // 'WebkitFilter': 'invert(0.4)',
     // backgroundColor: "#ECF0F1",
     height:'600px',
@@ -78,9 +84,10 @@ const styles = {
 }
 
 const mapStateToProps = (state) => {
-  console.log( 'staenya::: ',state)
+  console.log( 'staenya::: ',state.IS_LOGIN.islogin)
   return {
-    FLAG: state.Flag.Flag
+    FLAG: state.Flag.Flag,
+    checkFlagLogin: state.IS_LOGIN.islogin
   }
 }
 

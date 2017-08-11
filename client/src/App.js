@@ -42,6 +42,7 @@ class App extends Component {
               <Route exact path="/add-new-student" component={AddNewStudent}/>
               <Route exact path="/new-absent" component={NewAbsent}/>
               <Route exact path="/new-class" component={InsertClass}/>
+              <Route exact path="/data-student" component={InsertClass}/>
             </div>
           </Router>
         </div>

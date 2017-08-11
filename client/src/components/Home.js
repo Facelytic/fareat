@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase'
 import Webcam from 'react-webcam'
+import axios from 'axios'
+import { Redirect } from 'react-router-dom'
 
+import Index from './Index'
 import Header from './Header'
 import Footer from './Footer'
 import MenuBar from './MenuBar'
 import FaceCompare from './FaceCompare'
-
 export default class App extends Component {
   setRef = (webcam) => {
     this.webcam = webcam;
@@ -21,13 +23,64 @@ export default class App extends Component {
       pertemuanList: [ 1, 2, 3, 4, 5, 6, 7],
       hasilGo: "",
       isTakingPicture: false,
-      imageToAbsen: ""
+      imageToAbsen: "",
+      responseCheckCurrentUser: ""
     }
+  }
+  componentWillMount() {
+    // console.log('---------------1');
+    // if (localStorage.getItem('token')) {
+    //   console.log('---------------2');
+    //   this.checkCurrentUser()
+    // } else {
+    //   console.log('---------------3');
+    //   <Route path="/" component={Index} />
+    // }
+    if (localStorage.getItem('token')) {
+      this.checkCurrentUser()
+      // if (this.state.responseCheckCurrentUser === "eror") {
+      //   localStorage.clear()
+      // }
+    }
+  }
+
+
+
+  checkCurrentUser () {
+    var idUser = localStorage.getItem('id')
+    var username = localStorage.getItem('username')
+    axios.get('http://localhost:3000/api/users/' + idUser)
+    .then((resp) => {
+      if (resp.data.username === username) {
+        // console.log(resp.data);
+        console.log('usernya benar');
+      } else {
+        console.log('usernya salah');
+        localStorage.clear()
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+      localStorage.clear()
+      this.setState({
+        responseCheckCurrentUser: "eror"
+      })
+    })
   }
 
   render() {
     return (
       <div>
+        {
+          // localStorage.getItem('token') ?
+          // this.checkCurrentUser() :
+          this.state.responseCheckCurrentUser === "error" ?
+          null:
+          <div>
+            <Redirect to="/" />
+          </div>
+        
+        }
         <Header></Header>
         <MenuBar></MenuBar>
         <div style={{backgroundColor: "#ECF0F1", width: "80%", margin: "auto", padding: "3%", height: "90vh"}}>
