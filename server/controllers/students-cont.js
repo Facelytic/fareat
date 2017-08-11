@@ -44,6 +44,15 @@ module.exports = {
       }
     })
   },
+  getByClass: (req, res) => {
+    Student.find({class: req.params.name, user_id: req.params.id}, (err, result)=>{
+      if(!err) {
+        res.status(200).send(result)
+      } else {
+        res.status(400).send(err)
+      }
+    })
+  },
   update: (req, res)=>{
     Student.findOne({_id: req.params.id}, (err, result)=>{
       if(!err) {

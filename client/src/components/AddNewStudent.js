@@ -138,7 +138,7 @@ export default class AddNewStudent extends Component {
 
   postNewStudentGoGo() {
     let self = this;
-    if (this.state.newStudentName === "" || this.state.newStudentPhoto === "") {
+    if (this.state.newStudentName === "" || this.state.newStudentPhoto === "" || this.state.newStudentClass === 'Select Class Name') {
       this.setState({
         msg: "please fill all requirements before submitting",
         colorMsg: "red"
@@ -147,7 +147,7 @@ export default class AddNewStudent extends Component {
       axios.post('http://localhost:3000/api/students', {
         name: this.state.newStudentName,
         photo: this.state.newStudentPhoto,
-        class: this.state.newStudentClass,
+        className: this.state.newStudentClass,
         user_id: this.state.currUser._id
       })
       .then(function(response) {
