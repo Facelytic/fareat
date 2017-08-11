@@ -14,6 +14,7 @@ var absents = require('./routes/absents')
 var students = require('./routes/students')
 var users = require('./routes/users')
 var classList = require('./routes/classList')
+var subjectList = require('./routes/subjectList')
 var User = require('./models/user')
 
 mongoose.Promise = global.Promise;
@@ -46,6 +47,7 @@ app.use('/api/absents', absents)
 app.use('/api/students', students)
 app.use('/api/users', users)
 app.use('/api/classList', classList)
+app.use('/api/subjectList', subjectList)
 
 // var db;
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-
+import { Link } from 'react-router-dom'
 
 import Header from './Header'
 // import Footer from './Footer'
@@ -23,6 +23,7 @@ export default class NewAbsent extends Component {
       newAbsentSubject: "",
       newAbsentClassName: "",
       classList: [],
+      subjectList: [],
       msg: {
         msg: '',
         color: ""
@@ -48,8 +49,18 @@ export default class NewAbsent extends Component {
               <div>
                 <label className='label'>Subject</label>
               </div>
-              <div>
-                <input className='input' style={{borderRadius: '0'}} placeholder="New Subject" onChange={(e) => this.setState({newAbsentSubject: e.target.value})}/>
+              <div className="select is-fullwidth">
+                <select onChange={(e) => this.setState({newAbsentSubject: e.target.value})}>
+                  <option>Select Subject</option>
+                  { this.state.subjectList.map( x => {
+                    return (
+                      <option key={x}>{x}</option>
+                    )
+                  })}
+                </select>
+              </div>
+              <div style={{textAlign: 'left'}}>
+                <Link to='/new-subject' style={{fontSize: '0.9em'}}>create new subject</Link>
               </div>
             </div>
             <div className='column'>
@@ -58,7 +69,7 @@ export default class NewAbsent extends Component {
               </div>
               <div className="select is-fullwidth">
                 <select onChange={(e) => this.setState({newAbsentClassName: e.target.value})}>
-                  <option>Select Class Name</option>
+                  <option>Select Class</option>
                   { this.state.classList.map( x => {
                     return (
                       <option key={x}>{x}</option>
@@ -79,7 +90,7 @@ export default class NewAbsent extends Component {
   }
 
   createAbsentGoGo() {
-    if (this.state.newAbsentClassName === "Select Class Name" || this.state.newAbsentSubject === "" || this.state.newAbsentClassName === "") {
+    if (this.state.newAbsentSubject === "Select Subject" || this.state.newAbsentClassName === "Select Class" || this.state.newAbsentSubject === "" || this.state.newAbsentClassName === "") {
       this.setState({
         msg: {
           msg: "please fill all requirements first",
@@ -139,6 +150,20 @@ export default class NewAbsent extends Component {
     .then(response => {
       this.setState({
         classList: response.data.map(x => x.name)
+      })
+      this.getSubjectListCurrUser()
+    })
+    .catch(err => {
+      alert('ERROR')
+      console.log(err);
+    })
+  }
+
+  getSubjectListCurrUser() {
+    axios.get('http://localhost:3000/api/subjectList/user/'+this.state.currUser._id)
+    .then(response => {
+      this.setState({
+        subjectList: response.data.map(x => x.name)
       })
     })
     .catch(err => {
