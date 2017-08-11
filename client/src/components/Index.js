@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Provider } from 'react-redux'
 import {
   Link
 } from 'react-router-dom'
+
+import store from '../store'
+import { Get_Flag_SignIn } from '../actions'
 
 import bg from '../bg.jpg'
 import Header from './Header'
@@ -9,27 +14,37 @@ import Footer from './Footer'
 import SignIn from './SignIn'
 import SignUp from './SignUp'
 
-const Index = () => {
-  return (
-    <div className="index">
-      <Header></Header>
-      <div className="main" style={styles.body}>
-        <div className="columns">
-          <div className="column is-5 is-offset-1">
-            <h1 style={styles.slogan}>CHANGE YOUR ABSENT JUST BY CLICK AT ONCE USING FAREAT APPS.</h1>
-            <h3 style={styles.sloganMini}>aquire your good absent to increast your productivity.</h3>
-          </div>
-          <div className="column is-5">
-            <div className="column is-8 is-offset-4">
-              <SignUp></SignUp>
-              {/* <SignIn></SignIn> */}
+
+const Index = (props) => {
+    return (
+      <div>
+      <Provider store={store}>
+        <div className="index">
+          <Header></Header>
+          <div className="main" style={styles.body}>
+            <div className="columns">
+              <div className="column is-5 is-offset-1">
+                <h1 style={styles.slogan}>CHANGE YOUR ABSENT JUST BY CLICK AT ONCE USING FAREAT APPS.</h1>
+                <h3 style={styles.sloganMini}>aquire your good absent to increast your productivity.</h3>
+              </div>
+              <div className="column is-5">
+                <div className="column is-8 is-offset-4">
+
+                  {
+                    props.FLAG === "issignup" ?
+                    <SignUp></SignUp>
+                    :
+                    <SignIn></SignIn>
+                  }
+                </div>
+              </div>
             </div>
           </div>
+          <Footer></Footer>
         </div>
-      </div>
-      <Footer></Footer>
+      </Provider>
     </div>
-  )
+    )
 }
 
 const styles = {
@@ -62,4 +77,19 @@ const styles = {
 
 }
 
-export default Index
+const mapStateToProps = (state) => {
+  console.log( 'staenya::: ',state)
+  return {
+    FLAG: state.Flag.Flag
+  }
+}
+
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     getFlag: () => dispatch(Get_Flag_SignIn())
+//   }
+// }
+
+// export default connect(mapStateToProps, mapDispatchToProps)(Index)
+export default connect(mapStateToProps, null)(Index)
+// export default connect(mapStateToProps, mapDispatchToProps)(Home)

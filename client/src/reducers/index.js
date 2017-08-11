@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 
-import
+import absenReducer from './absenReducer'
 
 export default combineReducers({
-  passwordState: passwordReducer
+  Flag: absenReducer
 })

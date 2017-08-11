@@ -7,13 +7,13 @@ var AbsentSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'Student'
     },
-    pertemuan_1: String,
-    pertemuan_2: String,
-    pertemuan_3: String,
-    pertemuan_4: String,
-    pertemuan_5: String,
-    pertemuan_6: String,
-    pertemuan_7: String
+    pertemuan_1: "",
+    pertemuan_2: "",
+    pertemuan_3: "",
+    pertemuan_4: "",
+    pertemuan_5: "",
+    pertemuan_6: "",
+    pertemuan_7: ""
   }],
   subject: String,
   class_name: String,
