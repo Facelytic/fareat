@@ -18,12 +18,19 @@ export default class AddNewStudent extends Component {
   constructor() {
     super()
     this.state = {
-      currUser: "Sidik",
+      currUser: {
+        "name": "Sidik Hidayatullah",
+        "password": "$2a$10$t0zFGS2skAdRVQUV1/fl..ehk5dTRJLojPk1Yd5d87T0gyIuWzPie",
+        "email": "sidik@guru.com",
+        "_id": "598d57ef97ec530ceabb8cdb"
+      },
       newStudentName: "",
       newStudentPhoto: "",
+      newStudentClass: "",
       namaPhoto: "",
       displayPhoto: "",
-      colorMsg: "#20e8b2"
+      colorMsg: "#20e8b2",
+      classList: []
     }
   }
 
@@ -40,7 +47,8 @@ export default class AddNewStudent extends Component {
               </div>
               <div className="field">
                 <p className="subtitle is-4">please fill all the data yaa</p>
-              </div><div className="field">
+              </div>
+              <div className="field">
                 <p style={{color: this.state.colorMsg}}>{this.state.msg}</p>
               </div>
               <br/>
@@ -50,6 +58,24 @@ export default class AddNewStudent extends Component {
                 </div>
                 <div className="control">
                   <input className="input" type="text" placeholder="Fullname" onChange={(e) => this.setState({newStudentName: e.target.value})}/>
+                </div>
+              </div>
+              <br/>
+              <div className="field" style={{width: '50%', margin: 'auto'}}>
+                <div className="control label" style={{textAlign: 'left'}}>
+                  <label className="label">Class</label>
+                </div>
+                <div className="control">
+                  <div className="select">
+                    <select onChange={(e) => this.setState({newStudentClass: e.target.value})}>
+                      <option>Select Class Name</option>
+                      { this.state.classList.map( x => {
+                        return (
+                          <option key={x}>{x}</option>
+                        )
+                      })}
+                    </select>
+                  </div>
                 </div>
               </div>
               {/* <br />
@@ -93,6 +119,23 @@ export default class AddNewStudent extends Component {
     );
   }
 
+  getClassListCurrUser() {
+    axios.get('http://localhost:3000/api/classList/user/'+this.state.currUser._id)
+    .then(response => {
+      this.setState({
+        classList: response.data.map(x => x.name)
+      })
+    })
+    .catch(err => {
+      alert('ERROR')
+      console.log(err);
+    })
+  }
+
+  componentWillMount() {
+    this.getClassListCurrUser()
+  }
+
   postNewStudentGoGo() {
     let self = this;
     if (this.state.newStudentName === "" || this.state.newStudentPhoto === "") {
@@ -103,7 +146,9 @@ export default class AddNewStudent extends Component {
     } else {
       axios.post('http://localhost:3000/api/students', {
         name: this.state.newStudentName,
-        photo: this.state.newStudentPhoto
+        photo: this.state.newStudentPhoto,
+        class: this.state.newStudentClass,
+        user_id: this.state.currUser._id
       })
       .then(function(response) {
         self.setState({

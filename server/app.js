@@ -13,6 +13,7 @@ var bcrypt = require('bcrypt')
 var absents = require('./routes/absents')
 var students = require('./routes/students')
 var users = require('./routes/users')
+var classList = require('./routes/classList')
 var User = require('./models/user')
 
 mongoose.Promise = global.Promise;
@@ -44,6 +45,7 @@ app.use(bodyParser.raw())
 app.use('/api/absents', absents)
 app.use('/api/students', students)
 app.use('/api/users', users)
+app.use('/api/classList', classList)
 
 // var db;
 

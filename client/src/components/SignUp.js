@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SignIn = () => {
+const SignUp = () => {
   return (
     <div className="column is-12">
       <div className="login" style={styles.login}>
@@ -18,7 +18,7 @@ const SignIn = () => {
           <p className="control has-icons-left">
             <input className="input" type="text" placeholder="Username"/>
             <span className="icon is-small is-left">
-              <i className="fa fa-user-circle-o"></i>
+              <i className="fa fa-vcard"></i>
             </span>
           </p>
         </div>
@@ -31,17 +31,14 @@ const SignIn = () => {
           </p>
         </div>
         <div className="field">
-          <p className="control has-icons-left has-icons-right">
+          <p className="control has-icons-left">
             <input className="input" type="email" placeholder="Email"/>
             <span className="icon is-small is-left">
               <i className="fa fa-envelope"></i>
             </span>
-            <span className="icon is-small is-right">
-              <i className="fa fa-check"></i>
-            </span>
           </p>
           <hr/>
-          <a className="button">
+          <a className="button" onClick={() => this.props.signUpGoGo()}>
             Sign Up!
           </a>
           <p style={{color:'white'}}>
@@ -62,4 +59,4 @@ const styles = {
   }
 }
 
-export default SignIn
+export default SignUp
