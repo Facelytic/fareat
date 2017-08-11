@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import * as firebase from 'firebase'
 import Webcam from 'react-webcam'
 import * as Chance from 'chance'
-import * as AWS from 'aws-sdk'
-import * as fs from 'fs'
+import axios from 'axios'
+// import * as AWS from 'aws-sdk'
 
 
 import Header from './Header'
-import Footer from './Footer'
+// import Footer from './Footer'
 import MenuBar from './MenuBar'
 
 export default class AddNewStudent extends Component {
@@ -20,9 +20,10 @@ export default class AddNewStudent extends Component {
     this.state = {
       currUser: "Sidik",
       newStudentName: "",
-      newStudentBatch: "",
       newStudentPhoto: "",
-      namaPhoto: ""
+      namaPhoto: "",
+      displayPhoto: "",
+      colorMsg: "#20e8b2"
     }
   }
 
@@ -39,6 +40,8 @@ export default class AddNewStudent extends Component {
               </div>
               <div className="field">
                 <p className="subtitle is-4">please fill all the data yaa</p>
+              </div><div className="field">
+                <p style={{color: this.state.colorMsg}}>{this.state.msg}</p>
               </div>
               <br/>
               <div className="field" style={{width: '50%', margin: 'auto'}}>
@@ -69,7 +72,7 @@ export default class AddNewStudent extends Component {
                     screenshotFormat="image/jpeg" /> :
                   this.state.newStudentPhoto === 'loading' ?
                     <img id="loading-icon-add-new-student" src='https://www.shareicon.net/data/32x32/2015/06/30/62174_loading_32x32.png' alt="loading" /> :
-                    <img alt="new-student" src={this.state.newStudentPhoto} style={{width: "410px", height: "307px"}}/>
+                    <img alt="new-student" src={this.state.displayPhoto} style={{width: "410px", height: "307px"}}/>
                 }
               </div>
               <div className="field" style={{width: '50%', margin: 'auto', marginBottom: "18px"}}>
@@ -83,19 +86,6 @@ export default class AddNewStudent extends Component {
                 <img src='../logo.svg' alt=""/>
               </div>
             </div>
-            {/* { this.state.isTakingPicture ?
-              <div className="field" style={{}}>
-                <Webcam audio={false}
-                  width={821}
-                  height={615}
-                  ref={this.setRef}
-                  screenshotFormat="image/jpeg"></Webcam>
-                <p className="button is-danger" style={{width: "15%", margin: "1%"}} onClick={() => this.takePictureGo()}><i className="fa fa-camera"></i></p>
-              </div> :
-              <div className="field">
-                <p className="subtitle is-3">Silahkan isi data terlebih dahulu</p>
-              </div>
-            } */}
           </div>
         </div>
         {/* <Footer></Footer> */}
@@ -103,27 +93,54 @@ export default class AddNewStudent extends Component {
     );
   }
 
-  postNewStudentGoGo(file) {
+  postNewStudentGoGo() {
+    let self = this;
+    if (this.state.newStudentName === "" || this.state.newStudentPhoto === "") {
+      this.setState({
+        msg: "please fill all requirements before submitting",
+        colorMsg: "red"
+      })
+    } else {
+      axios.post('http://localhost:3000/api/students', {
+        name: this.state.newStudentName,
+        photo: this.state.newStudentPhoto
+      })
+      .then(function(response) {
+        self.setState({
+          colorMsg: "#20e8b2",
+          msg: "Add new student Success!",
+          newStudentPhoto: "",
+          newStudentName: "",
+          namaPhoto: "",
+        })
+      })
+      .catch(err => {
+        alert('ERROR')
+        console.log(err);
+      })
+    }
+
+
     // let bufferMan = new Buffer('https://firebasestorage.googleapis.com/v0/b/freat-7b322.appspot.com/o/fotoAbsen%2F57028?alt=media&token=4a40fb2d-e704-4cb9-98f0-ccf8ad73d4b7', 'base64')
     // console.log(bufferMan);
-    AWS.config.update({region:'us-east-1'});
-    AWS.config.accessKeyId = "AKIAIPAHAKTLBJIGW2JQ";
-    AWS.config.secretAccessKey = "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";
-    var rekognition = new AWS.Rekognition();
-    let params = {
-      SimilarityThreshold: 90,
-      SourceImage: {
-        Bytes: file
-      },
-      TargetImage: {
-        Bytes: file
-      }
-    };
+    // AWS.config.update({region:'us-east-1'});
+    // AWS.config.accessKeyId = "AKIAIPAHAKTLBJIGW2JQ";
+    // AWS.config.secretAccessKey = "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";
+    // var rekognition = new AWS.Rekognition();
+    // let params = {
+    //   SimilarityThreshold: 90,
+    //   SourceImage: {
+    //     Bytes: file
+    //   },
+    //   TargetImage: {
+    //     Bytes: file
+    //   }
+    // };
 
-    rekognition.compareFaces(params, function (err, data) {
-      if (err) console.log(err, err.stack); // an error occurred
-      else     console.log(data);           // successful response
-    });
+    // rekognition.compareFaces(params, function (err, data) {
+    //   if (err) console.log(err, err.stack); // an error occurred
+    //   else     console.log(data);           // successful response
+    // });
     // if (this.state.newStudentPhoto === "" || this.state.newStudentName === "" || this.state.newStudentBatch === "") {
     //   alert("tolong di isi semua dlu ya")
     // } else {
@@ -141,7 +158,8 @@ export default class AddNewStudent extends Component {
     storageRef.delete().then(function() {
       self.setState({
         newStudentPhoto: "",
-        namaPhoto: ""
+        namaPhoto: "",
+        displayPhoto: ""
       })
     }).catch(function(err) {
       console.log(err);
@@ -155,13 +173,34 @@ export default class AddNewStudent extends Component {
       })
 
       var image64 = await this.webcam.getScreenshot()
+      this.setState({
+        displayPhoto: image64
+      })
       var block = image64.split(";");
       var contentType = block[0].split(":")[1];
       var realData = block[1].split(",")[1];
-
       var blob = await this.b64toBlob(realData, contentType)
-      this.postNewStudentGoGo(blob)
-      // this.absenGo(blob)
+      this.uploadFirebaseGetUrl(realData)
+
+
+      // ini untuk faceCpmarison dari url firebase
+      // this.postNewStudentGoGo(blob)
+
+      // Ini contok kode untuk face comparison
+
+      // var binaryImg = atob(realData);
+      // var length = binaryImg.length;
+      // var ab = new ArrayBuffer(length);
+      // var ua = new Uint8Array(ab);
+      // for (var i = 0; i < length; i++) {
+      //   ua[i] = binaryImg.charCodeAt(i);
+      // }
+      //
+      // var blob = new Blob([ab], {
+      //   type: "image/jpeg"
+      // });
+
+      // this.postNewStudentGoGo(ab)
     } catch (error) {
       console.error('ERROR: ', error);
     }
@@ -192,21 +231,20 @@ export default class AddNewStudent extends Component {
     return blob;
   }
 
-  absenGo(file) {
+  uploadFirebaseGetUrl(file) {
     let chance = new Chance()
     let id = chance.guid()
     let self = this;
     let storage = firebase.storage()
-    let storageRef = storage.ref(`/fotoSiswa/${file.size + id}`)
-    storageRef.put(file)
+    let storageRef = storage.ref(`/fotoSiswa/${id}`)
+    storageRef.putString(file)
     .then(function() {
       storageRef.getDownloadURL().then(function(url) {
         console.log('cek firebase\nURL: ', url);
         self.setState({
           newStudentPhoto: url,
-          namaPhoto: (file.size+id)
+          namaPhoto: (id)
         })
-        console.log("namaPhoto", self.state.namaPhoto);
       })
     })
   }
