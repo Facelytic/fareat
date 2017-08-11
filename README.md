@@ -11,7 +11,7 @@ implementing face recognition for absent using comsume api such as face comparis
 | DELETE | /api/something/:id | delete something by id |
 
 ## How To Install
-clone the repository first and do step by step below 
+clone the repository first and do step by step below
 ```bash
 npm install
 npm start / yarn start
