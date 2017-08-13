@@ -19,6 +19,9 @@ import SignUp from './SignUp'
 const Index = (props) => {
     return (
       <div>
+        {/* {
+          localStorage.setItem('token', 'sokodskdok')
+        } */}
         {
           props.checkFlagLogin ?
           <div>
@@ -31,8 +34,8 @@ const Index = (props) => {
           <div className="main" style={styles.body}>
             <div className="columns">
               <div className="column is-5 is-offset-1">
-                <h1 style={styles.slogan}>CHANGE YOUR ABSENT JUST BY CLICK AT ONCE USING FAREAT APPS.</h1>
-                <h3 style={styles.sloganMini}>aquire your good absent to increast your productivity.</h3>
+                <h1 style={styles.slogan}>CHANGE YOUR ABSENT JUST BY CLICK AT ONCE USING FACELYTIC APPS.</h1>
+                <h3 style={styles.sloganMini}>aquire your good absent to increase your productivity.</h3>
               </div>
               <div className="column is-5">
                 <div className="column is-8 is-offset-4">

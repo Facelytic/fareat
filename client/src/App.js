@@ -18,6 +18,7 @@ import Home from './components/Home'
 import AddNewStudent from './components/AddNewStudent'
 import NewAbsent from './components/NewAbsent'
 import InsertClass from './components/InsertClass'
+import testing from './components/testing'
 class App extends Component {
   constructor() {
     super()
@@ -43,6 +44,7 @@ class App extends Component {
               <Route exact path="/new-absent" component={NewAbsent}/>
               <Route exact path="/new-class" component={InsertClass}/>
               <Route exact path="/data-student" component={InsertClass}/>
+              <Route exact path="/test" component={testing}/>
             </div>
           </Router>
         </div>

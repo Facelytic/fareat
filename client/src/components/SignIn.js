@@ -31,7 +31,7 @@ class SignIn extends Component {
     const { objLogin } = this.state
     const obj = objLogin
     return (
-      <Provider store={store}>
+      // <Provider store={store}>
 
         <div className="column is-12">
           {/* <Redirect to="/home" /> */}
@@ -68,7 +68,7 @@ class SignIn extends Component {
             </div>
           </div>
         </div>
-      </Provider>
+      // </Provider>
     )
   }
 
@@ -95,7 +95,7 @@ const styles = {
   }
 }
 const mapStateToProps = (state) => {
-  console.log('ini di sign in :: ', state.Flag.islogin);
+  console.log('ini di sign in :: ', state);
   return {
     checkFlagLogin: state.Flag.islogin
   }

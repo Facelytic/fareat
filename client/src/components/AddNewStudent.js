@@ -4,7 +4,7 @@ import Webcam from 'react-webcam'
 import * as Chance from 'chance'
 import axios from 'axios'
 // import * as AWS from 'aws-sdk'
-
+import { Redirect } from 'react-router-dom'
 
 import Header from './Header'
 // import Footer from './Footer'
@@ -30,13 +30,45 @@ export default class AddNewStudent extends Component {
       namaPhoto: "",
       displayPhoto: "",
       colorMsg: "#20e8b2",
-      classList: []
+      classList: [],
+      responseCheckCurrentUser: ""
     }
+  }
+
+  checkCurrentUser () {
+    var idUser = localStorage.getItem('id')
+    var username = localStorage.getItem('username')
+    axios.get('http://localhost:3000/api/users/' + idUser)
+    .then((resp) => {
+      if (resp.data.username === username) {
+        console.log('usernya benar');
+      } else {
+        console.log('usernya salah');
+        localStorage.clear()
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+      localStorage.clear()
+      this.setState({
+        responseCheckCurrentUser: "eror"
+      })
+    })
   }
 
   render() {
     return (
       <div>
+        {
+          this.state.responseCheckCurrentUser === "error" ?
+
+          <div>
+            <Redirect to="/" />
+          </div>
+          :
+          this.checkCurrentUser()
+
+        }
         <Header></Header>
         <MenuBar></MenuBar>
         <div style={{backgroundColor: "#ECF0F1", width: "80%", margin: "auto", padding: "3%", minHeight: "90vh"}}>
@@ -133,6 +165,11 @@ export default class AddNewStudent extends Component {
   }
 
   componentWillMount() {
+    if (localStorage.getItem('token')) {
+      this.checkCurrentUser()
+    } else {
+      this.setState({responseCheckCurrentUser: "error"})
+    }
     this.getClassListCurrUser()
   }
 
@@ -221,6 +258,7 @@ export default class AddNewStudent extends Component {
       this.setState({
         displayPhoto: image64
       })
+      console.log('image64!!!!!!!!!!', image64);
       var block = image64.split(";");
       var contentType = block[0].split(":")[1];
       var realData = block[1].split(",")[1];

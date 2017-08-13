@@ -3,13 +3,20 @@ import * as firebase from 'firebase'
 import Webcam from 'react-webcam'
 import axios from 'axios'
 import { Redirect } from 'react-router-dom'
+import * as AWS from 'aws-sdk'
 
 import Index from './Index'
 import Header from './Header'
 import Footer from './Footer'
 import MenuBar from './MenuBar'
 import FaceCompare from './FaceCompare'
+
+AWS.config.update({region:'us-east-1'});
+AWS.config.accessKeyId = process.env.accessKeyId
+AWS.config.secretAccessKey = process.env.secretAccessKey
+
 export default class App extends Component {
+
   setRef = (webcam) => {
     this.webcam = webcam;
   }
@@ -24,27 +31,20 @@ export default class App extends Component {
       hasilGo: "",
       isTakingPicture: false,
       imageToAbsen: "",
-      responseCheckCurrentUser: ""
+      responseCheckCurrentUser: "",
+      absent: "",
+      target: ""
     }
   }
   componentWillMount() {
-    // console.log('---------------1');
-    // if (localStorage.getItem('token')) {
-    //   console.log('---------------2');
-    //   this.checkCurrentUser()
-    // } else {
-    //   console.log('---------------3');
-    //   <Route path="/" component={Index} />
-    // }
     if (localStorage.getItem('token')) {
       this.checkCurrentUser()
-      // if (this.state.responseCheckCurrentUser === "eror") {
-      //   localStorage.clear()
-      // }
+    } else {
+      this.setState({responseCheckCurrentUser: "error"})
     }
+    // this.studentImage()
+    // console.log(this.state.target);
   }
-
-
 
   checkCurrentUser () {
     var idUser = localStorage.getItem('id')
@@ -75,11 +75,11 @@ export default class App extends Component {
           // localStorage.getItem('token') ?
           // this.checkCurrentUser() :
           this.state.responseCheckCurrentUser === "error" ?
-          null:
           <div>
             <Redirect to="/" />
           </div>
-        
+          :this.checkCurrentUser()
+
         }
         <Header></Header>
         <MenuBar></MenuBar>
@@ -170,13 +170,18 @@ export default class App extends Component {
   async takePictureGo() {
     try {
       var image64 = await this.webcam.getScreenshot()
-
+      this.setState({
+        absent: image64
+      })
+      // console.log('photo: ', image64);
       var block = image64.split(";");
       var contentType = block[0].split(":")[1];
       var realData = block[1].split(",")[1];
 
       var blob = await this.b64toBlob(realData, contentType)
+      console.log('ini blob', blob);
       this.absenGo(blob)
+
     } catch (error) {
       console.error('ERROR: ', error);
     }
@@ -184,6 +189,56 @@ export default class App extends Component {
     //   imageToAbsen: Webcam.getScreenshot()
     // })
     // console.log(this.state.imageToAbsen);
+
+    var binaryImg = atob(realData);
+    var length = binaryImg.length;
+    var ab = new ArrayBuffer(length);
+    var ua = new Uint8Array(ab);
+    for (var i = 0; i < length; i++) {
+      ua[i] = binaryImg.charCodeAt(i);
+    }
+
+    var blob = new Blob([ab], {
+      type: "image/jpeg"
+    });
+    console.log(ab,'ab');
+
+
+    this.prosesingCompareGo(ab)
+  }
+  studentImage() {
+    var tar = "https://vignette3.wikia.nocookie.net/particracy/images/e/ed/Tony-stark-i-am-iron-man.jpg/revision/latest?cb=20141121062534"
+    var binaryImg = atob(tar);
+    var length = binaryImg.length;
+    var ab = new ArrayBuffer(length);
+    var ua = new Uint8Array(ab);
+    for (var i = 0; i < length; i++) {
+      ua[i] = binaryImg.charCodeAt(i);
+    }
+
+    var blob = new Blob([ab], {
+      type: "image/jpeg"
+    });
+    this.setState({
+      target: ab
+    })
+  }
+  prosesingCompareGo(img) {
+    var rekognition = new AWS.Rekognition()
+    let params = {
+      SimilarityThreshold: 90,
+      SourceImage: {
+        Bytes: img
+      },
+      TargetImage: {
+        Bytes: this.state.target
+      }
+    };
+
+    rekognition.compareFaces(params, function (err, data) {
+      if (err) console.log(err, err.stack); // an error occurred
+      else     console.log(data);           // successful response
+    });
   }
 
   b64toBlob(b64Data, contentType, sliceSize) {
@@ -211,6 +266,9 @@ export default class App extends Component {
   }
 
   absenGo(file) {
+    // console.log('img: ',this.state.absent);
+    // this.prosesingCompareGo(this.state.absent)
+    console.log(file);
     let self = this;
     let storage = firebase.storage()
     let storageRef = storage.ref(`/fotoAbsen/${file.size}`)
@@ -223,5 +281,43 @@ export default class App extends Component {
         })
       })
     })
+
+    // let bufferMan = new Buffer('https://firebasestorage.googleapis.com/v0/b/freat-7b322.appspot.com/o/fotoSiswa%2Fc292c765-f71e-54f0-8ed3-023c5305f7de?alt=media&token=cef4e89e-f611-432b-a264-1c785a841079', 'base64')
+    // // let bufferMan = new Buffer('https://firebasestorage.googleapis.com/v0/b/freat-7b322.appspot.com/o/fotoAbsen%2F57028?alt=media&token=4a40fb2d-e704-4cb9-98f0-ccf8ad73d4b7', 'base64')
+    // console.log(bufferMan);
+
+  //   var base64Image = file.split("data:image/jpeg;base64,")[1];
+  //   var binaryImg = atob(base64Image);
+  //   var length = binaryImg.length;
+  //   var ab = new ArrayBuffer(length);
+  //   var ua = new Uint8Array(ab);
+  //   for (var i = 0; i < length; i++) {
+  //     ua[i] = binaryImg.charCodeAt(i);
+  //   }
+  //
+  //   var blob = new Blob([ab], {
+  //     type: "image/jpeg"
+  //   });
+  //   console.log('ini blob isinya apa: ', blob);
+  //   console.log('ini ab: ', ab);
+  //
+  //   // ini yang satunya
+  //   // AWS.config.secretAccessKey = "D7isA14gPzafTBjfjYiboawD9YciY8XUIp1XsCqD";
+  //   var rekognition = new AWS.Rekognition();
+  //   let params = {
+  //     SimilarityThreshold: 90,
+  //     SourceImage: {
+  //       Bytes: blob
+  //     },
+  //     TargetImage: {
+  //       Bytes: blob
+  //     }
+  //   };
+  //
+  //   rekognition.compareFaces(params, function (err, data) {
+  //     if (err) console.log(err, err.stack); // an error occurred
+  //     else     console.log(data);           // successful response
+  //   });
   }
+
 }
