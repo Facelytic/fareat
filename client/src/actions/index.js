@@ -38,6 +38,13 @@ export const loginGo = (objLogin) => {
   }
 }
 
+export const setCurrUser = (objUser) => {
+  return {
+    type: 'SET_USER',
+    payload: objUser
+  }
+}
+
 export const signupGo = (objSignup) => {
   console.log(objSignup);
   return (dispatch, getState) => {

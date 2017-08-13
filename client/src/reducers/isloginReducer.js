@@ -1,12 +1,15 @@
 const initialState = {
-  islogin: false
+  islogin: false,
+  currUser: {}
 }
 
 export default (state=initialState, action) => {
   switch (action.type) {
     case 'SET_FLAG':
-      return {islogin: action.payload}
+      return {...state, islogin: action.payload}
+    case 'SET_USER':
+      return {...state, currUser: action.payload}
     default:
-    return state
+      return state
   }
 }

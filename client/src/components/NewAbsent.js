@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 import Header from './Header'
 // import Footer from './Footer'
 import MenuBar from './MenuBar'
 
-export default class NewAbsent extends Component {
+class NewAbsent extends Component {
   setRef = (webcam) => {
     this.webcam = webcam;
   }
@@ -14,12 +15,6 @@ export default class NewAbsent extends Component {
   constructor() {
     super()
     this.state = {
-      currUser: {
-        "name": "Sidik Hidayatullah",
-        "password": "$2a$10$t0zFGS2skAdRVQUV1/fl..ehk5dTRJLojPk1Yd5d87T0gyIuWzPie",
-        "email": "sidik@guru.com",
-        "_id": "598d57ef97ec530ceabb8cdb"
-      },
       newAbsentSubject: "",
       newAbsentClassName: "",
       classList: [],
@@ -176,3 +171,19 @@ export default class NewAbsent extends Component {
     this.getClassListCurrUser()
   }
 }
+
+const mapStateToProps = (state) => {
+  console.log('ini di sign in :: ', state);
+  return {
+    checkFlagLogin: state.Flag.islogin
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    // getFlag: () => dispatch(Get_Flag_SignUp()),
+    // loginGo: (objLogin) => dispatch(loginGo(objLogin))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewAbsent)

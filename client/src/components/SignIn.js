@@ -94,6 +94,7 @@ const styles = {
     fontFamily: 'source sans pro', fontSize: 30, color: 'white', fontWeight: 900
   }
 }
+
 const mapStateToProps = (state) => {
   console.log('ini di sign in :: ', state);
   return {
