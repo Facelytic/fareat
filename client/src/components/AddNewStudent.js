@@ -3,8 +3,9 @@ import * as firebase from 'firebase'
 import Webcam from 'react-webcam'
 import * as Chance from 'chance'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 // import * as AWS from 'aws-sdk'
-
+import { Redirect } from 'react-router-dom'
 
 import Header from './Header'
 // import Footer from './Footer'
@@ -18,18 +19,57 @@ export default class AddNewStudent extends Component {
   constructor() {
     super()
     this.state = {
-      currUser: "Sidik",
+      currUser: {
+        "name": "Sidik Hidayatullah",
+        "password": "$2a$10$t0zFGS2skAdRVQUV1/fl..ehk5dTRJLojPk1Yd5d87T0gyIuWzPie",
+        "email": "sidik@guru.com",
+        "_id": "598d57ef97ec530ceabb8cdb"
+      },
       newStudentName: "",
       newStudentPhoto: "",
+      newStudentClass: "",
       namaPhoto: "",
       displayPhoto: "",
-      colorMsg: "#20e8b2"
+      colorMsg: "#20e8b2",
+      classList: [],
+      responseCheckCurrentUser: ""
     }
+  }
+
+  checkCurrentUser () {
+    var idUser = localStorage.getItem('id')
+    var username = localStorage.getItem('username')
+    axios.get('http://localhost:3000/api/users/' + idUser)
+    .then((resp) => {
+      if (resp.data.username === username) {
+        console.log('usernya benar');
+      } else {
+        console.log('usernya salah');
+        localStorage.clear()
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+      localStorage.clear()
+      this.setState({
+        responseCheckCurrentUser: "eror"
+      })
+    })
   }
 
   render() {
     return (
       <div>
+        {
+          this.state.responseCheckCurrentUser === "error" ?
+
+          <div>
+            <Redirect to="/" />
+          </div>
+          :
+          this.checkCurrentUser()
+
+        }
         <Header></Header>
         <MenuBar></MenuBar>
         <div style={{backgroundColor: "#ECF0F1", width: "80%", margin: "auto", padding: "3%", minHeight: "90vh"}}>
@@ -40,7 +80,8 @@ export default class AddNewStudent extends Component {
               </div>
               <div className="field">
                 <p className="subtitle is-4">please fill all the data yaa</p>
-              </div><div className="field">
+              </div>
+              <div className="field">
                 <p style={{color: this.state.colorMsg}}>{this.state.msg}</p>
               </div>
               <br/>
@@ -50,6 +91,27 @@ export default class AddNewStudent extends Component {
                 </div>
                 <div className="control">
                   <input className="input" type="text" placeholder="Fullname" onChange={(e) => this.setState({newStudentName: e.target.value})}/>
+                </div>
+              </div>
+              <br/>
+              <div className="field" style={{width: '50%', margin: 'auto'}}>
+                <div className="control label" style={{textAlign: 'left'}}>
+                  <label className="label">Class</label>
+                </div>
+                <div className="control">
+                  <div className="select is-fullwidth">
+                    <select onChange={(e) => this.setState({newStudentClass: e.target.value})}>
+                      <option>Select Class Name</option>
+                      { this.state.classList.map( x => {
+                        return (
+                          <option key={x}>{x}</option>
+                        )
+                      })}
+                    </select>
+                  </div>
+                </div>
+                <div style={{textAlign: 'left'}}>
+                  <Link to="/new-class">create new class</Link>
                 </div>
               </div>
               {/* <br />
@@ -93,9 +155,31 @@ export default class AddNewStudent extends Component {
     );
   }
 
+  getClassListCurrUser() {
+    axios.get('http://localhost:3000/api/classList/user/'+this.state.currUser._id)
+    .then(response => {
+      this.setState({
+        classList: response.data.map(x => x.name)
+      })
+    })
+    .catch(err => {
+      alert('ERROR')
+      console.log(err);
+    })
+  }
+
+  componentWillMount() {
+    if (localStorage.getItem('token')) {
+      this.checkCurrentUser()
+    } else {
+      this.setState({responseCheckCurrentUser: "error"})
+    }
+    this.getClassListCurrUser()
+  }
+
   postNewStudentGoGo() {
     let self = this;
-    if (this.state.newStudentName === "" || this.state.newStudentPhoto === "") {
+    if (this.state.newStudentName === "" || this.state.newStudentPhoto === "" || this.state.newStudentClass === 'Select Class Name' || this.state.newStudentClass === '') {
       this.setState({
         msg: "please fill all requirements before submitting",
         colorMsg: "red"
@@ -103,7 +187,9 @@ export default class AddNewStudent extends Component {
     } else {
       axios.post('http://localhost:3000/api/students', {
         name: this.state.newStudentName,
-        photo: this.state.newStudentPhoto
+        photo: this.state.newStudentPhoto,
+        className: this.state.newStudentClass,
+        user_id: this.state.currUser._id
       })
       .then(function(response) {
         self.setState({
@@ -176,6 +262,7 @@ export default class AddNewStudent extends Component {
       this.setState({
         displayPhoto: image64
       })
+      console.log('image64!!!!!!!!!!', image64);
       var block = image64.split(";");
       var contentType = block[0].split(":")[1];
       var realData = block[1].split(",")[1];

@@ -13,9 +13,19 @@ var bcrypt = require('bcrypt')
 var absents = require('./routes/absents')
 var students = require('./routes/students')
 var users = require('./routes/users')
+var classList = require('./routes/classList')
+var subjectList = require('./routes/subjectList')
 var User = require('./models/user')
 
 mongoose.Promise = global.Promise;
+// mongoose.connect('mongodb://localhost/facelytic-test', {useMongoClient: true}, function(err, res) {
+//   if(err) {
+//     console.log('Error connecting to the database. ' + err);
+//   } else {
+//     console.log('Connected to Database: facelytic-test');
+//   }
+// });
+
 mongoose.connect(config.mongoURI[app.settings.env], {useMongoClient: true}, function(err, res) {
   if(err) {
     console.log('Error connecting to the database. ' + err);
@@ -44,6 +54,8 @@ app.use(bodyParser.raw())
 app.use('/api/absents', absents)
 app.use('/api/students', students)
 app.use('/api/users', users)
+app.use('/api/classList', classList)
+app.use('/api/subjectList', subjectList)
 
 // var db;
 

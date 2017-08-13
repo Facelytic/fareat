@@ -3,30 +3,40 @@ var AWS = require('aws-sdk')
 
 module.exports = {
   create : (req, res)=>{
-    let students = req.body.student_ids.map(x => {
-      return {
-        student_id: x._id,
-        pertemuan_1: '',
-        pertemuan_2: '',
-        pertemuan_3: '',
-        pertemuan_4: '',
-        pertemuan_5: '',
-        pertemuan_6: '',
-        pertemuan_7: ''
-      }
-    })
-    var createAbsent = new Absent({
-      student_list: students,
-      subject: req.body.subject,
-      class_name: req.body.class_name,
-      user_id: req.body.user_id
-    })
-
-    createAbsent.save((err, absent)=>{
-      if(!err) {
-        res.status(200).send(absent)
-      } else {
-        res.status(400).send(err)
+    Absent.find({
+      user_id: req.body.user_id,
+      class: req.body.class,
+      subject: req.body.subject
+    }, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else if (result.length > 0) {
+        res.status(200).send('sudah ada')
+      } else if (result.length === 0) {
+        Absent.create({
+          student_list: req.body.student_id.map(x => {
+              return {
+                student_id: x._id,
+                pertemuan_1: '',
+                pertemuan_2: '',
+                pertemuan_3: '',
+                pertemuan_4: '',
+                pertemuan_5: '',
+                pertemuan_6: '',
+                pertemuan_7: ''
+              }
+            }),
+          subject: req.body.subject,
+          class_name: req.body.class_name,
+          user_id: req.body.user_id
+        }, (erro, rezult) => {
+          if (err) {
+            console.log(err);
+            res.status(400).send(err)
+          } else {
+            res.status(200).send(rezult)
+          }
+        })
       }
     })
   },
@@ -46,7 +56,7 @@ module.exports = {
 
   getOne: (req, res)=>{
     Absent
-    .find({subject: req.params.subject, class_name: req.params.class_name})
+    .find({subject: req.query.s, class_name: req.query.c, user_id: req.query.u})
     .populate('student_list.student_id')
     .exec(function(err, result){
       if(!err) {
@@ -57,7 +67,7 @@ module.exports = {
     })
   },
 
-  update: (req, res)=>{
+ update: (req, res)=>{
     Absent.findOne({student_list: {$elemMatch: {student_id:req.params.student_id}}}, (err, result)=>{
       if(!err){
         var index = result.student_list.filter( (x) => {return x.student_id == req.params.student_id})
@@ -76,6 +86,7 @@ module.exports = {
         subject: result.subject,
         class_name: result.class_name,
         user_id: result.user_id}}, {new: true}, (err, data)=>{
+
           if(!err) {
             res.status(200).send(data)
           } else {
@@ -87,7 +98,18 @@ module.exports = {
       }
     })
   },
-
+    
+  getByUser: (req, res) => {
+      Absent.find({
+        user_id: req.params.id
+      }, (err, response) => {
+        if(!err) {
+          res.status(200).send(response)
+        } else {
+          res.status(400).send(err)
+        }
+      })
+    },
   delete: (req, res)=>{
     Absent.remove({_id: req.params.id}, function(err,removed) {
       if(!err) {
