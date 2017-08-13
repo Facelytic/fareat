@@ -224,6 +224,7 @@ export default class App extends Component {
     })
   }
   prosesingCompareGo(img) {
+    console.log(this.state.target);
     var rekognition = new AWS.Rekognition()
     let params = {
       SimilarityThreshold: 90,
