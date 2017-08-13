@@ -10,6 +10,7 @@ import Header from './Header'
 import Footer from './Footer'
 import MenuBar from './MenuBar'
 import FaceCompare from './FaceCompare'
+import { Redirect } from 'react-router-dom'
 
 AWS.config.update({region:'us-east-1'});
 AWS.config.accessKeyId = process.env.accessKeyId
@@ -24,10 +25,14 @@ export default class App extends Component {
   constructor() {
     super()
     this.state = {
-      currUser: "Sidik",
-      classList: [ "Dead Fox", "Ethopian Fox", "Fire Fox", "Grey Fox", "Happy Fox", "Island Fox" ],
-      subjectList: [ "VueJS", "API", "React", "Express", "Sequelize"],
-      pertemuanList: [ 1, 2, 3, 4, 5, 6, 7],
+      currUser: {
+        "name": "Sidik Hidayatullah",
+        "password": "$2a$10$t0zFGS2skAdRVQUV1/fl..ehk5dTRJLojPk1Yd5d87T0gyIuWzPie",
+        "email": "sidik@guru.com",
+        "_id": "598d57ef97ec530ceabb8cdb"
+      },
+      absentList: "",
+      pertemuanList: [],
       hasilGo: "",
       isTakingPicture: false,
       imageToAbsen: "",
@@ -83,7 +88,7 @@ export default class App extends Component {
         }
         <Header></Header>
         <MenuBar></MenuBar>
-        <div style={{backgroundColor: "#ECF0F1", width: "80%", margin: "auto", padding: "3%", height: "90vh"}}>
+        <div style={{backgroundColor: "#ECF0F1", width: "80%", margin: "auto", padding: "3%", minHeight: "90vh"}}>
           <div style={{width: "70%", margin: "auto", paddingTop: "20px", paddingBottom: "20px"}}>
             {/* TAKING PICTURE */}
             { this.state.isTakingPicture ?
@@ -96,36 +101,28 @@ export default class App extends Component {
                 <p className="button is-danger" style={{width: "15%", margin: "1%"}} onClick={() => this.takePictureGo()}><i className="fa fa-camera"></i></p>
               </div> :
               <div className="field">
-                <h2 className="title is-2">Hi, { this.state.currUser }</h2>
+                <h2 className="title is-2">Hi, { this.state.currUser.name }</h2>
                 <p className="subtitle is-3">Mau absen kelas mana nih?</p>
               </div>
             }
-            <div className="" style={{backgroundColor: "#ff7070", borderRadius: "5px", display: "flex", justifyContent: "space-around", padding: "10px"}}>
-              <div className="">
-                <div className="select">
-                  <select id="subject">
-                    <option>Select Subject</option>
-                    { this.state.subjectList.map( (x, idx) => {
+            <div className="columns" style={{backgroundColor: "#ff7070", borderRadius: "5px",
+              // display: "flex", justifyContent: "space-around",
+              padding: "10px"}}>
+              <div className="column is-7">
+                <div className="select is-fullwidth">
+                  <select id="absent-nya" onChange={(e) => this.adjustEncounter(JSON.parse(e.target.value))}>
+                    <option>Select Absent</option>
+                    { this.state.absentList === "" ?
+                      <option value="">loading..</option> :
+                      this.state.absentList.map( (x, idx) => {
                       return (
-                        <option key={idx} value={x}> { x } </option>
+                        <option key={idx} value={JSON.stringify(x)}> { x.class_name }, { x.subject }</option>
                       )
                     })}
                   </select>
                 </div>
               </div>
-              <div className="">
-                <div className="select">
-                  <select id="kelas">
-                    <option>Select Class</option>
-                    { this.state.classList.map( (x, idx) => {
-                      return (
-                        <option key={idx} value={x}> { x } </option>
-                      )
-                    })}
-                  </select>
-                </div>
-              </div>
-              <div className="">
+              <div className="column is-3">
                 <div className="select">
                   <select id="pertemuan">
                     <option>Encounter</option>
@@ -137,7 +134,7 @@ export default class App extends Component {
                   </select>
                 </div>
               </div>
-              <div className="">
+              <div className="column is-2">
                 <div className="field">
                   {/* <div className="file is-danger">
                     <label className="file-label" style={{border: "2px white solid", borderRadius: "5px"}}>
@@ -153,9 +150,7 @@ export default class App extends Component {
                   </div> */}
                   <p className="button is-danger"
                     style={{border: "2px white solid", borderRadius: "5px"}}
-                    onClick={() => this.setState({
-                      isTakingPicture: true
-                    })}>Absent!</p>
+                    onClick={() => this.readyToAbsent()}>Absent!</p>
                 </div>
               </div>
             </div>
@@ -165,6 +160,57 @@ export default class App extends Component {
         {/* <FaceCompare></FaceCompare> */}
       </div>
     );
+  }
+
+  readyToAbsent() {
+    // this.setState({
+    //   isTakingPicture: true
+    // })
+    let self = this;
+    let classToAbsent = document.getElementById("kelas").value;
+    let SubjectToAbsent = document.getElementById("subject").value;
+    let pretemuanKe = document.getElementById("pertemuan").value;
+    axios.get(`http://localhost:3000/api/absents/detail?s=${SubjectToAbsent}&c=${classToAbsent}&u=${this.state.currUser._id}`)
+    .then(response => {
+      
+    })
+  }
+
+  adjustEncounter(obj) {
+    if (obj.student_list[0].pertemuan_1 === "") {
+      this.setState({
+        pertemuanList: [1,2,3,4,5,6,7]
+      })
+    } else if (obj.student_list[0].pertemuan_2 === "") {
+      this.setState({
+        pertemuanList: [2,3,4,5,6,7]
+      })
+    } else if (obj.student_list[0].pertemuan_3 === "") {
+      this.setState({
+        pertemuanList: [3,4,5,6,7]
+      })
+    } else if (obj.student_list[0].pertemuan_4 === "") {
+      this.setState({
+        pertemuanList: [4,5,6,7]
+      })
+    } else if (obj.student_list[0].pertemuan_5 === "") {
+      this.setState({
+        pertemuanList: [5,6,7]
+      })
+    } else if (obj.student_list[0].pertemuan_6 === "") {
+      this.setState({
+        pertemuanList: [6,7]
+      })
+    } else if (obj.student_list[0].pertemuan_7 === "") {
+      this.setState({
+        pertemuanList: [7]
+      })
+    } else {
+      console.log(obj);
+      this.setState({
+        pertemuanList: []
+      })
+    }
   }
 
   async takePictureGo() {
@@ -320,4 +366,20 @@ export default class App extends Component {
   //   });
   }
 
+  getAbsentListCurrUser() {
+    axios.get('http://localhost:3000/api/absents/user/'+this.state.currUser._id)
+    .then(response => {
+      this.setState({
+        absentList: response.data
+      })
+    })
+    .catch(err => {
+      alert('ERROR')
+      console.log(err);
+    })
+  }
+
+  componentWillMount() {
+    this.getAbsentListCurrUser()
+  }
 }
