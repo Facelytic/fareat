@@ -10,7 +10,6 @@ import Header from './Header'
 import Footer from './Footer'
 import MenuBar from './MenuBar'
 import FaceCompare from './FaceCompare'
-import { Redirect } from 'react-router-dom'
 
 AWS.config.update({region:'us-east-1'});
 AWS.config.accessKeyId = process.env.accessKeyId
@@ -172,7 +171,7 @@ export default class App extends Component {
     let pretemuanKe = document.getElementById("pertemuan").value;
     axios.get(`http://localhost:3000/api/absents/detail?s=${SubjectToAbsent}&c=${classToAbsent}&u=${this.state.currUser._id}`)
     .then(response => {
-      
+
     })
   }
 
