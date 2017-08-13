@@ -22,6 +22,13 @@ export const Flag_Login = () => {
   }
 }
 
+export const setCurrUser = (obj) => {
+  return {
+    type: 'SET_CURR_USER',
+    payload: obj
+  }
+}
+
 export const loginGo = (objLogin) => {
   console.log('actions loginGo: ', objLogin);
   return (dispatch, getState) => {

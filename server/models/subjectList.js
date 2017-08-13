@@ -3,8 +3,7 @@ var Schema  = mongoose.Schema
 
 var SubjectListSchema = new Schema({
   name: {
-    type: String,
-    unique: true
+    type: String
   },
   user_id:{
     type: Schema.Types.ObjectId,

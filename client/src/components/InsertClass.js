@@ -1,22 +1,17 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-
+import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 
 import Header from './Header'
 // import Footer from './Footer'
 import MenuBar from './MenuBar'
 
-export default class InsertClass extends Component {
+class InsertClass extends Component {
 
   constructor() {
     super()
     this.state = {
-      currUser: {
-        "name": "Sidik Hidayatullah",
-        "password": "$2a$10$t0zFGS2skAdRVQUV1/fl..ehk5dTRJLojPk1Yd5d87T0gyIuWzPie",
-        "email": "sidik@guru.com",
-        "_id": "598d57ef97ec530ceabb8cdb"
-      },
       msg: "",
       newClassName: "",
       classList: []
@@ -26,6 +21,10 @@ export default class InsertClass extends Component {
   render() {
     return (
       <div>
+        { this.props.currUser._id == undefined ?
+        <Redirect to='/' /> :
+        null
+      }
         <Header></Header>
         <MenuBar></MenuBar>
         <div style={{backgroundColor: "#ECF0F1", width: "80%", margin: 'auto', padding: "20px 0"}}>
@@ -55,7 +54,7 @@ export default class InsertClass extends Component {
     if (this.state.classList.indexOf(this.state.newClassName) === -1) {
       axios.post('http://localhost:3000/api/classList', {
         name: this.state.newClassName,
-        user_id: this.state.currUser._id
+        user_id: this.props.currUser._id
       })
       .then(response => {
         this.setState({
@@ -66,17 +65,17 @@ export default class InsertClass extends Component {
         this.getClassListCurrUser()
       })
     } else {
-    this.setState({
-      newClassName: "",
-      msg: "Class name already exist",
-      msgColor: "red"
-    })
+      this.setState({
+        newClassName: "",
+        msg: "Class name already exist",
+        msgColor: "red"
+      })
     }
   }
 
 
   getClassListCurrUser() {
-    axios.get('http://localhost:3000/api/classList/user/'+this.state.currUser._id)
+    axios.get('http://localhost:3000/api/classList/user/'+this.props.currUser._id)
     .then(response => {
       this.setState({
         classList: response.data.map(x => x.name)
@@ -89,6 +88,16 @@ export default class InsertClass extends Component {
   }
 
   componentWillMount() {
-    this.getClassListCurrUser()
+    if (this.props.currUser._id !== undefined) {
+      this.getClassListCurrUser()
+    }
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    currUser: state.IS_LOGIN.currUser
+  }
+}
+
+export default connect(mapStateToProps, null)(InsertClass)

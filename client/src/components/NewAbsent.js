@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import Header from './Header'
@@ -29,6 +29,10 @@ class NewAbsent extends Component {
   render() {
     return (
       <div>
+        { this.props.currUser._id == undefined ?
+          <Redirect to='/'/> :
+          null
+        }
         <Header></Header>
         <MenuBar></MenuBar>
         <div style={{backgroundColor: "#ECF0F1", width: "80%", margin: 'auto', padding: "20px 0"}}>
@@ -94,14 +98,14 @@ class NewAbsent extends Component {
       })
     } else {
       let self = this;
-      axios.get('http://localhost:3000/api/students/class/'+this.state.newAbsentClassName+'/'+this.state.currUser._id)
+      axios.get('http://localhost:3000/api/students/class/'+this.state.newAbsentClassName+'/'+this.props.currUser._id)
       .then(response => {
         if (response.data.length > 0) {
           axios.post('http://localhost:3000/api/absents', {
             student_id: response.data,
             subject: self.state.newAbsentSubject,
             class_name: self.state.newAbsentClassName,
-            user_id: self.state.currUser._id
+            user_id: self.props.currUser._id
           })
           .then(rezponse => {
             if (rezponse.data === 'sudah ada') {
@@ -141,7 +145,7 @@ class NewAbsent extends Component {
 
 
   getClassListCurrUser() {
-    axios.get('http://localhost:3000/api/classList/user/'+this.state.currUser._id)
+    axios.get('http://localhost:3000/api/classList/user/'+this.props.currUser._id)
     .then(response => {
       this.setState({
         classList: response.data.map(x => x.name)
@@ -155,7 +159,7 @@ class NewAbsent extends Component {
   }
 
   getSubjectListCurrUser() {
-    axios.get('http://localhost:3000/api/subjectList/user/'+this.state.currUser._id)
+    axios.get('http://localhost:3000/api/subjectList/user/'+this.props.currUser._id)
     .then(response => {
       this.setState({
         subjectList: response.data.map(x => x.name)
@@ -168,10 +172,19 @@ class NewAbsent extends Component {
   }
 
   componentWillMount() {
-    this.getClassListCurrUser()
+    if (this.props.currUser != undefined) {
+      this.getClassListCurrUser()
+    }
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    currUser: state.IS_LOGIN.currUser
+  }
+}
+
+<<<<<<< HEAD
 const mapStateToProps = (state) => {
   console.log('ini di sign in :: ', state);
   return {
@@ -183,6 +196,11 @@ const mapDispatchToProps = (dispatch) => {
   return {
     // getFlag: () => dispatch(Get_Flag_SignUp()),
     // loginGo: (objLogin) => dispatch(loginGo(objLogin))
+=======
+const mapDispatchToProps = (dispatch) => {
+  return {
+
+>>>>>>> eac0bff7e8b2b2a603b687b27df3e0f3a552a734
   }
 }
 

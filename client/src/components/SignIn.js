@@ -1,10 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Provider } from 'react-redux'
-import axios from 'axios'
-import { Redirect } from 'react-router-dom'
-
-import store from '../store'
 import { Get_Flag_SignUp, loginGo } from '../actions'
 
 class SignIn extends Component {
@@ -31,11 +26,8 @@ class SignIn extends Component {
     const { objLogin } = this.state
     const obj = objLogin
     return (
-      // <Provider store={store}>
 
         <div className="column is-12">
-          {/* <Redirect to="/home" /> */}
-
           <div className="login" style={styles.login}>
             <h1 style={styles.h1}>Start Today</h1>
             <br/>
@@ -68,21 +60,8 @@ class SignIn extends Component {
             </div>
           </div>
         </div>
-      // </Provider>
     )
   }
-
-  // loginGo() {
-  //   console.log('mystate:::::>>>>>', this.state.objLogin.username);
-  //   var self = this
-  //   axios.post('http://localhost:3000/api/users/signin', {
-  //     username: self.state.objLogin.username,
-  //     password: self.state.objLogin.password
-  //   })
-  //   .then((resp) => {
-  //     console.log(resp.data);
-  //   }).catch((err) => console.log(err))
-  // }
 }
 
 
@@ -110,4 +89,3 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn)
-// export default SignIn

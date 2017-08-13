@@ -1,22 +1,16 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-
-
+import { connect } from 'react-redux'
 import Header from './Header'
 // import Footer from './Footer'
 import MenuBar from './MenuBar'
+import { Redirect } from 'react-router-dom'
 
-export default class InsertSubject extends Component {
+class InsertSubject extends Component {
 
   constructor() {
     super()
     this.state = {
-      currUser: {
-        "name": "Sidik Hidayatullah",
-        "password": "$2a$10$t0zFGS2skAdRVQUV1/fl..ehk5dTRJLojPk1Yd5d87T0gyIuWzPie",
-        "email": "sidik@guru.com",
-        "_id": "598d57ef97ec530ceabb8cdb"
-      },
       msg: "",
       newSubject: "",
       subjectList: []
@@ -26,6 +20,11 @@ export default class InsertSubject extends Component {
   render() {
     return (
       <div>
+        {
+          this.props.currUser._id == undefined ?
+          <Redirect to='/' /> :
+          null
+        }
         <Header></Header>
         <MenuBar></MenuBar>
         <div style={{backgroundColor: "#ECF0F1", width: "80%", margin: 'auto', padding: "20px 0"}}>
@@ -55,7 +54,7 @@ export default class InsertSubject extends Component {
     if (this.state.subjectList.indexOf(this.state.newSubject) === -1) {
       axios.post('http://localhost:3000/api/subjectList', {
         name: this.state.newSubject,
-        user_id: this.state.currUser._id
+        user_id: this.props.currUser._id
       })
       .then(response => {
         this.setState({
@@ -76,7 +75,7 @@ export default class InsertSubject extends Component {
 
 
   getSubjectListCurrUser() {
-    axios.get('http://localhost:3000/api/subjectList/user/'+this.state.currUser._id)
+    axios.get('http://localhost:3000/api/subjectList/user/'+this.props.currUser._id)
     .then(response => {
       this.setState({
         subjectList: response.data.map(x => x.name)
@@ -89,6 +88,22 @@ export default class InsertSubject extends Component {
   }
 
   componentWillMount() {
-    this.getSubjectListCurrUser()
+    if (this.props.currUser._id != undefined) {
+      this.getSubjectListCurrUser()
+    }
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    currUser: state.IS_LOGIN.currUser
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(InsertSubject)
