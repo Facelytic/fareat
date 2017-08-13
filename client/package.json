@@ -5,9 +5,12 @@
   "dependencies": {
     "aws-sdk": "^2.95.0",
     "axios": "^0.16.2",
+    "base64-img": "^1.0.3",
     "bulma": "^0.5.1",
     "chance": "^1.0.10",
+    "dotenv": "^4.0.0",
     "firebase": "^4.2.0",
+    "node-base64-image": "^1.0.4",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.6",

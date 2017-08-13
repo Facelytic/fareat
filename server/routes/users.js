@@ -4,7 +4,7 @@ var userCont = require('../controllers/users-cont')
 var passport = require('passport')
 
 
-router.post('/', userCont.signup)
+router.post('/signup', userCont.signup)
 router.post('/signin', passport.authenticate('local', { session: false }), userCont.signin)
 router.get('/', userCont.getAll)
 router.get('/:id', userCont.getOne)

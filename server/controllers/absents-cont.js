@@ -10,6 +10,29 @@ module.exports = {
     }, (err, result) => {
       if (err) {
         console.log(err);
+    let students = req.body.student_id.map(x => {
+      return {
+        student_id: x._id,
+        pertemuan_1: '',
+        pertemuan_2: '',
+        pertemuan_3: '',
+        pertemuan_4: '',
+        pertemuan_5: '',
+        pertemuan_6: '',
+        pertemuan_7: ''
+      }
+    })
+    var createAbsent = new Absent({
+      student_list: students,
+      subject: req.body.subject,
+      class_name: req.body.class_name,
+      user_id: req.body.user_id
+    })
+
+    createAbsent.save((err, absent)=>{
+      if(!err) {
+        res.status(200).send(absent)
+      } else {
         res.status(400).send(err)
       } else if (result.length > 0) {
         res.status(200).send('sudah ada')

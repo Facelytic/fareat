@@ -8,6 +8,8 @@ export default (state=initialState, action) => {
       return {Flag: action.payload}
     case 'GET_FLAG_SIGNUP':
       return {Flag: action.payload}
+    // case 'SET_FLAG':
+    //   return {islogin: action.payload}
     default:
     return state
 
