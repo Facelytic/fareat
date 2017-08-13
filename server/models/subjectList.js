@@ -1,7 +1,7 @@
 var mongoose = require('mongoose')
 var Schema  = mongoose.Schema
 
-var ClassListSchema = new Schema({
+var SubjectListSchema = new Schema({
   name: {
     type: String,
     unique: true
@@ -13,6 +13,6 @@ var ClassListSchema = new Schema({
 })
 
 
-var ClassList = mongoose.model('ClassList', ClassListSchema)
+var SubjectList = mongoose.model('SubjectList', SubjectListSchema)
 
-module.exports = ClassList
+module.exports = SubjectList
