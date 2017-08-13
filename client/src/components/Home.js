@@ -149,7 +149,7 @@ export default class App extends Component {
                   </div> */}
                   <p className="button is-danger"
                     style={{border: "2px white solid", borderRadius: "5px"}}
-                    onClick={() => this.readyToAbsent()}>Absent!</p>
+                    onClick={() => this.openCamera()}>Absent!</p>
                 </div>
               </div>
             </div>
@@ -160,7 +160,11 @@ export default class App extends Component {
       </div>
     );
   }
-
+  openCamera() {
+    this.setState({
+      isTakingPicture: true
+    })
+  }
   adjustEncounter(obj) {
     if (obj.student_list[0].pertemuan_1 === "") {
       this.setState({
@@ -238,8 +242,13 @@ export default class App extends Component {
     this.prosesingCompareGo(ab)
   }
   studentImage() {
-    var tar = "https://vignette3.wikia.nocookie.net/particracy/images/e/ed/Tony-stark-i-am-iron-man.jpg/revision/latest?cb=20141121062534"
+
+    var tar = "https://firebasestorage.googleapis.com/v0/b/freat-7b322.appspot.com/o/fotoSiswa%2F225350b207a04-f467-5930-b631-7b71ede82203?alt=media&token=801fd66a-7fe6-4af0-a152-4655380042d9"
+
+    // var enc = btoa(tar)
+    // console.log('enc: ', enc);
     var binaryImg = atob(tar);
+    console.log('target img', binaryImg);
     var length = binaryImg.length;
     var ab = new ArrayBuffer(length);
     var ua = new Uint8Array(ab);
@@ -250,11 +259,13 @@ export default class App extends Component {
     var blob = new Blob([ab], {
       type: "image/jpeg"
     });
+    console.log('target::: ', ab);
     this.setState({
       target: ab
     })
   }
   prosesingCompareGo(img) {
+    this.studentImage()
     console.log(this.state.target);
     var rekognition = new AWS.Rekognition()
     let params = {
@@ -263,6 +274,7 @@ export default class App extends Component {
         Bytes: img
       },
       TargetImage: {
+        // Bytes: img
         Bytes: this.state.target
       }
     };
@@ -308,9 +320,9 @@ export default class App extends Component {
     .then(function() {
       storageRef.getDownloadURL().then(function(url) {
         console.log('cek firebase\nURL: ', url);
-        self.setState({
-          hasilGo: `mengabsen kelas ${document.getElementById("kelas").value}, mata pelajaran ${document.getElementById("subject").value}, pertemuan ke-${document.getElementById("pertemuan").value}\nimage url : ${url}`
-        })
+        // self.setState({
+        //   hasilGo: `mengabsen kelas ${document.getElementById("kelas").value}, mata pelajaran ${document.getElementById("subject").value}, pertemuan ke-${document.getElementById("pertemuan").value}\nimage url : ${url}`
+        // })
       })
     })
 
