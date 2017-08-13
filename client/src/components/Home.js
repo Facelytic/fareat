@@ -37,7 +37,9 @@ class Home extends Component {
     }
   }
   componentWillMount() {
-    if (localStorage.getItem('token')) {
+    // console.log('localStorage', localStorage);
+    if (localStorage.token !== undefined) {
+      console.log('masuk componentWillMount localStorage gak undefined');
       this.checkCurrentUser()
     } else {
       this.setState({responseCheckCurrentUser: "error"})
@@ -45,6 +47,7 @@ class Home extends Component {
   }
 
   checkCurrentUser () {
+    let self = this
     var idUser = localStorage.getItem('id')
     var username = localStorage.getItem('username')
     axios.get('http://localhost:3000/api/users/' + idUser)
@@ -52,13 +55,13 @@ class Home extends Component {
       if (resp.data.username === username) {
         // console.log(resp.data);
         // this.getAbsentListCurrUser()
-        this.props.setCurrUser({
+        self.props.flagLogin()
+        self.props.setCurrUser({
           name: resp.data.name,
           username: resp.data.username,
           _id: resp.data._id
         })
-        this.props.flagLogin()
-        this.getAbsentListCurrUser()
+        self.getAbsentListCurrUser()
         console.log('usernya benar');
       } else {
         console.log('usernya salah');
@@ -80,7 +83,8 @@ class Home extends Component {
         {
           // localStorage.getItem('token') ?
           // this.checkCurrentUser() :
-          this.state.responseCheckCurrentUser === "error" ?
+          // this.props.currUser._id == undefined ?
+          this.state.responseCheckCurrentUser == "error" ?
           <div>
             <Redirect to="/" />
           </div>

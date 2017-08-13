@@ -184,23 +184,10 @@ const mapStateToProps = (state) => {
   }
 }
 
-<<<<<<< HEAD
-const mapStateToProps = (state) => {
-  console.log('ini di sign in :: ', state);
-  return {
-    checkFlagLogin: state.Flag.islogin
-  }
-}
-
 const mapDispatchToProps = (dispatch) => {
   return {
     // getFlag: () => dispatch(Get_Flag_SignUp()),
     // loginGo: (objLogin) => dispatch(loginGo(objLogin))
-=======
-const mapDispatchToProps = (dispatch) => {
-  return {
-
->>>>>>> eac0bff7e8b2b2a603b687b27df3e0f3a552a734
   }
 }
 

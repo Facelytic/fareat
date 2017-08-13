@@ -22,32 +22,26 @@ export const Flag_Login = () => {
   }
 }
 
-export const setCurrUser = (obj) => {
-  return {
-    type: 'SET_CURR_USER',
-    payload: obj
-  }
-}
-
 export const loginGo = (objLogin) => {
   console.log('actions loginGo: ', objLogin);
   return (dispatch, getState) => {
     const apiUrl = 'http://localhost:3000/api/users/signin'
     axios.post(apiUrl, {...objLogin})
     .then((resp) => {
-      console.log(resp, 'ini reps after hit loginGo');
-      localStorage.setItem('token', resp.data.token)
-      localStorage.setItem('username', resp.data.username)
-      localStorage.setItem('id', resp.data.id)
-      dispatch(Flag_Login())
-
+      if (resp.data.msg != "Invalid username" || resp.data.msg != "Invalid Password") {
+        console.log(resp, 'ini reps after hit loginGo');
+        localStorage.setItem('token', resp.data.token)
+        localStorage.setItem('username', resp.data.username)
+        localStorage.setItem('id', resp.data.id)
+        dispatch(Flag_Login())
+      }
     }).catch(err => console.log(err))
   }
 }
 
 export const setCurrUser = (objUser) => {
   return {
-    type: 'SET_USER',
+    type: 'SET_CURR_USER',
     payload: objUser
   }
 }

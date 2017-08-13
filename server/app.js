@@ -38,7 +38,7 @@ passport.use(new LocalStrategy(
   function(username, password, done) {
     User.findOne({ username: username }, function (err, user) {
       if (err) { return done(err); }
-      if (!user) { return done(null, {msg: 'invalid username'}); }
+      if (!user) { return done(null, {msg: 'Invalid username'}); }
       if (!bcrypt.compareSync(password, user.password)) { return done(null, {msg: 'Invalid password'}); }
       return done(null, user);
     });
