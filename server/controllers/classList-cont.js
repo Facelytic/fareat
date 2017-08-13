@@ -7,13 +7,26 @@ module.exports = {
       user_id: req.body.user_id
     })
 
-    createClassList.save((err, student)=>{
-      if(!err) {
-        res.status(200).send(student)
+    ClassList.find({name: req.body.name, user_id: req.body.user_id}, (errorr, response) => {
+      if (!errorr) {
+        if (response.length > 0) {
+          res.status(200).send('sudah ada')
+        } else {
+          createClassList.save((err, student)=>{
+            if(!err) {
+              res.status(200).send(student)
+            } else {
+              console.log(err);
+              res.status(400).send(err)
+            }
+          })
+        }
       } else {
+        console.log(errorr);
         res.status(400).send(err)
       }
     })
+
   },
   getAll : (req, res)=>{
     ClassList.find({}, (err, result)=>{
