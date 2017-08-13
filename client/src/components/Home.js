@@ -4,18 +4,20 @@ import Webcam from 'react-webcam'
 import axios from 'axios'
 import { Redirect } from 'react-router-dom'
 import * as AWS from 'aws-sdk'
+import { connect } from 'react-redux'
 
 import Index from './Index'
 import Header from './Header'
 import Footer from './Footer'
 import MenuBar from './MenuBar'
 import FaceCompare from './FaceCompare'
+import { setCurrUser, Flag_Login } from '../actions'
 
 AWS.config.update({region:'us-east-1'});
 AWS.config.accessKeyId = process.env.accessKeyId
 AWS.config.secretAccessKey = process.env.secretAccessKey
 
-export default class App extends Component {
+class Home extends Component {
 
   setRef = (webcam) => {
     this.webcam = webcam;
@@ -24,12 +26,6 @@ export default class App extends Component {
   constructor() {
     super()
     this.state = {
-      currUser: {
-        "name": "Sidik Hidayatullah",
-        "password": "$2a$10$t0zFGS2skAdRVQUV1/fl..ehk5dTRJLojPk1Yd5d87T0gyIuWzPie",
-        "email": "sidik@guru.com",
-        "_id": "598d57ef97ec530ceabb8cdb"
-      },
       absentList: "",
       pertemuanList: [],
       hasilGo: "",
@@ -46,7 +42,6 @@ export default class App extends Component {
     } else {
       this.setState({responseCheckCurrentUser: "error"})
     }
-    this.getAbsentListCurrUser()
   }
 
   checkCurrentUser () {
@@ -57,6 +52,13 @@ export default class App extends Component {
       if (resp.data.username === username) {
         // console.log(resp.data);
         // this.getAbsentListCurrUser()
+        this.props.setCurrUser({
+          name: resp.data.name,
+          username: resp.data.username,
+          _id: resp.data._id
+        })
+        this.props.flagLogin()
+        this.getAbsentListCurrUser()
         console.log('usernya benar');
       } else {
         console.log('usernya salah');
@@ -100,7 +102,7 @@ export default class App extends Component {
                 <p className="button is-danger" style={{width: "15%", margin: "1%"}} onClick={() => this.takePictureGo()}><i className="fa fa-camera"></i></p>
               </div> :
               <div className="field">
-                <h2 className="title is-2">Hi, { this.state.currUser.name }</h2>
+                <h2 className="title is-2">Hi, { this.props.currUser.name }</h2>
                 <p className="subtitle is-3">Mau absen kelas mana nih?</p>
               </div>
             }
@@ -215,7 +217,7 @@ export default class App extends Component {
 
       var blob = await this.b64toBlob(realData, contentType)
       console.log('ini blob', blob);
-      this.absenGo(blob)
+      // this.absenGo(blob)
 
     } catch (error) {
       console.error('ERROR: ', error);
@@ -238,51 +240,88 @@ export default class App extends Component {
     });
     console.log(ab,'ab');
 
-
     this.prosesingCompareGo(ab)
+
   }
   studentImage() {
+    axios.get('http://localhost:3000/api/students/59908aa79e6c523b2d6086e2')
+    // var tar = "https://firebasestorage.googleapis.com/v0/b/freat-7b322.appspot.com/o/fotoSiswa%2F225350b207a04-f467-5930-b631-7b71ede82203?alt=media&token=801fd66a-7fe6-4af0-a152-4655380042d9"
+    .then(resp => {
+      // this.setState({
+      //   target: resp.data.photo
+      // })
+      // console.log("ini targetnya woy!!!!!", this.state.target);
+      console.log(resp.data);
+      var binaryImg = btoa(resp.data.photo);
+      // console.log('target img', binaryImg);
+      var length = binaryImg.length;
+      var ab = new ArrayBuffer(length);
+      var ua = new Uint8Array(ab);
+      for (var i = 0; i < length; i++) {
+        ua[i] = binaryImg.charCodeAt(i);
+      }
 
-    var tar = "https://firebasestorage.googleapis.com/v0/b/freat-7b322.appspot.com/o/fotoSiswa%2F225350b207a04-f467-5930-b631-7b71ede82203?alt=media&token=801fd66a-7fe6-4af0-a152-4655380042d9"
+      var blob = new Blob([ab], {
+        type: "image/jpeg"
+      });
+      console.log('target::: ', ab);
+      this.setState({
+        target: ab
+      })
 
-    // var enc = btoa(tar)
-    // console.log('enc: ', enc);
-    var binaryImg = atob(tar);
-    console.log('target img', binaryImg);
-    var length = binaryImg.length;
-    var ab = new ArrayBuffer(length);
-    var ua = new Uint8Array(ab);
-    for (var i = 0; i < length; i++) {
-      ua[i] = binaryImg.charCodeAt(i);
-    }
-
-    var blob = new Blob([ab], {
-      type: "image/jpeg"
-    });
-    console.log('target::: ', ab);
-    this.setState({
-      target: ab
+      return ab
+    })
+    .catch(err => {
+      console.log(err);
     })
   }
-  prosesingCompareGo(img) {
-    this.studentImage()
-    console.log(this.state.target);
+  prosesingCompareGo(ab) {
     var rekognition = new AWS.Rekognition()
-    let params = {
-      SimilarityThreshold: 90,
+    var params = {
+      SimilarityThreshold: 80,
       SourceImage: {
-        Bytes: img
+        Bytes: ab
+      //  S3Object: {
+      //   Bucket: "facelytic",
+      //   Name: "absent/pp.jpeg"
+      //  }
       },
       TargetImage: {
-        // Bytes: img
-        Bytes: this.state.target
-      }
-    };
+       S3Object: {
+        Bucket: "facelytic",
+        Name: "student/nugraha.jpg"
+       }
+       }
+     };
 
-    rekognition.compareFaces(params, function (err, data) {
-      if (err) console.log(err, err.stack); // an error occurred
-      else     console.log(data);           // successful response
-    });
+     rekognition.compareFaces(params, function (err, data) {
+       if (err) console.log(err, err.stack); // an error occurred
+       else    {
+         console.log("nugraha: ", data);           // successful response
+         if (data) {
+           var params2 = {
+             SimilarityThreshold: 80,
+             SourceImage: {
+               Bytes: ab
+             },
+             TargetImage: {
+              S3Object: {
+               Bucket: "facelytic",
+               Name: "student/pp.jpeg"
+              }
+              }
+            };
+            rekognition.compareFaces(params2, function(error, data2) {
+              if (error) console.log(error, error.stack);
+              else {
+                console.log("erwin: ", data2);
+              }
+            })
+         }
+       }
+     });
+
+
   }
 
   b64toBlob(b64Data, contentType, sliceSize) {
@@ -312,19 +351,19 @@ export default class App extends Component {
   absenGo(file) {
     // console.log('img: ',this.state.absent);
     // this.prosesingCompareGo(this.state.absent)
-    console.log(file);
-    let self = this;
-    let storage = firebase.storage()
-    let storageRef = storage.ref(`/fotoAbsen/${file.size}`)
-    storageRef.put(file)
-    .then(function() {
-      storageRef.getDownloadURL().then(function(url) {
-        console.log('cek firebase\nURL: ', url);
-        // self.setState({
-        //   hasilGo: `mengabsen kelas ${document.getElementById("kelas").value}, mata pelajaran ${document.getElementById("subject").value}, pertemuan ke-${document.getElementById("pertemuan").value}\nimage url : ${url}`
-        // })
-      })
-    })
+    // console.log(file);
+    // let self = this;
+    // let storage = firebase.storage()
+    // let storageRef = storage.ref(`/fotoAbsen/${file.size}`)
+    // storageRef.put(file)
+    // .then(function() {
+    //   storageRef.getDownloadURL().then(function(url) {
+    //     console.log('cek firebase\nURL: ', url);
+    //     // self.setState({
+    //     //   hasilGo: `mengabsen kelas ${document.getElementById("kelas").value}, mata pelajaran ${document.getElementById("subject").value}, pertemuan ke-${document.getElementById("pertemuan").value}\nimage url : ${url}`
+    //     // })
+    //   })
+    // })
 
     // let bufferMan = new Buffer('https://firebasestorage.googleapis.com/v0/b/freat-7b322.appspot.com/o/fotoSiswa%2Fc292c765-f71e-54f0-8ed3-023c5305f7de?alt=media&token=cef4e89e-f611-432b-a264-1c785a841079', 'base64')
     // // let bufferMan = new Buffer('https://firebasestorage.googleapis.com/v0/b/freat-7b322.appspot.com/o/fotoAbsen%2F57028?alt=media&token=4a40fb2d-e704-4cb9-98f0-ccf8ad73d4b7', 'base64')
@@ -365,7 +404,7 @@ export default class App extends Component {
   }
 
   getAbsentListCurrUser() {
-    axios.get('http://localhost:3000/api/absents/user/'+this.state.currUser._id)
+    axios.get('http://localhost:3000/api/absents/user/'+this.props.currUser._id)
     .then(response => {
       this.setState({
         absentList: response.data
@@ -376,6 +415,20 @@ export default class App extends Component {
       console.log(err);
     })
   }
-
-
 }
+
+const mapStateToProps = (state) => {
+  console.log('state', state);
+  return {
+    currUser: state.IS_LOGIN.currUser
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCurrUser: (obj) => dispatch(setCurrUser(obj)),
+    flagLogin: () => dispatch(Flag_Login())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

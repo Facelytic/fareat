@@ -3,15 +3,15 @@ import * as firebase from 'firebase'
 import Webcam from 'react-webcam'
 import * as Chance from 'chance'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
 // import * as AWS from 'aws-sdk'
-import { Redirect } from 'react-router-dom'
 
 import Header from './Header'
 // import Footer from './Footer'
 import MenuBar from './MenuBar'
 
-export default class AddNewStudent extends Component {
+class AddNewStudent extends Component {
   setRef = (webcam) => {
     this.webcam = webcam;
   }
@@ -19,12 +19,6 @@ export default class AddNewStudent extends Component {
   constructor() {
     super()
     this.state = {
-      currUser: {
-        "name": "Sidik Hidayatullah",
-        "password": "$2a$10$t0zFGS2skAdRVQUV1/fl..ehk5dTRJLojPk1Yd5d87T0gyIuWzPie",
-        "email": "sidik@guru.com",
-        "_id": "598d57ef97ec530ceabb8cdb"
-      },
       newStudentName: "",
       newStudentPhoto: "",
       newStudentClass: "",
@@ -61,13 +55,13 @@ export default class AddNewStudent extends Component {
     return (
       <div>
         {
-          this.state.responseCheckCurrentUser === "error" ?
-
+          // this.state.responseCheckCurrentUser === "error" ?
+          this.props.currUser._id == undefined ?
           <div>
             <Redirect to="/" />
           </div>
           :
-          this.checkCurrentUser()
+          null
 
         }
         <Header></Header>
@@ -156,7 +150,7 @@ export default class AddNewStudent extends Component {
   }
 
   getClassListCurrUser() {
-    axios.get('http://localhost:3000/api/classList/user/'+this.state.currUser._id)
+    axios.get('http://localhost:3000/api/classList/user/'+this.props.currUser._id)
     .then(response => {
       this.setState({
         classList: response.data.map(x => x.name)
@@ -169,12 +163,11 @@ export default class AddNewStudent extends Component {
   }
 
   componentWillMount() {
-    if (localStorage.getItem('token')) {
-      this.checkCurrentUser()
+    if (this.props.currUser._id !== undefined) {
+      this.getClassListCurrUser()
     } else {
       this.setState({responseCheckCurrentUser: "error"})
     }
-    this.getClassListCurrUser()
   }
 
   postNewStudentGoGo() {
@@ -189,7 +182,7 @@ export default class AddNewStudent extends Component {
         name: this.state.newStudentName,
         photo: this.state.newStudentPhoto,
         className: this.state.newStudentClass,
-        user_id: this.state.currUser._id
+        user_id: this.props.currUser._id
       })
       .then(function(response) {
         self.setState({
@@ -257,7 +250,6 @@ export default class AddNewStudent extends Component {
       this.setState({
         newStudentPhoto: 'loading'
       })
-
       var image64 = await this.webcam.getScreenshot()
       this.setState({
         displayPhoto: image64
@@ -267,31 +259,31 @@ export default class AddNewStudent extends Component {
       var contentType = block[0].split(":")[1];
       var realData = block[1].split(",")[1];
       var blob = await this.b64toBlob(realData, contentType)
-      this.uploadFirebaseGetUrl(realData)
-
-
-      // ini untuk faceCpmarison dari url firebase
-      // this.postNewStudentGoGo(blob)
-
-      // Ini contok kode untuk face comparison
-
-      // var binaryImg = atob(realData);
-      // var length = binaryImg.length;
-      // var ab = new ArrayBuffer(length);
-      // var ua = new Uint8Array(ab);
-      // for (var i = 0; i < length; i++) {
-      //   ua[i] = binaryImg.charCodeAt(i);
-      // }
-      //
-      // var blob = new Blob([ab], {
-      //   type: "image/jpeg"
-      // });
-
-      // this.postNewStudentGoGo(ab)
+      // this.uploadFirebaseGetUrl(realData)
+      this.setState({
+        newStudentPhoto: realData
+      })
+      if (this.state.newStudentPhoto !== "") {
+        this.postImageStudent()
+      }
     } catch (error) {
       console.error('ERROR: ', error);
     }
+  }
 
+  postImageStudent() {
+    axios.post('http://localhost:3000/api/students', {
+      name: this.state.newStudentName,
+      photo: this.state.newStudentPhoto,
+      class: this.state.newStudentClass,
+      user_id: this.props.currUser._id
+    })
+    .then((response) => {
+      console.log('sukses');
+    })
+    .catch((error) => {
+      console.log(error);
+    })
   }
 
   b64toBlob(b64Data, contentType, sliceSize) {
@@ -336,3 +328,11 @@ export default class AddNewStudent extends Component {
     })
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    currUser: state.IS_LOGIN.currUser
+  }
+}
+
+export default connect(mapStateToProps, null)(AddNewStudent)

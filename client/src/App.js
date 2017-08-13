@@ -10,7 +10,6 @@ import {
 } from 'react-router-dom'
 
 import './App.css';
-import Footer from './components/Footer'
 import store from './store'
 import Index from './components/Index.js'
 import SignIn from './components/SignIn.js'
@@ -43,7 +42,7 @@ class App extends Component {
               <Route exact path="/" component={Index}/>
               <Route exact path="/home" component={Home}/>
               <Route exact path="/signin" component={SignIn}/>
-              <Route exact path="/add-new-student" component={AddNewStudent}/>
+              <Route exact path="/create-new-student" component={AddNewStudent}/>
               <Route exact path="/create-new-absent" component={NewAbsent}/>
               <Route exact path="/new-class" component={InsertClass}/>
               <Route exact path="/new-subject" component={InsertSubject}/>

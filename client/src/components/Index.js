@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Provider } from 'react-redux'
 import {
-  Link
+  Redirect
 } from 'react-router-dom'
-import { Redirect } from 'react-router-dom'
+import * as axios from 'axios'
 
-import store from '../store'
-import { Get_Flag_SignIn } from '../actions'
+import { Get_Flag_SignIn, Flag_Login, setCurrUser } from '../actions'
 
 import bg from '../bg.jpg'
 import Header from './Header'
@@ -16,18 +14,38 @@ import SignIn from './SignIn'
 import SignUp from './SignUp'
 
 
-const Index = (props) => {
+class Index extends Component {
+  constructor() {
+    super()
+    this.state = {
+      checkLSLogin: ""
+    }
+  }
+  componentWillMount() {
+    if (localStorage.getItem('id') && localStorage.getItem('username') && localStorage.getItem('token')) {
+      this.setState({
+        checkLSLogin: true
+      })
+    } else {
+      localStorage.clear()
+    }
+  }
+  render() {
     return (
       <div>
-        {/* {
-          localStorage.setItem('token', 'sokodskdok')
-        } */}
         {
-          props.checkFlagLogin ?
+          this.state.checkLSLogin == true ?
+          <div>
+            <Redirect to="/home"></Redirect>
+          </div>
+          : null
+         }
+        {
+          this.props.checkFlagLogin ?
           <div>
             <Redirect to="/home"/>
           </div>
-          : <Redirect to="/"/>
+          : null
         }
         <div className="index">
           <Header></Header>
@@ -41,7 +59,7 @@ const Index = (props) => {
                 <div className="column is-8 is-offset-4">
 
                   {
-                    props.FLAG === "issignup" ?
+                    this.props.FLAG === "issignup" ?
                     <SignUp></SignUp>
                     :
                     <SignIn></SignIn>
@@ -54,6 +72,7 @@ const Index = (props) => {
         </div>
     </div>
     )
+  }
 }
 
 const styles = {
@@ -86,6 +105,33 @@ const styles = {
 
 }
 
+const checkCurrentUser = (props) => {
+  var idUser = localStorage.getItem('id')
+  var username = localStorage.getItem('username')
+  axios.get('http://localhost:3000/api/users/' + idUser)
+  .then((resp) => {
+    if (resp.data.username === username) {
+      // console.log(resp.data);
+      // this.getAbsentListCurrUser()
+      this.props.setCurrUser({
+        name: resp.data.name,
+        username: resp.data.username,
+        _id: resp.data._id
+      })
+      this.props.flagLogin()
+      console.log('usernya benar');
+    } else {
+      console.log('usernya salah');
+      localStorage.clear()
+    }
+  })
+  .catch((err) => {
+    console.log(err)
+    localStorage.clear()
+
+  })
+}
+
 const mapStateToProps = (state) => {
   console.log( 'staenya::: ',state.IS_LOGIN.islogin)
   return {
@@ -94,11 +140,12 @@ const mapStateToProps = (state) => {
   }
 }
 
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     getFlag: () => dispatch(Get_Flag_SignIn())
-//   }
-// }
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCurrUser: (obj) => dispatch(setCurrUser(obj)),
+    flagLogin: () => dispatch(Flag_Login())
+  }
+}
 
 // export default connect(mapStateToProps, mapDispatchToProps)(Index)
 export default connect(mapStateToProps, null)(Index)
