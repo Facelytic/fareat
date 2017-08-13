@@ -46,8 +46,7 @@ export default class App extends Component {
     } else {
       this.setState({responseCheckCurrentUser: "error"})
     }
-    // this.studentImage()
-    // console.log(this.state.target);
+    this.getAbsentListCurrUser()
   }
 
   checkCurrentUser () {
@@ -57,6 +56,7 @@ export default class App extends Component {
     .then((resp) => {
       if (resp.data.username === username) {
         // console.log(resp.data);
+        // this.getAbsentListCurrUser()
         console.log('usernya benar');
       } else {
         console.log('usernya salah');
@@ -67,7 +67,7 @@ export default class App extends Component {
       console.log(err)
       localStorage.clear()
       this.setState({
-        responseCheckCurrentUser: "eror"
+        responseCheckCurrentUser: "error"
       })
     })
   }
@@ -82,7 +82,7 @@ export default class App extends Component {
           <div>
             <Redirect to="/" />
           </div>
-          :this.checkCurrentUser()
+          :null
 
         }
         <Header></Header>
@@ -159,20 +159,6 @@ export default class App extends Component {
         {/* <FaceCompare></FaceCompare> */}
       </div>
     );
-  }
-
-  readyToAbsent() {
-    // this.setState({
-    //   isTakingPicture: true
-    // })
-    let self = this;
-    let classToAbsent = document.getElementById("kelas").value;
-    let SubjectToAbsent = document.getElementById("subject").value;
-    let pretemuanKe = document.getElementById("pertemuan").value;
-    axios.get(`http://localhost:3000/api/absents/detail?s=${SubjectToAbsent}&c=${classToAbsent}&u=${this.state.currUser._id}`)
-    .then(response => {
-
-    })
   }
 
   adjustEncounter(obj) {
@@ -379,7 +365,5 @@ export default class App extends Component {
     })
   }
 
-  componentWillMount() {
-    this.getAbsentListCurrUser()
-  }
+
 }
