@@ -10,7 +10,6 @@ import Header from './Header'
 import Footer from './Footer'
 import MenuBar from './MenuBar'
 import FaceCompare from './FaceCompare'
-import { Redirect } from 'react-router-dom'
 
 AWS.config.update({region:'us-east-1'});
 AWS.config.accessKeyId = process.env.accessKeyId
@@ -25,12 +24,7 @@ export default class App extends Component {
   constructor() {
     super()
     this.state = {
-      currUser: {
-        "name": "Sidik Hidayatullah",
-        "password": "$2a$10$t0zFGS2skAdRVQUV1/fl..ehk5dTRJLojPk1Yd5d87T0gyIuWzPie",
-        "email": "sidik@guru.com",
-        "_id": "598d57ef97ec530ceabb8cdb"
-      },
+      currUser: {},
       absentList: "",
       pertemuanList: [],
       hasilGo: "",
@@ -42,11 +36,11 @@ export default class App extends Component {
     }
   }
   componentWillMount() {
-    if (localStorage.getItem('token')) {
-      this.checkCurrentUser()
-    } else {
-      this.setState({responseCheckCurrentUser: "error"})
-    }
+    // if (localStorage.getItem('token') !== undefined) {
+    //   this.checkCurrentUser()
+    // } else {
+    //   this.setState({responseCheckCurrentUser: "error"})
+    // }
     // this.studentImage()
     // console.log(this.state.target);
   }
@@ -58,6 +52,14 @@ export default class App extends Component {
     .then((resp) => {
       if (resp.data.username === username) {
         // console.log(resp.data);
+        this.getAbsentListCurrUser()
+        this.setState({
+          currUser: {
+            "name": resp.data.name,
+            "email": resp.data.email,
+            "_id": resp.data._id
+          }
+        })
         console.log('usernya benar');
       } else {
         console.log('usernya salah');
@@ -65,10 +67,11 @@ export default class App extends Component {
       }
     })
     .catch((err) => {
+      console.log('masuk sini');
       console.log(err)
       localStorage.clear()
       this.setState({
-        responseCheckCurrentUser: "eror"
+        responseCheckCurrentUser: "error"
       })
     })
   }
@@ -172,7 +175,7 @@ export default class App extends Component {
     let pretemuanKe = document.getElementById("pertemuan").value;
     axios.get(`http://localhost:3000/api/absents/detail?s=${SubjectToAbsent}&c=${classToAbsent}&u=${this.state.currUser._id}`)
     .then(response => {
-      
+
     })
   }
 
@@ -377,9 +380,5 @@ export default class App extends Component {
       alert('ERROR')
       console.log(err);
     })
-  }
-
-  componentWillMount() {
-    this.getAbsentListCurrUser()
   }
 }
