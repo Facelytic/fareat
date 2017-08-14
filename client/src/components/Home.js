@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import * as firebase from 'firebase'
 import Webcam from 'react-webcam'
 import axios from 'axios'
 import { Redirect } from 'react-router-dom'
-import * as AWS from 'aws-sdk'
 import { connect } from 'react-redux'
 
 import Index from './Index'
@@ -11,11 +9,11 @@ import Header from './Header'
 import Footer from './Footer'
 import MenuBar from './MenuBar'
 import FaceCompare from './FaceCompare'
-import { setCurrUser, Flag_Login } from '../actions'
+import { setCurrUser, Flag_Login, setAbsentionToCheck, setImageToCompare, setPertemuan } from '../actions'
 
-AWS.config.update({region:'us-east-1'});
-AWS.config.accessKeyId = process.env.accessKeyId
-AWS.config.secretAccessKey = process.env.secretAccessKey
+// AWS.config.update({region:'us-east-1'});
+// AWS.config.accessKeyId = process.env.accessKeyId
+// AWS.config.secretAccessKey = process.env.secretAccessKey
 
 class Home extends Component {
 
@@ -26,14 +24,12 @@ class Home extends Component {
   constructor() {
     super()
     this.state = {
+      absentToCheck: {},
       absentList: "",
       pertemuanList: [],
-      hasilGo: "",
       isTakingPicture: false,
-      imageToAbsen: "",
-      responseCheckCurrentUser: "",
-      absent: "",
-      target: ""
+      dataAbsen: "",
+      responseCheckCurrentUser: ""
     }
   }
   componentWillMount() {
@@ -89,7 +85,11 @@ class Home extends Component {
             <Redirect to="/" />
           </div>
           :null
-
+        }
+        {
+          this.state.processingAbsent ?
+          <Redirect to='/absent/in-progress' />:
+          null
         }
         <Header></Header>
         <MenuBar></MenuBar>
@@ -129,11 +129,11 @@ class Home extends Component {
               </div>
               <div className="column is-3">
                 <div className="select">
-                  <select id="pertemuan">
+                  <select id="pertemuan" onChange={(e) => this.props.setPertemuan(e.target.value)}>
                     <option>Encounter</option>
                     { this.state.pertemuanList.map( (x, idx) => {
                       return (
-                        <option key={idx} value={x}> { x } </option>
+                        <option key={idx} value={x.toString()}> { x } </option>
                       )
                     })}
                   </select>
@@ -167,7 +167,10 @@ class Home extends Component {
     );
   }
   openCamera() {
+    let jdObj = document.getElementById('absent-nya').value
+    this.props.setAbsentionToCheck(JSON.parse(jdObj))
     this.setState({
+      dataAbsent: document.getElementById('absent-nya').value,
       isTakingPicture: true
     })
   }
@@ -214,99 +217,13 @@ class Home extends Component {
       this.setState({
         absent: image64
       })
-      // console.log('photo: ', image64);
-      var block = image64.split(";");
-      var contentType = block[0].split(":")[1];
-      var realData = block[1].split(",")[1];
-
-      var blob = await this.b64toBlob(realData, contentType)
-      console.log('ini blob', blob);
-      // this.absenGo(blob)
-
     } catch (error) {
       console.error('ERROR: ', error);
     }
-    var binaryImg = atob(realData);
-    var length = binaryImg.length;
-    var ab = new ArrayBuffer(length);
-    var ua = new Uint8Array(ab);
-    for (var i = 0; i < length; i++) {
-      ua[i] = binaryImg.charCodeAt(i);
-    }
-
-    var blob = new Blob([ab], {
-      type: "image/jpeg"
-    });
-    console.log(ab,'ab');
-
-    this.prosesingCompareGo(ab)
-
-  }
-  
-  prosesingCompareGo(ab) {
-    var rekognition = new AWS.Rekognition()
-    var params = {
-      SimilarityThreshold: 80,
-      SourceImage: {
-        Bytes: ab
-      },
-      TargetImage: {
-       S3Object: {
-        Bucket: "facelytic",
-        Name: "student/nugraha.jpg"
-       }
-       }
-     };
-
-     rekognition.compareFaces(params, function (err, data) {
-       if (err) console.log(err, err.stack); // an error occurred
-       else    {
-         console.log("nugraha: ", data);           // successful response
-         if (data) {
-           var params2 = {
-             SimilarityThreshold: 80,
-             SourceImage: {
-               Bytes: ab
-             },
-             TargetImage: {
-              S3Object: {
-               Bucket: "facelytic",
-               Name: "student/erwin.jpg"
-              }
-              }
-            };
-            rekognition.compareFaces(params2, function(error, data2) {
-              if (error) console.log(error, error.stack);
-              else {
-                console.log("erwin: ", data2);
-                if (data) {
-                  var params3 = {
-                    SimilarityThreshold: 80,
-                    SourceImage: {
-                      Bytes: ab
-                    },
-                    TargetImage: {
-                     S3Object: {
-                      Bucket: "facelytic",
-                      Name: "student/sidik.jpg"
-                     }
-                     }
-                   };
-                   rekognition.compareFaces(params3, function(error3, data3) {
-                     if (error3) console.log(error3, error3.stack);
-                     else {
-                       console.log("sidik: ", data3);
-
-                     }
-                   })
-                }
-              }
-            })
-         }
-       }
-     });
-
-
+    this.props.setImageToCompare(image64)
+    this.setState({
+      processingAbsent: true
+    })
   }
 
   b64toBlob(b64Data, contentType, sliceSize) {
@@ -357,7 +274,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setCurrUser: (obj) => dispatch(setCurrUser(obj)),
-    flagLogin: () => dispatch(Flag_Login())
+    flagLogin: () => dispatch(Flag_Login()),
+    setAbsentionToCheck: (obj) => dispatch(setAbsentionToCheck(obj)),
+    setImageToCompare: (file) => dispatch(setImageToCompare(file)),
+    setPertemuan: (str) => dispatch(setPertemuan(str))
   }
 }
 

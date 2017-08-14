@@ -4,8 +4,7 @@ var Schema  = mongoose.Schema
 var StudentSchema = new Schema({
   name: String,
   photo: {
-    type: String,
-    require: true
+    type: String
   },
   class: {
     type: String,

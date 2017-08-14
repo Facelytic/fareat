@@ -35,6 +35,7 @@ class AddNewStudent extends Component {
 
   checkCurrentUser () {
     var idUser = localStorage.getItem('id')
+    console.log('');
     var username = localStorage.getItem('username')
     axios.get('http://localhost:3000/api/users/' + idUser)
     .then((resp) => {
@@ -172,27 +173,27 @@ class AddNewStudent extends Component {
       this.setState({responseCheckCurrentUser: "error"})
     }
   }
-  toS3() {
-    var s3 = new AWS.S3();
-    var params = {
-      // Body: <Binary String>,
-      Bucket: "student",
-      Key: this.state.newStudentPhoto,
-      ServerSideEncryption: "AES256",
-      Tagging: "key1=value1&key2=value2"
-   };
-   s3.putObject(params, function(err, data) {
-     if (err) console.log(err, err.stack); // an error occurred
-     else     console.log(data);           // successful response
-     /*
-     data = {
-      ETag: "\"6805f2cfc46c0f04559748bb039d69ae\"",
-      ServerSideEncryption: "AES256",
-      VersionId: "Ri.vC6qVlA4dEnjgRV4ZHsHoFIjqEMNt"
-     }
-     */
-   });
-  }
+  // toS3() {
+  //   var s3 = new AWS.S3();
+  //   var params = {
+  //     // Body: <Binary String>,
+  //     Bucket: "student",
+  //     Key: this.state.newStudentPhoto,
+  //     ServerSideEncryption: "AES256",
+  //     Tagging: "key1=value1&key2=value2"
+  //  };
+  //  s3.putObject(params, function(err, data) {
+  //    if (err) console.log(err, err.stack); // an error occurred
+  //    else     console.log(data);           // successful response
+  //    /*
+  //    data = {
+  //     ETag: "\"6805f2cfc46c0f04559748bb039d69ae\"",
+  //     ServerSideEncryption: "AES256",
+  //     VersionId: "Ri.vC6qVlA4dEnjgRV4ZHsHoFIjqEMNt"
+  //    }
+  //    */
+  //  });
+  // }
   postNewStudentGoGo() {
 
     let self = this;
@@ -204,19 +205,31 @@ class AddNewStudent extends Component {
     } else {
       axios.post('http://localhost:3000/api/students', {
         name: this.state.newStudentName,
-        photo: this.state.newStudentPhoto,
         className: this.state.newStudentClass,
         user_id: this.props.currUser._id
       })
       .then(function(response) {
-
-        self.setState({
-          colorMsg: "#20e8b2",
-          msg: "Add new student Success!",
-          newStudentPhoto: "",
-          newStudentName: "",
-          namaPhoto: "",
+        console.log(response.data);
+        let namaNya = response.data.name.toLowerCase().split(' ').join('-')
+        axios.put(`http://localhost:3000/api/students/${response.data._id}`, {
+          photo: `${response.data._id}_${namaNya}.jpg`
         })
+        .then(rezponse => {
+          console.log('response.dr rezponse', response.data);
+          self.takeToS3(response.data._id, namaNya, self.b64toBlob(self.state.newStudentPhoto.data, self.state.newStudentPhoto.contentType))
+          self.setState({
+            colorMsg: "#20e8b2",
+            msg: "Add new student Success!",
+            newStudentPhoto: "",
+            newStudentName: "",
+            namaPhoto: "",
+          })
+        })
+        .catch(err2 => {
+          alert('ERROR')
+          console.log(err2);
+        })
+
       })
       .catch(err => {
         alert('ERROR')
@@ -252,14 +265,14 @@ class AddNewStudent extends Component {
     // }
   }
 
-  takeToS3(img) {
-    console.log(img);
+  takeToS3( id, name, img) {
+    console.log('img: ', img);
     // var id = chance.guid()
     // console.log('id: ', id);
     var s3 = new AWS.S3();
     var params = {
       Bucket: 'facelytic/student',
-      Key: this.state.newStudentName.toLowerCase()+'.jpg',
+      Key: id+'_'+name+'.jpg',
       Body: img,
       ACL: 'public-read-write'
       // AccessControlPolicy: {
@@ -284,6 +297,8 @@ class AddNewStudent extends Component {
       // },
     };
 
+    this.insertNewStudentToAbsent(id)
+
     s3.putObject(params, function(err, data) {
       console.log(err, data);
     });
@@ -307,22 +322,29 @@ class AddNewStudent extends Component {
      */
   //  });
   }
+
+  insertNewStudentToAbsent(id) {
+    axios.get('http://localhost:3000/api/absents/user/'+this.props.currUser._id+'/class_name/'+this.state.newStudentClass)
+    .then(response => {
+      response.data.forEach( data => {
+        axios.put('http://localhost:3000/api/absents/new-student/'+data._id, {
+          student_id: id
+        })
+        .then(response => {
+          console.log('response.data', response.data)
+        })
+        .catch(err => {
+          console.log('err', err);
+        })
+      })
+    })
+  }
+
   clearImage() {
     this.setState({
-      newStudentPhoto: 'loading'
+      newStudentPhoto: ''
     })
-    let self = this;
-    let storage = firebase.storage()
-    let storageRef = storage.ref(`/fotoSiswa/${this.state.namaPhoto}`)
-    storageRef.delete().then(function() {
-      self.setState({
-        newStudentPhoto: "",
-        namaPhoto: "",
-        displayPhoto: ""
-      })
-    }).catch(function(err) {
-      console.log(err);
-    })
+
   }
 
   async takePictureGo() {
@@ -338,11 +360,14 @@ class AddNewStudent extends Component {
       var block = image64.split(";");
       var contentType = block[0].split(":")[1];
       var realData = block[1].split(",")[1];
-      var blob = await this.b64toBlob(realData, contentType)
+      // var blob = await this.b64toBlob(realData, contentType)
       // this.uploadFirebaseGetUrl(realData)
-      this.takeToS3(blob)
+      // this.takeToS3(blob)
       this.setState({
-        newStudentPhoto: realData
+        newStudentPhoto: {
+          data: realData,
+          contentType: contentType
+        }
       })
       // var binaryImg = atob(realData);
       // var length = binaryImg.length;
@@ -368,7 +393,7 @@ class AddNewStudent extends Component {
   postImageStudent() {
     axios.post('http://localhost:3000/api/students', {
       name: this.state.newStudentName,
-      photo: this.state.newStudentPhoto,
+      // photo: this.state.newStudentPhoto,
       class: this.state.newStudentClass,
       user_id: this.props.currUser._id
     })
