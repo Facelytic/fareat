@@ -15,6 +15,23 @@ export const Get_Flag_SignUp = () => {
   }
 }
 
+export const updateRawData = (data, obj=null) => {
+  return {
+    type: 'UPDATE_RAW_DATA',
+    payload: {
+      data: data,
+      BoundingBox: obj
+    }
+  }
+}
+
+export const updateMoodData = (data) => {
+  return {
+    type: "UPDATE_MOOD_DATA",
+    payload: data
+  }
+}
+
 export const setPertemuan = (str) => {
   return {
     type: 'SET_PERTEMUAN',
@@ -75,6 +92,18 @@ export const signupGo = (objSignup) => {
     .then((resp) => {
       dispatch(Get_Flag_SignIn())
 
+    }).catch(err => console.log(err))
+  }
+}
+
+//update hasil absent to database
+export const saveResultAbsent = (objAbsent) => {
+  console.log('objnya: ', objAbsent);
+  return (dispatch, getState) => {
+    const apiUrl = 'http://localhost:3000/api/absents/'+objAbsent.student_id._id
+    axios.put(apiUrl, objAbsent)
+    .then((resp) => {
+      console.log('sukses update : ', resp);
     }).catch(err => console.log(err))
   }
 }

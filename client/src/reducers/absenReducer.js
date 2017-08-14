@@ -2,7 +2,9 @@ const initialState = {
   Flag: "issignup",
   absentToCheck: {},
   imageToCompare: "",
-  pertemuan: ""
+  pertemuan: "",
+  rawResult: [],
+  moodData: []
 }
 
 export default (state=initialState, action) => {
@@ -19,6 +21,10 @@ export default (state=initialState, action) => {
       return {...state, pertemuan: action.payload}
     case 'UPDATE_ABSENT_TO_CHECK':
       return {...state, absentToCheck: action.payload}
+    case "UPDATE_RAW_DATA":
+      return {...state, rawResult: [...state.rawResult, action.payload]}
+    case "UPDATE_MOOD_DATA":
+      return {...state, moodData: action.payload}
     default:
       return state
   }
