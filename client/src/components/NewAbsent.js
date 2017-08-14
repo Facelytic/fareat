@@ -186,7 +186,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-
+    // getFlag: () => dispatch(Get_Flag_SignUp()),
+    // loginGo: (objLogin) => dispatch(loginGo(objLogin))
   }
 }
 

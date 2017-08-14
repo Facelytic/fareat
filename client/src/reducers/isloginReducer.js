@@ -10,6 +10,6 @@ export default (state=initialState, action) => {
     case 'SET_CURR_USER':
       return {...state, currUser: action.payload}
     default:
-    return state
+      return state
   }
 }

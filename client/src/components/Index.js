@@ -33,13 +33,7 @@ class Index extends Component {
   render() {
     return (
       <div>
-        {
-          this.state.checkLSLogin == true ?
-          <div>
-            <Redirect to="/home"></Redirect>
-          </div>
-          : null
-         }
+        
         {
           this.props.checkFlagLogin ?
           <div>

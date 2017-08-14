@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Get_Flag_SignUp, loginGo } from '../actions'
+import axios from 'axios'
+
+import { Get_Flag_SignUp, loginGo, Flag_Login, setCurrUser } from '../actions'
 
 class SignIn extends Component {
   constructor() {
@@ -9,7 +11,8 @@ class SignIn extends Component {
       objLogin: {
         username: '',
         password: ''
-      }
+      },
+      msg: ""
     }
   }
 
@@ -30,6 +33,7 @@ class SignIn extends Component {
         <div className="column is-12">
           <div className="login" style={styles.login}>
             <h1 style={styles.h1}>Start Today</h1>
+            <p style={{color: 'red'}}>{this.state.msg}</p>
             <br/>
             <div className="field">
               <p className="control has-icons-left">
@@ -49,7 +53,7 @@ class SignIn extends Component {
             </div>
             <div className="field">
               <hr/>
-              <a className="button" onClick={(e) => this.props.loginGo(this.state.objLogin)}>
+              <a className="button" onClick={(e) => this.loginGoGo(this.state.objLogin)}>
                 Sign In!
               </a>
               <a style={{color:'white'}}
@@ -62,6 +66,44 @@ class SignIn extends Component {
         </div>
     )
   }
+
+  loginGoGo(obj) {
+    console.log('masuk sini');
+    let self = this;
+    axios.post('http://localhost:3000/api/users/signin', obj)
+    .then(response => {
+      console.log(response);
+      if (response.data === "Invalid password") {
+        self.setState({
+          msg: "Wrong Password!",
+          objLogin: {...self.state.objLogin, password: ""}
+        })
+      } else if (response.data === "Invalid username") {
+        this.setState({
+          msg: "Invalid Username",
+          objLogin: {
+            username: "",
+            password: ""
+          }
+        })
+      } else {
+        localStorage.token = response.data.token
+        localStorage.username = response.data.username
+        localStorage.id = response.data.id
+        self.props.setCurrUser({
+          name: response.data.name,
+          username: response.data.username,
+          _id: response.data.id
+        })
+        self.props.flagLogin()
+      }
+    })
+    .catch( err => {
+      alert('ERROR!')
+      console.log(err);
+    })
+  }
+
 }
 
 
@@ -73,6 +115,7 @@ const styles = {
     fontFamily: 'source sans pro', fontSize: 30, color: 'white', fontWeight: 900
   }
 }
+
 const mapStateToProps = (state) => {
   console.log('ini di sign in :: ', state);
   return {
@@ -83,7 +126,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getFlag: () => dispatch(Get_Flag_SignUp()),
-    loginGo: (objLogin) => dispatch(loginGo(objLogin))
+    setCurrUser: (obj) => dispatch(setCurrUser(obj)),
+    flagLogin: () => dispatch(Flag_Login())
   }
 }
 

@@ -36,7 +36,8 @@ module.exports = {
           res.send({
             token: token,
             username: decoded.username,
-            id: decoded.id
+            id: decoded.id,
+            name: decoded.name
           })
         }
       })
