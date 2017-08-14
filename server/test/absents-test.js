@@ -83,7 +83,7 @@ var server = require('../app')
         chai.request(server)
         .post('/api/absents')
         .send({
-          student_ids: [{
+          student_id: [{
             _id: "598c675b85c0716d7fa75899"
             }],
     	     "subject": "VueJs",
@@ -100,7 +100,7 @@ var server = require('../app')
         chai.request(server)
         .post('/api/absents')
         .send({
-          student_ids: [{
+          student_id: [{
             _id: "598c675b85c0716d7fa75899"
             }],
     	     "subject": "VueJs",
@@ -108,10 +108,15 @@ var server = require('../app')
     	      "user_id": "598c672b85c0716d7fa75898"
         })
         .end(function(err, res){
-          res.should.be.json
-          done()
+          if(res.text == 'sudah ada'){
+            done()
+          } else {
+            res.should.be.json
+            done()
+          }
         })
       })
+
 
     it(`should add a SINGLE Absent on /api/absents POST and has properties:
         1. student_list
@@ -121,7 +126,7 @@ var server = require('../app')
         chai.request(server)
         .post('/api/absents')
         .send({
-          student_ids: [{
+          student_id: [{
             _id: "598c675b85c0716d7fa75899"
             }],
     	     "subject": "VueJs",
@@ -129,13 +134,17 @@ var server = require('../app')
     	      "user_id": "598c672b85c0716d7fa75898"
         })
         .end(function(err, res){
-          res.body.should.have.property('subject')
-          res.body.should.have.property('class_name')
-          res.body.should.have.property('user_id')
-          res.body.subject.should.equal('VueJs')
-          res.body.class_name.should.equal('Happy Fox')
-          res.body.user_id.should.equal('598c672b85c0716d7fa75898')
-          done()
+          if(res.text == 'sudah ada'){
+            done()
+          } else {
+            res.body.should.have.property('subject')
+            res.body.should.have.property('class_name')
+            res.body.should.have.property('user_id')
+            res.body.subject.should.equal('VueJs')
+            res.body.class_name.should.equal('Happy Fox')
+            res.body.user_id.should.equal('598c672b85c0716d7fa75898')
+            done()
+          }
         })
       })
 
@@ -157,7 +166,7 @@ var server = require('../app')
       })
       createAbsent.save(function(err, data){
         chai.request(server)
-        .get('/api/absents/'+data.subject+'/'+data.class_name)
+        .get('/api/absents/user/'+data.user_id)
         .end(function(err, res){
           res.should.have.status(200)
           done()
@@ -183,7 +192,7 @@ var server = require('../app')
       })
       createAbsent.save(function(err, data){
         chai.request(server)
-        .get('/api/absents/'+data.subject+'/'+data.class_name)
+        .get('/api/absents/user/'+data.user_id)
         .end(function(err, res){
           res.should.be.json;
           done()
@@ -213,7 +222,7 @@ var server = require('../app')
       })
       createAbsent.save(function(err, data){
         chai.request(server)
-        .get('/api/absents/'+data.subject+'/'+data.class_name)
+        .get('/api/absents/user/'+data.user_id)
         .end(function(err, res){
           res.body[0].should.have.property('student_list')
           res.body[0].should.have.property('subject')
