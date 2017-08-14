@@ -1,4 +1,5 @@
 require('dotenv').config()
+console.log(process.env.PASSWORD);
 var config = {
   port: process.env.PORT || 3000,
   test_port: 3001,
