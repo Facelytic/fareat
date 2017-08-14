@@ -78,8 +78,7 @@ class Home extends Component {
     return (
       <div>
         {
-          // localStorage.getItem('token') ?
-          // this.checkCurrentUser() :
+
           this.state.responseCheckCurrentUser === "error" ?
           <div>
             <Redirect to="/" />
@@ -307,7 +306,7 @@ class Home extends Component {
              TargetImage: {
               S3Object: {
                Bucket: "facelytic",
-               Name: "student/pp.jpeg"
+               Name: "student/erwin.jpg"
               }
               }
             };
@@ -315,6 +314,27 @@ class Home extends Component {
               if (error) console.log(error, error.stack);
               else {
                 console.log("erwin: ", data2);
+                if (data) {
+                  var params3 = {
+                    SimilarityThreshold: 80,
+                    SourceImage: {
+                      Bytes: ab
+                    },
+                    TargetImage: {
+                     S3Object: {
+                      Bucket: "facelytic",
+                      Name: "student/sidik.jpg"
+                     }
+                     }
+                   };
+                   rekognition.compareFaces(params3, function(error3, data3) {
+                     if (error3) console.log(error3, error3.stack);
+                     else {
+                       console.log("sidik: ", data3);
+
+                     }
+                   })
+                }
               }
             })
          }
