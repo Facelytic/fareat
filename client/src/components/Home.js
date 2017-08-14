@@ -80,7 +80,7 @@ class Home extends Component {
           // localStorage.getItem('token') ?
           // this.checkCurrentUser() :
           // this.props.currUser._id == undefined ?
-          this.state.responseCheckCurrentUser === "error" ?
+          this.state.responseCheckCurrentUser == "error" ?
           <div>
             <Redirect to="/" />
           </div>
@@ -220,7 +220,6 @@ class Home extends Component {
     } catch (error) {
       console.error('ERROR: ', error);
     }
-
     this.props.setImageToCompare(image64)
     this.setState({
       processingAbsent: true
