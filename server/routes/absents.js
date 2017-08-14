@@ -8,7 +8,9 @@ router.get('/', absentCont.getAll)
 // router.get()
 router.get('/user/:id', absentCont.getByUser)
 router.get('/detail', absentCont.getOne)
+router.get('/user/:user_id/class_name/:name', absentCont.getByClassNameAndUserID)
 router.put('/:student_id', absentCont.update)
+router.put('/new-student/:id', absentCont.pushStudent)
 router.delete('/:id', absentCont.delete)
 
 module.exports = router

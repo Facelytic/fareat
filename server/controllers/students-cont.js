@@ -35,6 +35,15 @@ module.exports = {
       }
     })
   },
+  deleteAllByUser: (req, res) => {
+    Student.remove({user_id: req.params.user_id}, (err, result) => {
+      if(!err) {
+        res.status(200).send(result)
+      } else {
+        res.status(400).send(err)
+      }
+    })
+  },
   getByUser: (req, res) => {
     Student.find({user_id: req.params.id}, (err, result)=>{
       if(!err) {

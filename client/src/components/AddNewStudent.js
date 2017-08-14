@@ -6,11 +6,14 @@ import axios from 'axios'
 import { Link, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 // import * as AWS from 'aws-sdk'
-
+import chance from 'chance'
 import Header from './Header'
 // import Footer from './Footer'
 import MenuBar from './MenuBar'
-
+import * as AWS from 'aws-sdk'
+AWS.config.update({region:'us-east-1'});
+AWS.config.accessKeyId = process.env.accessKeyId
+AWS.config.secretAccessKey = process.env.secretAccessKey
 class AddNewStudent extends Component {
   setRef = (webcam) => {
     this.webcam = webcam;
@@ -32,6 +35,7 @@ class AddNewStudent extends Component {
 
   checkCurrentUser () {
     var idUser = localStorage.getItem('id')
+    console.log('');
     var username = localStorage.getItem('username')
     axios.get('http://localhost:3000/api/users/' + idUser)
     .then((resp) => {
@@ -169,8 +173,29 @@ class AddNewStudent extends Component {
       this.setState({responseCheckCurrentUser: "error"})
     }
   }
-
+  // toS3() {
+  //   var s3 = new AWS.S3();
+  //   var params = {
+  //     // Body: <Binary String>,
+  //     Bucket: "student",
+  //     Key: this.state.newStudentPhoto,
+  //     ServerSideEncryption: "AES256",
+  //     Tagging: "key1=value1&key2=value2"
+  //  };
+  //  s3.putObject(params, function(err, data) {
+  //    if (err) console.log(err, err.stack); // an error occurred
+  //    else     console.log(data);           // successful response
+  //    /*
+  //    data = {
+  //     ETag: "\"6805f2cfc46c0f04559748bb039d69ae\"",
+  //     ServerSideEncryption: "AES256",
+  //     VersionId: "Ri.vC6qVlA4dEnjgRV4ZHsHoFIjqEMNt"
+  //    }
+  //    */
+  //  });
+  // }
   postNewStudentGoGo() {
+
     let self = this;
     if (this.state.newStudentName === "" || this.state.newStudentPhoto === "" || this.state.newStudentClass === 'Select Class Name' || this.state.newStudentClass === '') {
       this.setState({
@@ -180,18 +205,31 @@ class AddNewStudent extends Component {
     } else {
       axios.post('http://localhost:3000/api/students', {
         name: this.state.newStudentName,
-        photo: this.state.newStudentPhoto,
         className: this.state.newStudentClass,
         user_id: this.props.currUser._id
       })
       .then(function(response) {
-        self.setState({
-          colorMsg: "#20e8b2",
-          msg: "Add new student Success!",
-          newStudentPhoto: "",
-          newStudentName: "",
-          namaPhoto: "",
+        console.log(response.data);
+        let namaNya = response.data.name.toLowerCase().split(' ').join('-')
+        axios.put(`http://localhost:3000/api/students/${response.data._id}`, {
+          photo: `${response.data._id}_${namaNya}.jpg`
         })
+        .then(rezponse => {
+          console.log('response.dr rezponse', response.data);
+          self.takeToS3(response.data._id, namaNya, self.b64toBlob(self.state.newStudentPhoto.data, self.state.newStudentPhoto.contentType))
+          self.setState({
+            colorMsg: "#20e8b2",
+            msg: "Add new student Success!",
+            newStudentPhoto: "",
+            newStudentName: "",
+            namaPhoto: "",
+          })
+        })
+        .catch(err2 => {
+          alert('ERROR')
+          console.log(err2);
+        })
+
       })
       .catch(err => {
         alert('ERROR')
@@ -227,22 +265,86 @@ class AddNewStudent extends Component {
     // }
   }
 
+  takeToS3( id, name, img) {
+    console.log('img: ', img);
+    // var id = chance.guid()
+    // console.log('id: ', id);
+    var s3 = new AWS.S3();
+    var params = {
+      Bucket: 'facelytic/student',
+      Key: id+'_'+name+'.jpg',
+      Body: img,
+      ACL: 'public-read-write'
+      // AccessControlPolicy: {
+      //   Grants: [
+      //     {
+      //       Grantee: {
+      //         Type: 'AmazonCustomerByEmail',
+      //         DisplayName: 'erwin',
+      //         EmailAddress: 'erwinwahyuramadhan@gmail.com',
+      //         // ID: 'STRING_VALUE',
+      //         // URI: 'STRING_VALUE'
+      //       },
+      //       Permission: 'READ'
+      //     },
+      //     /* more items */
+      //   ]
+        // ,
+        // Owner: {
+        //   DisplayName: 'STRING_VALUE',
+        //   ID: 'STRING_VALUE'
+        // }
+      // },
+    };
+
+    this.insertNewStudentToAbsent(id)
+
+    s3.putObject(params, function(err, data) {
+      console.log(err, data);
+    });
+  //   var s3 = new AWS.S3();
+  //   var params = {
+  //   Body: img,
+  //   Bucket: "facelytic",
+  //   Key: "exampleobject",
+  //   ServerSideEncryption: "AES256",
+  //   Tagging: "key1=value1&key2=value2"
+  //  };
+  //  s3.putObject(params, function(err, data) {
+  //    if (err) console.log(err, err.stack); // an error occurred
+  //    else     console.log('response sukses: ', data);           // successful response
+     /*
+     data = {
+      ETag: "\"6805f2cfc46c0f04559748bb039d69ae\"",
+      ServerSideEncryption: "AES256",
+      VersionId: "Ri.vC6qVlA4dEnjgRV4ZHsHoFIjqEMNt"
+     }
+     */
+  //  });
+  }
+
+  insertNewStudentToAbsent(id) {
+    axios.get('http://localhost:3000/api/absents/user/'+this.props.currUser._id+'/class_name/'+this.state.newStudentClass)
+    .then(response => {
+      response.data.forEach( data => {
+        axios.put('http://localhost:3000/api/absents/new-student/'+data._id, {
+          student_id: id
+        })
+        .then(response => {
+          console.log('response.data', response.data)
+        })
+        .catch(err => {
+          console.log('err', err);
+        })
+      })
+    })
+  }
+
   clearImage() {
     this.setState({
-      newStudentPhoto: 'loading'
+      newStudentPhoto: ''
     })
-    let self = this;
-    let storage = firebase.storage()
-    let storageRef = storage.ref(`/fotoSiswa/${this.state.namaPhoto}`)
-    storageRef.delete().then(function() {
-      self.setState({
-        newStudentPhoto: "",
-        namaPhoto: "",
-        displayPhoto: ""
-      })
-    }).catch(function(err) {
-      console.log(err);
-    })
+
   }
 
   async takePictureGo() {
@@ -258,14 +360,31 @@ class AddNewStudent extends Component {
       var block = image64.split(";");
       var contentType = block[0].split(":")[1];
       var realData = block[1].split(",")[1];
-      var blob = await this.b64toBlob(realData, contentType)
+      // var blob = await this.b64toBlob(realData, contentType)
       // this.uploadFirebaseGetUrl(realData)
+      // this.takeToS3(blob)
       this.setState({
-        newStudentPhoto: realData
+        newStudentPhoto: {
+          data: realData,
+          contentType: contentType
+        }
       })
-      if (this.state.newStudentPhoto !== "") {
-        this.postImageStudent()
-      }
+      // var binaryImg = atob(realData);
+      // var length = binaryImg.length;
+      // var ab = new ArrayBuffer(length);
+      // var ua = new Uint8Array(ab);
+      // for (var i = 0; i < length; i++) {
+      //   ua[i] = binaryImg.charCodeAt(i);
+      // }
+      //
+      // var blob = new Blob([ab], {
+      //   type: "image/jpeg"
+      // });
+      // console.log(ab,'ab');
+      // this.takeToS3(ab)
+      // if (this.state.newStudentPhoto !== "") {
+      //   this.postImageStudent()
+      // }
     } catch (error) {
       console.error('ERROR: ', error);
     }
@@ -274,7 +393,7 @@ class AddNewStudent extends Component {
   postImageStudent() {
     axios.post('http://localhost:3000/api/students', {
       name: this.state.newStudentName,
-      photo: this.state.newStudentPhoto,
+      // photo: this.state.newStudentPhoto,
       class: this.state.newStudentClass,
       user_id: this.props.currUser._id
     })
@@ -310,23 +429,23 @@ class AddNewStudent extends Component {
     return blob;
   }
 
-  uploadFirebaseGetUrl(file) {
-    let chance = new Chance()
-    let id = chance.guid()
-    let self = this;
-    let storage = firebase.storage()
-    let storageRef = storage.ref(`/fotoSiswa/${id}`)
-    storageRef.putString(file)
-    .then(function() {
-      storageRef.getDownloadURL().then(function(url) {
-        console.log('cek firebase\nURL: ', url);
-        self.setState({
-          newStudentPhoto: url,
-          namaPhoto: (id)
-        })
-      })
-    })
-  }
+  // uploadFirebaseGetUrl(file) {
+  //   let chance = new Chance()
+  //   let id = chance.guid()
+  //   let self = this;
+  //   let storage = firebase.storage()
+  //   let storageRef = storage.ref(`/fotoSiswa/${id}`)
+  //   storageRef.putString(file)
+  //   .then(function() {
+  //     storageRef.getDownloadURL().then(function(url) {
+  //       console.log('cek firebase\nURL: ', url);
+  //       self.setState({
+  //         newStudentPhoto: url,
+  //         namaPhoto: (id)
+  //       })
+  //     })
+  //   })
+  // }
 }
 
 const mapStateToProps = (state) => {
