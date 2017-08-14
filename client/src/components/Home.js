@@ -242,7 +242,7 @@ class Home extends Component {
     this.prosesingCompareGo(ab)
 
   }
-  
+
   prosesingCompareGo(ab) {
     var rekognition = new AWS.Rekognition()
     var params = {
@@ -260,53 +260,9 @@ class Home extends Component {
 
      rekognition.compareFaces(params, function (err, data) {
        if (err) console.log(err, err.stack); // an error occurred
-       else    {
-         console.log("nugraha: ", data);           // successful response
-         if (data) {
-           var params2 = {
-             SimilarityThreshold: 80,
-             SourceImage: {
-               Bytes: ab
-             },
-             TargetImage: {
-              S3Object: {
-               Bucket: "facelytic",
-               Name: "student/erwin.jpg"
-              }
-              }
-            };
-            rekognition.compareFaces(params2, function(error, data2) {
-              if (error) console.log(error, error.stack);
-              else {
-                console.log("erwin: ", data2);
-                if (data) {
-                  var params3 = {
-                    SimilarityThreshold: 80,
-                    SourceImage: {
-                      Bytes: ab
-                    },
-                    TargetImage: {
-                     S3Object: {
-                      Bucket: "facelytic",
-                      Name: "student/sidik.jpg"
-                     }
-                     }
-                   };
-                   rekognition.compareFaces(params3, function(error3, data3) {
-                     if (error3) console.log(error3, error3.stack);
-                     else {
-                       console.log("sidik: ", data3);
-
-                     }
-                   })
-                }
-              }
-            })
-         }
+       else console.log(data);
        }
      });
-
-
   }
 
   b64toBlob(b64Data, contentType, sliceSize) {
