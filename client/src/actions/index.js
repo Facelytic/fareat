@@ -15,10 +15,31 @@ export const Get_Flag_SignUp = () => {
   }
 }
 
+export const setPertemuan = (str) => {
+  return {
+    type: 'SET_PERTEMUAN',
+    payload: str
+  }
+}
+
 export const Flag_Login = () => {
   return {
     type: 'SET_FLAG',
     payload: true
+  }
+}
+
+export const setImageToCompare = (file) => {
+  return {
+    type: 'SET_IMAGE_TO_COMPARE',
+    payload: file
+  }
+}
+
+export const setAbsentionToCheck = (obj) => {
+  return {
+    type: 'SET_ABSENT_TO_CHECK',
+    payload: obj
   }
 }
 

@@ -17,6 +17,7 @@ import Home from './components/Home'
 import AddNewStudent from './components/AddNewStudent'
 import NewAbsent from './components/NewAbsent'
 import InsertClass from './components/InsertClass'
+import AbsentProgress from './components/AbsentProgress'
 
 import InsertSubject from './components/InsertSubject'
 import DataAbsent from './components/DataAbsent'
@@ -49,6 +50,7 @@ class App extends Component {
               <Route exact path="/new-subject" component={InsertSubject}/>
               <Route exact path="/data-absent" component={DataAbsent}/>
               <Route exact path="/test" component={testing}/>
+              <Route exact path="/absent/in-progress" component={AbsentProgress}/>
             </div>
           </Router>
         </div>
