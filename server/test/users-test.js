@@ -75,9 +75,9 @@ describe('User End Point', function() {
       });
   });
 
-  it('should add a SINGLE user on api/users POST and Return status 200', function(done) {
+  it('should add a SINGLE user on api/users/signup POST and Return status 200', function(done) {
     chai.request(server)
-    .post('/api/users')
+    .post('/api/users/signup')
     .send({
       name: 'test1',
       username: 'user1',
@@ -90,9 +90,9 @@ describe('User End Point', function() {
     });
   });
 
-  it('should add a SINGLE user on api/users POST and it\'s a JSON', function(done) {
+  it('should add a SINGLE user on api/users/signup POST and it\'s a JSON', function(done) {
     chai.request(server)
-    .post('/api/users')
+    .post('/api/users/signup')
     .send({
       name: 'test1',
       username: 'user1',
@@ -104,9 +104,9 @@ describe('User End Point', function() {
       done();
     });
   });
-  it('should add a SINGLE user on api/users POST and data type is Object', function(done) {
+  it('should add a SINGLE user on api/users/signup POST and data type is Object', function(done) {
     chai.request(server)
-    .post('/api/users')
+    .post('/api/users/signup')
     .send({
       name: 'test1',
       username: 'user1',
@@ -119,13 +119,13 @@ describe('User End Point', function() {
     });
   });
 
-  it(`should add a SINGLE user on api/users POST and Has Properties:
+  it(`should add a SINGLE user on api/users/signup POST and Has Properties:
       1. _id
       2. username
       3. email
       4. password`, function(done) {
     chai.request(server)
-    .post('/api/users')
+    .post('/api/users/signup')
     .send({
       name: 'test1',
       username: 'user1',
