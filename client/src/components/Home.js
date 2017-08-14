@@ -226,11 +226,6 @@ class Home extends Component {
     } catch (error) {
       console.error('ERROR: ', error);
     }
-    // this.setState({
-    //   imageToAbsen: Webcam.getScreenshot()
-    // })
-    // console.log(this.state.imageToAbsen);
-
     var binaryImg = atob(realData);
     var length = binaryImg.length;
     var ab = new ArrayBuffer(length);
@@ -247,48 +242,13 @@ class Home extends Component {
     this.prosesingCompareGo(ab)
 
   }
-  studentImage() {
-    axios.get('http://localhost:3000/api/students/59908aa79e6c523b2d6086e2')
-    // var tar = "https://firebasestorage.googleapis.com/v0/b/freat-7b322.appspot.com/o/fotoSiswa%2F225350b207a04-f467-5930-b631-7b71ede82203?alt=media&token=801fd66a-7fe6-4af0-a152-4655380042d9"
-    .then(resp => {
-      // this.setState({
-      //   target: resp.data.photo
-      // })
-      // console.log("ini targetnya woy!!!!!", this.state.target);
-      console.log(resp.data);
-      var binaryImg = btoa(resp.data.photo);
-      // console.log('target img', binaryImg);
-      var length = binaryImg.length;
-      var ab = new ArrayBuffer(length);
-      var ua = new Uint8Array(ab);
-      for (var i = 0; i < length; i++) {
-        ua[i] = binaryImg.charCodeAt(i);
-      }
-
-      var blob = new Blob([ab], {
-        type: "image/jpeg"
-      });
-      console.log('target::: ', ab);
-      this.setState({
-        target: ab
-      })
-
-      return ab
-    })
-    .catch(err => {
-      console.log(err);
-    })
-  }
+  
   prosesingCompareGo(ab) {
     var rekognition = new AWS.Rekognition()
     var params = {
       SimilarityThreshold: 80,
       SourceImage: {
         Bytes: ab
-      //  S3Object: {
-      //   Bucket: "facelytic",
-      //   Name: "absent/pp.jpeg"
-      //  }
       },
       TargetImage: {
        S3Object: {
@@ -311,7 +271,7 @@ class Home extends Component {
              TargetImage: {
               S3Object: {
                Bucket: "facelytic",
-               Name: "student/pp.jpeg"
+               Name: "student/erwin.jpg"
               }
               }
             };
@@ -319,6 +279,27 @@ class Home extends Component {
               if (error) console.log(error, error.stack);
               else {
                 console.log("erwin: ", data2);
+                if (data) {
+                  var params3 = {
+                    SimilarityThreshold: 80,
+                    SourceImage: {
+                      Bytes: ab
+                    },
+                    TargetImage: {
+                     S3Object: {
+                      Bucket: "facelytic",
+                      Name: "student/sidik.jpg"
+                     }
+                     }
+                   };
+                   rekognition.compareFaces(params3, function(error3, data3) {
+                     if (error3) console.log(error3, error3.stack);
+                     else {
+                       console.log("sidik: ", data3);
+
+                     }
+                   })
+                }
               }
             })
          }
@@ -350,61 +331,6 @@ class Home extends Component {
 
     var blob = new Blob(byteArrays, {type: contentType});
     return blob;
-  }
-
-  absenGo(file) {
-    // console.log('img: ',this.state.absent);
-    // this.prosesingCompareGo(this.state.absent)
-    // console.log(file);
-    // let self = this;
-    // let storage = firebase.storage()
-    // let storageRef = storage.ref(`/fotoAbsen/${file.size}`)
-    // storageRef.put(file)
-    // .then(function() {
-    //   storageRef.getDownloadURL().then(function(url) {
-    //     console.log('cek firebase\nURL: ', url);
-    //     // self.setState({
-    //     //   hasilGo: `mengabsen kelas ${document.getElementById("kelas").value}, mata pelajaran ${document.getElementById("subject").value}, pertemuan ke-${document.getElementById("pertemuan").value}\nimage url : ${url}`
-    //     // })
-    //   })
-    // })
-
-    // let bufferMan = new Buffer('https://firebasestorage.googleapis.com/v0/b/freat-7b322.appspot.com/o/fotoSiswa%2Fc292c765-f71e-54f0-8ed3-023c5305f7de?alt=media&token=cef4e89e-f611-432b-a264-1c785a841079', 'base64')
-    // // let bufferMan = new Buffer('https://firebasestorage.googleapis.com/v0/b/freat-7b322.appspot.com/o/fotoAbsen%2F57028?alt=media&token=4a40fb2d-e704-4cb9-98f0-ccf8ad73d4b7', 'base64')
-    // console.log(bufferMan);
-
-  //   var base64Image = file.split("data:image/jpeg;base64,")[1];
-  //   var binaryImg = atob(base64Image);
-  //   var length = binaryImg.length;
-  //   var ab = new ArrayBuffer(length);
-  //   var ua = new Uint8Array(ab);
-  //   for (var i = 0; i < length; i++) {
-  //     ua[i] = binaryImg.charCodeAt(i);
-  //   }
-  //
-  //   var blob = new Blob([ab], {
-  //     type: "image/jpeg"
-  //   });
-  //   console.log('ini blob isinya apa: ', blob);
-  //   console.log('ini ab: ', ab);
-  //
-  //   // ini yang satunya
-  //   // AWS.config.secretAccessKey = "D7isA14gPzafTBjfjYiboawD9YciY8XUIp1XsCqD";
-  //   var rekognition = new AWS.Rekognition();
-  //   let params = {
-  //     SimilarityThreshold: 90,
-  //     SourceImage: {
-  //       Bytes: blob
-  //     },
-  //     TargetImage: {
-  //       Bytes: blob
-  //     }
-  //   };
-  //
-  //   rekognition.compareFaces(params, function (err, data) {
-  //     if (err) console.log(err, err.stack); // an error occurred
-  //     else     console.log(data);           // successful response
-  //   });
   }
 
   getAbsentListCurrUser() {
