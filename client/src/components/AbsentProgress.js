@@ -47,7 +47,7 @@ class AbsentProgress extends Component {
                           //   this.getMood()
                           // }
                           if (this.props.allData.length === idx) {
-                            this.prosesingCompareGo(this.props.imageToCompare, student)
+                            this.prosesingCompareGo(this.props.imageToCompare, student, idx)
                           }
                           return (
                             <tr key={idx}>
@@ -165,7 +165,7 @@ class AbsentProgress extends Component {
     })
   }
 
-  prosesingCompareGo(image64, student) {
+  prosesingCompareGo(image64, student, idx) {
     console.log('student di processingcompareGo',student);
     var block = image64.split(";");
     var contentType = block[0].split(":")[1];
@@ -201,9 +201,13 @@ class AbsentProgress extends Component {
        } else {
         console.log(student.student_id.photo, data); // successful response
         if (data.FaceMatches[0].Similarity < 75) {
-          self.props.updateRawData("Gak Masuk")
+          if (self.props.allData.length === idx) {
+            self.props.updateRawData("Gak Masuk")
+          }
         } else {
-          self.props.updateRawData("Masuk", data.FaceMatches[0].Face.BoundingBox)
+            if (self.props.allData.length === idx) {
+              self.props.updateRawData("Masuk", data.FaceMatches[0].Face.BoundingBox)
+            }
           let paramsSA = {
             Image: {
              Bytes: ab
