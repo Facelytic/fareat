@@ -107,3 +107,20 @@ export const saveResultAbsent = (objAbsent) => {
     }).catch(err => console.log(err))
   }
 }
+
+// START UNTUK WARNA SAAT DI KLIK DI MENU BAR
+export const takeAbsentSTATUS = (isaktive) => {
+  return {
+    type: 'GET_STATUS_TAKE_ABSENT',
+    payload: isaktive
+  }
+}
+
+export const addNewStudentSTATUS = (isaktive) => {
+  return {
+    type: 'GET_STATUS_ADD_NEW_STUDENT',
+    payload: isaktive
+  }
+}
+
+// END MENUBAR

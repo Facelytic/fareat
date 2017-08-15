@@ -4,7 +4,14 @@ const initialState = {
   imageToCompare: "",
   pertemuan: "",
   rawResult: [],
-  moodData: []
+  moodData: [],
+  takeAbsent: '',
+  dataAbsent: '',
+  addNewStudent: '',
+  addNewAbsent: '',
+  addNewClass: '',
+  dataStudent: '',
+  dataStudent: ''
 }
 
 export default (state=initialState, action) => {
@@ -13,6 +20,10 @@ export default (state=initialState, action) => {
       return {...state, Flag: action.payload}
     case 'GET_FLAG_SIGNUP':
       return {...state, Flag: action.payload}
+    case "GET_STATUS_TAKE_ABSENT":
+      return {...state, takeAbsent: action.payload}
+    case "GET_STATUS_ADD_NEW_STUDENT":
+      return {...state, addNewStudent: action.payload}
     case 'SET_ABSENT_TO_CHECK':
       return {...state, absentToCheck: action.payload}
     case 'SET_IMAGE_TO_COMPARE':
