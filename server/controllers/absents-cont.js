@@ -5,7 +5,7 @@ module.exports = {
   create : (req, res)=>{
     Absent.find({
       user_id: req.body.user_id,
-      class: req.body.class,
+      class: req.body.class_name,
       subject: req.body.subject
     }, (err, result) => {
       if (err) {
@@ -29,7 +29,7 @@ module.exports = {
           subject: req.body.subject,
           class_name: req.body.class_name,
           user_id: req.body.user_id
-        }, (erro, rezult) => {
+        }, (err, rezult) => {
           if (err) {
             console.log(err);
             res.status(400).send(err)
@@ -69,7 +69,7 @@ module.exports = {
 
   getByClassNameAndUserID: (req, res) => {
     Absent.find({
-      user_id: req.params.user_id,
+      user_id: req.params.user_id.split('%20').join(' '),
       class_name: req.params.name
     }, (err, result) => {
       if(!err) {
@@ -120,7 +120,6 @@ module.exports = {
     Absent.findOne({student_list: {$elemMatch: {student_id:req.params.student_id}}}, (err, result)=>{
       if(!err){
         var index = result.student_list.filter( (x) => {return x.student_id == req.params.student_id})
-        console.log(index);
         var query = {
             student_id: index[0].student_id,
             pertemuan_1: req.body.pertemuan_1 || index[0].pertemuan_1,

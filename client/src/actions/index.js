@@ -8,10 +8,34 @@ export const Get_Flag_SignIn = () => {
   }
 }
 
+export const getAbsentListCurrUser = (data) => {
+  return {
+    type: 'GET_ABSENT_LIST',
+    payload: data
+  }
+}
+
 export const Get_Flag_SignUp = () => {
   return {
     type: 'GET_FLAG_SIGNUP',
     payload: 'issignup'
+  }
+}
+
+export const updateRawData = (data, obj=null) => {
+  return {
+    type: 'UPDATE_RAW_DATA',
+    payload: {
+      data: data,
+      BoundingBox: obj
+    }
+  }
+}
+
+export const updateMoodData = (data) => {
+  return {
+    type: "UPDATE_MOOD_DATA",
+    payload: data
   }
 }
 
@@ -78,3 +102,32 @@ export const signupGo = (objSignup) => {
     }).catch(err => console.log(err))
   }
 }
+
+//update hasil absent to database
+export const saveResultAbsent = (objAbsent) => {
+  console.log('objnya: ', objAbsent);
+  return (dispatch, getState) => {
+    const apiUrl = 'http://localhost:3000/api/absents/'+objAbsent.student_id._id
+    axios.put(apiUrl, objAbsent)
+    .then((resp) => {
+      console.log('sukses update : ', resp);
+    }).catch(err => console.log(err))
+  }
+}
+
+// START UNTUK WARNA SAAT DI KLIK DI MENU BAR
+export const takeAbsentSTATUS = (isaktive) => {
+  return {
+    type: 'GET_STATUS_TAKE_ABSENT',
+    payload: isaktive
+  }
+}
+
+export const addNewStudentSTATUS = (isaktive) => {
+  return {
+    type: 'GET_STATUS_ADD_NEW_STUDENT',
+    payload: isaktive
+  }
+}
+
+// END MENUBAR

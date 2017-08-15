@@ -5,7 +5,6 @@ var absentCont = require('../controllers/absents-cont')
 
 router.post('/', absentCont.create)
 router.get('/', absentCont.getAll)
-// router.get()
 router.get('/user/:id', absentCont.getByUser)
 router.get('/detail', absentCont.getOne)
 router.get('/user/:user_id/class_name/:name', absentCont.getByClassNameAndUserID)

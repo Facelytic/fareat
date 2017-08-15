@@ -98,7 +98,7 @@ class NewAbsent extends Component {
       })
     } else {
       let self = this;
-      axios.get('http://localhost:3000/api/students/class/'+this.state.newAbsentClassName+'/'+this.props.currUser._id)
+      axios.get('http://localhost:3000/api/students/class/'+this.state.newAbsentClassName.split(' ').join('%20')+'/'+this.props.currUser._id)
       .then(response => {
         if (response.data.length > 0) {
           axios.post('http://localhost:3000/api/absents', {
@@ -130,7 +130,7 @@ class NewAbsent extends Component {
         } else {
           this.setState({
             msg: {
-              msg: `"${this.state.newAbsentClassName}" any student yet`,
+              msg: `"${this.state.newAbsentClassName}" doesn't have any student yet`,
               color: "red"
             }
           })

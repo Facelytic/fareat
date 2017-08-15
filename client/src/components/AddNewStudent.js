@@ -429,23 +429,6 @@ class AddNewStudent extends Component {
     return blob;
   }
 
-  // uploadFirebaseGetUrl(file) {
-  //   let chance = new Chance()
-  //   let id = chance.guid()
-  //   let self = this;
-  //   let storage = firebase.storage()
-  //   let storageRef = storage.ref(`/fotoSiswa/${id}`)
-  //   storageRef.putString(file)
-  //   .then(function() {
-  //     storageRef.getDownloadURL().then(function(url) {
-  //       console.log('cek firebase\nURL: ', url);
-  //       self.setState({
-  //         newStudentPhoto: url,
-  //         namaPhoto: (id)
-  //       })
-  //     })
-  //   })
-  // }
 }
 
 const mapStateToProps = (state) => {
