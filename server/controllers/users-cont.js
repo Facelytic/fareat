@@ -1,5 +1,5 @@
 var User = require('../models/user')
-var bcrypt = require('bcrypt')
+var bcrypt = require('bcryptjs')
 var jwt = require('jsonwebtoken')
 var saltRound = 10
 var salt = bcrypt.genSaltSync(saltRound)

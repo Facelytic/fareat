@@ -7,7 +7,7 @@ var app = express()
 var config = require('./config/config')
 var passport = require('passport')
 var LocalStrategy = require('passport-local')
-var bcrypt = require('bcrypt')
+var bcrypt = require('bcryptjs')
 
 
 var absents = require('./routes/absents')
