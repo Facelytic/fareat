@@ -9,7 +9,7 @@ import Header from './Header'
 import Footer from './Footer'
 import MenuBar from './MenuBar'
 import FaceCompare from './FaceCompare'
-import { setCurrUser, Flag_Login, setAbsentionToCheck, setImageToCompare, setPertemuan } from '../actions'
+import { setCurrUser, Flag_Login, setAbsentionToCheck, setImageToCompare, setPertemuan, getAbsentListCurrUser } from '../actions'
 
 // AWS.config.update({region:'us-east-1'});
 // AWS.config.accessKeyId = process.env.accessKeyId
@@ -57,7 +57,7 @@ class Home extends Component {
           username: resp.data.username,
           _id: resp.data._id
         })
-        self.getAbsentListCurrUser()
+        self.getAbsentListCurrUser(resp.data._id)
         console.log('usernya benar');
       } else {
         console.log('usernya salah');
@@ -65,11 +65,21 @@ class Home extends Component {
       }
     })
     .catch((err) => {
-      console.log(err)
+      console.log('err dari checkCurrentUser',err)
       localStorage.clear()
       this.setState({
         responseCheckCurrentUser: "error"
       })
+    })
+  }
+
+  getAbsentListCurrUser(id) {
+    axios.get('http://localhost:3000/api/absents/user/'+id)
+    .then(response => {
+      this.props.getAbsentListCurrUser(response.data)
+    })
+    .catch( err => {
+      console.log(err);
     })
   }
 
@@ -80,7 +90,7 @@ class Home extends Component {
           // localStorage.getItem('token') ?
           // this.checkCurrentUser() :
           // this.props.currUser._id == undefined ?
-          this.state.responseCheckCurrentUser == "error" ?
+          this.state.responseCheckCurrentUser === "error" ?
           <div>
             <Redirect to="/" />
           </div>
@@ -117,9 +127,9 @@ class Home extends Component {
                 <div className="select is-fullwidth">
                   <select id="absent-nya" onChange={(e) => this.adjustEncounter(JSON.parse(e.target.value))}>
                     <option>Select Absent</option>
-                    { this.state.absentList === "" ?
-                      <option value="">loading..</option> :
-                      this.state.absentList.map( (x, idx) => {
+                    { this.props.absentList.length === 0 ?
+                      <option value="">loading..</option>:
+                      this.props.absentList.map( (x, idx) => {
                       return (
                         <option key={idx} value={JSON.stringify(x)}> { x.class_name }, { x.subject }</option>
                       )
@@ -249,25 +259,13 @@ class Home extends Component {
     var blob = new Blob(byteArrays, {type: contentType});
     return blob;
   }
-
-  getAbsentListCurrUser() {
-    axios.get('http://localhost:3000/api/absents/user/'+this.props.currUser._id)
-    .then(response => {
-      this.setState({
-        absentList: response.data
-      })
-    })
-    .catch(err => {
-      alert('ERROR')
-      console.log(err);
-    })
-  }
 }
 
 const mapStateToProps = (state) => {
   console.log('state', state);
   return {
-    currUser: state.IS_LOGIN.currUser
+    currUser: state.IS_LOGIN.currUser,
+    absentList: state.Flag.absentList
   }
 }
 
@@ -277,7 +275,8 @@ const mapDispatchToProps = (dispatch) => {
     flagLogin: () => dispatch(Flag_Login()),
     setAbsentionToCheck: (obj) => dispatch(setAbsentionToCheck(obj)),
     setImageToCompare: (file) => dispatch(setImageToCompare(file)),
-    setPertemuan: (str) => dispatch(setPertemuan(str))
+    setPertemuan: (str) => dispatch(setPertemuan(str)),
+    getAbsentListCurrUser: (data) => dispatch(getAbsentListCurrUser(data))
   }
 }
 

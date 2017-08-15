@@ -33,7 +33,7 @@ class Index extends Component {
   render() {
     return (
       <div>
-        
+
         {
           this.props.checkFlagLogin ?
           <div>

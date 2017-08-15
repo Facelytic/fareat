@@ -9,7 +9,7 @@ import { takeAbsentSTATUS, addNewStudentSTATUS } from '../actions'
 
 const MenuBar = (props) => {
   return (
-    <div className="menubar">
+    <div className="menubar" style={{backgroundColor: "white"}}>
       <div>
         <div className="tabs is-centered">
           <ul>

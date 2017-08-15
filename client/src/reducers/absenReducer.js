@@ -11,7 +11,7 @@ const initialState = {
   addNewAbsent: '',
   addNewClass: '',
   dataStudent: '',
-  dataStudent: ''
+  absentList: []
 }
 
 export default (state=initialState, action) => {
@@ -20,6 +20,8 @@ export default (state=initialState, action) => {
       return {...state, Flag: action.payload}
     case 'GET_FLAG_SIGNUP':
       return {...state, Flag: action.payload}
+    case "GET_ABSENT_LIST":
+      return {...state, absentList: action.payload}
     case "GET_STATUS_TAKE_ABSENT":
       return {...state, takeAbsent: action.payload}
     case "GET_STATUS_ADD_NEW_STUDENT":

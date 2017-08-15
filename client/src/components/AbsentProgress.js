@@ -5,7 +5,6 @@ import * as AWS from 'aws-sdk'
 
 import Header from './Header'
 import MenuBar from './MenuBar'
-import loading from '../loading.png'
 import { updateRawData, saveResultAbsent, updateMoodData } from '../actions'
 
 AWS.config.update({region:'us-east-1'});
@@ -13,15 +12,6 @@ AWS.config.accessKeyId = process.env.accessKeyId
 AWS.config.secretAccessKey = process.env.secretAccessKey
 
 class AbsentProgress extends Component {
-  constructor() {
-    super()
-    this.state = {
-      moodData: []
-    }
-  }
-  componentDidMount() {
-    console.log(this.props.allData);
-  }
   render() {
     return (
       <div>
@@ -234,7 +224,7 @@ class AbsentProgress extends Component {
         }
       }
      })
- }
+   }
 }
 
 const mapStateToProps = (state) => {
