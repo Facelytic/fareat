@@ -5,7 +5,7 @@ import * as AWS from 'aws-sdk'
 
 import Header from './Header'
 import MenuBar from './MenuBar'
-import { updateRawData, saveResultAbsent, updateMoodData, setAbsentionToCheck, getAbsentListCurrUser } from '../actions'
+import { updateRawData, saveResultAbsent, updateMoodData, setAbsentionToCheck, getAbsentListCurrUser, clearMoodAndRawData } from '../actions'
 
 AWS.config.update({region:'us-east-1'});
 AWS.config.accessKeyId = process.env.accessKeyId
@@ -127,6 +127,7 @@ class AbsentProgress extends Component {
       this.props.saveResultAbsent(studentToUpdate)
       console.log('studentToUpdate', studentToUpdate);
       if (idx === this.props.absentToCheck.student_list.length-1) {
+        this.props.clearMoodAndRawData()
         this.props.setAbsentionToCheck("kosong")
       }
     })
@@ -251,7 +252,8 @@ const mapDispatchToProps = (dispatch) => {
     saveResultAbsent: (objAbsent) => dispatch(saveResultAbsent(objAbsent)),
     updateMoodData: (data) => dispatch(updateMoodData(data)),
     setAbsentionToCheck: (data) => dispatch(setAbsentionToCheck(data)),
-    getAbsentListCurrUser: (id) => dispatch(getAbsentListCurrUser(id))
+    getAbsentListCurrUser: (id) => dispatch(getAbsentListCurrUser(id)),
+    clearMoodAndRawData: () => dispatch(clearMoodAndRawData())
   }
 }
 

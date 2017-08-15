@@ -10,7 +10,7 @@ import Footer from './Footer'
 import MenuBar from './MenuBar'
 import FaceCompare from './FaceCompare'
 import { setCurrUser, Flag_Login, setAbsentionToCheck, setImageToCompare, setPertemuan, getAbsentListCurrUser,
-checkCurrentUser, updateResponseCheckCurrentUser } from '../actions'
+checkCurrentUser, updateResponseCheckCurrentUser, clearMoodAndRawData } from '../actions'
 
 // AWS.config.update({region:'us-east-1'});
 // AWS.config.accessKeyId = process.env.accessKeyId
@@ -71,6 +71,13 @@ class Home extends Component {
     //     responseCheckCurrentUser: "error"
     //   })
     // })
+  }
+
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.absentToCheck !== nextProps.absentToCheck) {
+      this.props.clearMoodAndRawData()
+    }
   }
 
   getAbsentListCurrUser(id) {
@@ -267,7 +274,8 @@ const mapStateToProps = (state) => {
   return {
     currUser: state.IS_LOGIN.currUser,
     absentList: state.Flag.absentList,
-    responseCheckCurrentUser: state.IS_LOGIN.responseCheckCurrentUser
+    responseCheckCurrentUser: state.IS_LOGIN.responseCheckCurrentUser,
+    absentToCheck: state.Flag.absentToCheck
   }
 }
 
@@ -280,7 +288,8 @@ const mapDispatchToProps = (dispatch) => {
     setPertemuan: (str) => dispatch(setPertemuan(str)),
     getAbsentListCurrUser: (data) => dispatch(getAbsentListCurrUser(data)),
     checkCurrentUser: (id, username) => dispatch(checkCurrentUser(id, username)),
-    updateResponseCheckCurrentUser: (data) => dispatch(updateResponseCheckCurrentUser(data))
+    updateResponseCheckCurrentUser: (data) => dispatch(updateResponseCheckCurrentUser(data)),
+    clearMoodAndRawData: () => dispatch(clearMoodAndRawData())
   }
 }
 

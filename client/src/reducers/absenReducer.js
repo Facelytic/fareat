@@ -42,6 +42,8 @@ export default (state=initialState, action) => {
       return {...state, rawResult: [...state.rawResult, action.payload]}
     case "UPDATE_MOOD_DATA":
       return {...state, moodData: action.payload}
+    case "CLEAR_MOOD_AND_RAW_DATA":
+      return {...state, moodData: action.payload, rawResult: action.payload}
     default:
       return state
   }

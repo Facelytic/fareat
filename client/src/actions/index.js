@@ -8,6 +8,13 @@ export const Get_Flag_SignIn = () => {
   }
 }
 
+export const clearMoodAndRawData = () => {
+  return {
+    type: 'CLEAR_MOOD_AND_RAW_DATA',
+    payload: []
+  }
+}
+
 export const checkCurrentUser = (id, username) => {
   return (dispatch, getState) => {
     axios.get('http://localhost:3000/api/users/' + id)
