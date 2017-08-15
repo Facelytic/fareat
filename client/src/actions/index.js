@@ -8,6 +8,13 @@ export const Get_Flag_SignIn = () => {
   }
 }
 
+export const getAbsentListCurrUser = (data) => {
+  return {
+    type: 'GET_ABSENT_LIST',
+    payload: data
+  }
+}
+
 export const Get_Flag_SignUp = () => {
   return {
     type: 'GET_FLAG_SIGNUP',

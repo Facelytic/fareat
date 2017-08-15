@@ -5,7 +5,7 @@ module.exports = {
   create : (req, res)=>{
     Absent.find({
       user_id: req.body.user_id,
-      class: req.body.class,
+      class: req.body.class_name,
       subject: req.body.subject
     }, (err, result) => {
       if (err) {
@@ -69,7 +69,7 @@ module.exports = {
 
   getByClassNameAndUserID: (req, res) => {
     Absent.find({
-      user_id: req.params.user_id,
+      user_id: req.params.user_id.split('%20').join(' '),
       class_name: req.params.name
     }, (err, result) => {
       if(!err) {
