@@ -1,8 +1,5 @@
 import React from 'react'
 import AWS from 'aws-sdk'
-AWS.config.update({region:'us-east-1'});
-AWS.config.accessKeyId = "AKIAJPCQSW5RYCVRTRTA"
-AWS.config.secretAccessKey = "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"
 // import base64Image from 'base64-img'
 class testing extends React.Component {
   render() {

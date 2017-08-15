@@ -46,7 +46,7 @@ class Home extends Component {
     let self = this
     var idUser = localStorage.getItem('id')
     var username = localStorage.getItem('username')
-    axios.get('http://localhost:3000/api/users/' + idUser)
+    axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/users/' + idUser)
     .then((resp) => {
       if (resp.data.username === username) {
         // console.log(resp.data);
@@ -74,7 +74,7 @@ class Home extends Component {
   }
 
   getAbsentListCurrUser(id) {
-    axios.get('http://localhost:3000/api/absents/user/'+id)
+    axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/absents/user/'+id)
     .then(response => {
       this.props.getAbsentListCurrUser(response.data)
     })

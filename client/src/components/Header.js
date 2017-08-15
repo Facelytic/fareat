@@ -6,7 +6,7 @@ const Header = () => {
       <nav className="navbar" style={{width: "80%", margin: "auto"}}>
         <div className="navbar-brand">
           <a className="navbar-item" href="http://bulma.io">
-            <img src="https://app.getresponse.com/images/common/templates/landing/241/1/img/241_01.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28" />
+            <img src="http://i.imgur.com/T5JKfhD.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28" />
             {/* <p>LOGO</p> */}
           </a>
           <div className="navbar-burger burger" data-target="navMenuExample">

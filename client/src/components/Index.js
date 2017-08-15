@@ -102,7 +102,7 @@ const styles = {
 const checkCurrentUser = (props) => {
   var idUser = localStorage.getItem('id')
   var username = localStorage.getItem('username')
-  axios.get('http://localhost:3000/api/users/' + idUser)
+  axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/users/' + idUser)
   .then((resp) => {
     if (resp.data.username === username) {
       // console.log(resp.data);

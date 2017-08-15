@@ -52,7 +52,7 @@ class InsertClass extends Component {
 
   insertClassGoGo() {
     if (this.state.classList.indexOf(this.state.newClassName) === -1) {
-      axios.post('http://localhost:3000/api/classList', {
+      axios.post('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/classList', {
         name: this.state.newClassName,
         user_id: this.props.currUser._id
       })
@@ -75,7 +75,7 @@ class InsertClass extends Component {
 
 
   getClassListCurrUser() {
-    axios.get('http://localhost:3000/api/classList/user/'+this.props.currUser._id)
+    axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/classList/user/'+this.props.currUser._id)
     .then(response => {
       this.setState({
         classList: response.data.map(x => x.name)

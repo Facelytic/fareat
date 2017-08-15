@@ -70,7 +70,7 @@ export const setAbsentionToCheck = (obj) => {
 export const loginGo = (objLogin) => {
   console.log('actions loginGo: ', objLogin);
   return (dispatch, getState) => {
-    const apiUrl = 'http://localhost:3000/api/users/signin'
+    const apiUrl = 'http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/users/signin'
     axios.post(apiUrl, {...objLogin})
     .then((resp) => {
       if (resp.data.msg != "Invalid username" || resp.data.msg != "Invalid Password") {
@@ -94,7 +94,7 @@ export const setCurrUser = (objUser) => {
 export const signupGo = (objSignup) => {
   console.log(objSignup);
   return (dispatch, getState) => {
-    const apiUrl = 'http://localhost:3000/api/users/signup'
+    const apiUrl = 'http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/users/signup'
     axios.post(apiUrl, {...objSignup})
     .then((resp) => {
       dispatch(Get_Flag_SignIn())
@@ -107,7 +107,7 @@ export const signupGo = (objSignup) => {
 export const saveResultAbsent = (objAbsent) => {
   console.log('objnya: ', objAbsent);
   return (dispatch, getState) => {
-    const apiUrl = 'http://localhost:3000/api/absents/'+objAbsent.student_id._id
+    const apiUrl = 'http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/absents/'+objAbsent.student_id._id
     axios.put(apiUrl, objAbsent)
     .then((resp) => {
       console.log('sukses update : ', resp);

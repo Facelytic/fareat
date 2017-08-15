@@ -70,7 +70,7 @@ class SignIn extends Component {
   loginGoGo(obj) {
     console.log('masuk sini');
     let self = this;
-    axios.post('http://localhost:3000/api/users/signin', obj)
+    axios.post('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/users/signin', obj)
     .then(response => {
       console.log(response);
       if (response.data === "Invalid password") {
