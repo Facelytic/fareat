@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "istanbul cover node_modules/mocha/bin/_mocha && codecov",
-    "start": "nodemon app.js"
+    "start": "node app.js"
   },
   "author": "",
   "license": "ISC",
