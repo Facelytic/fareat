@@ -54,18 +54,18 @@ module.exports = {
     })
   },
 
-  getOne: (req, res)=>{
-    Absent
-    .find({subject: req.query.s, class_name: req.query.c, user_id: req.query.u})
-    .populate('student_list.student_id')
-    .exec(function(err, result){
-      if(!err) {
-        res.status(200).send(result)
-      } else {
-        res.status(400).send(err)
-      }
-    })
-  },
+  // getOne: (req, res)=>{
+  //   Absent
+  //   .find({subject: req.query.s, class_name: req.query.c, user_id: req.query.u})
+  //   .populate('student_list.student_id')
+  //   .exec(function(err, result){
+  //     if(!err) {
+  //       res.status(200).send(result)
+  //     } else {
+  //       res.status(400).send(err)
+  //     }
+  //   })
+  // },
 
   getByClassNameAndUserID: (req, res) => {
     Absent.find({
