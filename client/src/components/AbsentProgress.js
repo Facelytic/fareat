@@ -11,7 +11,12 @@ AWS.config.accessKeyId = process.env.accessKeyId
 AWS.config.secretAccessKey = process.env.secretAccessKey
 
 class AbsentProgress extends Component {
-
+  constructor() {
+    super()
+    this.state = {
+      allData: []
+    }
+  }
   render() {
     return (
       <div>
@@ -40,17 +45,17 @@ class AbsentProgress extends Component {
                       {
                         this.props.absentToCheck.student_list.map((student, idx) => {
                           // let hasil = this.prosesingCompareGo(this.props.imageToCompare, student)
-                          // this.prosesingCompareGo(this.props.imageToCompare, student, idx)
+                          this.prosesingCompareGo(this.props.imageToCompare, student)
                           let pertemuan = 'pertemuan_ '+this.props.pertemuan
                           return (
                           <tr key={idx}>
                             <td>{idx+1}.</td>
                             <th>{student.student_id.name}</th>
-                            <td>
-                              {
-                                this.prosesingCompareGo(this.props.imageToCompare, student, idx)
-                              }
-                            </td>
+                            {
+                              this.state.allData[idx] ?
+                              <td>{this.state.allData[idx]}</td> :
+                              <td><img id="loading-icon-add-new-student" src='https://www.shareicon.net/data/32x32/2015/06/30/62174_loading_32x32.png' alt="loading" /></td>
+                            }
                           </tr>
                           )
                         })
@@ -67,11 +72,18 @@ class AbsentProgress extends Component {
     )
   }
 
-  componentWillMount() {
+  componentDidMount() {
     console.log("this.props.absentToCheck.hasOwnProperty('_id')", this.props.absentToCheck.hasOwnProperty('_id'));
-    // if (this.props.absentToCheck._id != undefined) {
-    //   this.prosesingCompareGo(this.props.imageToCompare, this.props.absentToCheck)
-    // }
+    if (this.props.absentToCheck._id != undefined) {
+      let self = this
+      // this.props.absentToCheck.student_list.forEach( student => {
+      //   this.prosesingCompareGo(this.props.imageToCompare, student)
+      // })
+      for (let i = self.state.allData.length; i<self.props.absentToCheck.student_list.length; i++) {
+        console.log('self.props.absentToCheck.student_list[i]', self.props.absentToCheck.student_list[i]);
+        // this.prosesingCompareGo(this.props.imageToCompare, this.props.absentToCheck.student_list[i])
+      }
+    }
   }
 
   prosesingCompareGo(image64, student) {
@@ -86,6 +98,7 @@ class AbsentProgress extends Component {
     for (var i = 0; i < length; i++) {
       ua[i] = binaryImg.charCodeAt(i);
     }
+    let self = this
 
     var blob = new Blob([ab], {
       type: "image/jpeg"
@@ -109,7 +122,16 @@ class AbsentProgress extends Component {
      } // an error occurred
      else {
        console.log(student.student_id.photo, data); // successful response
-       return data
+       if (data.FaceMatches[0].Similarity < 80) {
+         self.setState({
+           allData: [...self.state.allData, "Gak Masuk"]
+         })
+       } else {
+         self.setState({
+           allData: [...self.state.allData, "Masuk"]
+         })
+       }
+
      }
    })
  }
