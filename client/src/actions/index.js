@@ -8,10 +8,64 @@ export const Get_Flag_SignIn = () => {
   }
 }
 
-export const getAbsentListCurrUser = (data) => {
+export const checkCurrentUser = (id, username) => {
+  return (dispatch, getState) => {
+    axios.get('http://localhost:3000/api/users/' + id)
+    .then((resp) => {
+      if (resp.data.username === username) {
+        // console.log(resp.data);
+        // this.getAbsentListCurrUser()
+        dispatch(Flag_Login())
+        dispatch(setCurrUser({
+          name: resp.data.name,
+          username: resp.data.username,
+          _id: resp.data._id
+        }))
+        console.log('usernya benar');
+      } else {
+        console.log('usernya salah');
+        localStorage.clear()
+      }
+    })
+    .catch((err) => {
+      console.log('err dari checkCurrentUser',err)
+      localStorage.clear()
+      dispatch(updateResponseCheckCurrentUser("error"))
+      // this.setState({
+      //   responseCheckCurrentUser: "error"
+      // })
+    })
+  }
+}
+
+export const updateResponseCheckCurrentUser = (data) => {
   return {
-    type: 'GET_ABSENT_LIST',
+    type: "RESPONSE_CHECK_CURR_USER",
     payload: data
+  }
+}
+
+export const getAbsentListCurrUser = (id) => {
+    return {
+      type: 'GET_ABSENT_LIST',
+      payload: axios.get('http://localhost:3000/api/absents/user/'+id)
+    }
+}
+
+export const updateAbsentListCurrUser = (data) => {
+  return {
+    type: 'UPDATE_ABSENT_LIST',
+    payload: data
+  }
+}
+
+export const deleteAbsent = (id) => {
+  return (dispatch, getState) => {
+    axios.delete('http://localhost:3000/api/absents/'+id)
+    .then(response => {
+      dispatch(getAbsentListCurrUser(id))
+    })
+    .catch(err => console.log(err))
   }
 }
 
@@ -85,9 +139,16 @@ export const loginGo = (objLogin) => {
 }
 
 export const setCurrUser = (objUser) => {
+  return (dispatch, getState) => {
+    // dispatch(getAbsentListCurrUser(objUser._id))
+    dispatch(setCurrUser2(objUser))
+  }
+}
+
+export const setCurrUser2 = (obj) => {
   return {
     type: 'SET_CURR_USER',
-    payload: objUser
+    payload: obj
   }
 }
 

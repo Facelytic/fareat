@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 
-import {  } from '../actions'
+import { deleteAbsent } from '../actions'
 import Header from './Header'
 import MenuBar from './MenuBar'
 
@@ -21,12 +21,12 @@ class DataAbsent extends Component {
           <div>
             <Header></Header>
             <MenuBar></MenuBar>
-            <div style={{backgroundColor: "#ECF0F1", width: "80%", margin: "auto", padding: "3%", minHeight: "90vh"}}>
+            <div style={{backgroundColor: "#ECF0F1", minWidth: "fit-content", margin: "auto", padding: "3%", minHeight: "90vh"}}>
               <div style={{minWidth: "70%", margin: "auto", paddingTop: "20px", paddingBottom: "20px"}}>
                 <p className="title">My Absent</p>
                 <div className="columns" style={{backgroundColor: "#ff7070", borderRadius: "5px",
-                  padding: "10px"}}>
-                  <div className="column is-4">
+                  padding: "10px", justifyContent: 'center'}}>
+                  <div className="column" style={{minWidth: "fit-content", maxWidth: "40%"}}>
                     <table className="table is-striped" style={{width: "100%", border: "solid 1px #ECF0F1", borderRadius: "15px"}}>
                       <thead>
                         <tr>
@@ -46,7 +46,15 @@ class DataAbsent extends Component {
                                 <td>{idx+1}.</td>
                                 <th>{absent.subject}</th>
                                 <td>{absent.class_name}</td>
-                                <td><a onClick={() => this.setState({absentDetail: absent})}>Details</a></td>
+                                <td>
+                                  <span><a onClick={() => this.setState({absentDetail: absent})}>Detail </a></span>
+                                  <span><a onClick={() => {
+                                    // if (confirm(`Are you sure want to delete absent for:\nClass: ${absent.class_name}\nSubject: ${absent.subject}`)) {
+                                      this.props.deleteAbsent(absent._id)
+                                    // }
+                                  }
+                                }> Delete</a></span>
+                                </td>
                               </tr>
                             )
                           })
@@ -56,7 +64,7 @@ class DataAbsent extends Component {
                   </div>
                   {
                     this.state.absentDetail ?
-                    <div className="column is-8" style={{textAlign: "right"}}>
+                    <div className="column is-8" style={{textAlign: "right", minWidth: "fit-content"}}>
                       <table className="table" style={{width: "100%", border: "solid 1px #ECF0F1", borderRadius: "15px"}}>
                         <thead>
                           <tr>
@@ -117,6 +125,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    deleteAbsent: (id) => {
+      dispatch(deleteAbsent(id))
+    }
   }
 }
 

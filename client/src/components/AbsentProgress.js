@@ -5,7 +5,7 @@ import * as AWS from 'aws-sdk'
 
 import Header from './Header'
 import MenuBar from './MenuBar'
-import { updateRawData, saveResultAbsent, updateMoodData } from '../actions'
+import { updateRawData, saveResultAbsent, updateMoodData, setAbsentionToCheck, getAbsentListCurrUser } from '../actions'
 
 AWS.config.update({region:'us-east-1'});
 AWS.config.accessKeyId = process.env.accessKeyId
@@ -126,11 +126,14 @@ class AbsentProgress extends Component {
       studentToUpdate[pertemuan] = document.getElementById('absent-nya-'+idx).value || document.getElementById('mood-nya-'+idx).innerHTML || "Masuk"
       this.props.saveResultAbsent(studentToUpdate)
       console.log('studentToUpdate', studentToUpdate);
+      if (idx === this.props.absentToCheck.student_list.length-1) {
+        this.props.setAbsentionToCheck("kosong")
+      }
     })
   }
 
-  componentWillMount() {
-
+  componentWillUpdate() {
+    this.props.getAbsentListCurrUser(this.props.currUser._id)
   }
 
   getMood() {
@@ -237,7 +240,8 @@ const mapStateToProps = (state) => {
     imageToCompare: state.Flag.imageToCompare,
     pertemuan: state.Flag.pertemuan,
     allData: state.Flag.rawResult,
-    moodData: state.Flag.moodData
+    moodData: state.Flag.moodData,
+    currUser: state.IS_LOGIN.currUser
   }
 }
 
@@ -245,7 +249,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateRawData: (data, obj) => dispatch(updateRawData(data, obj)),
     saveResultAbsent: (objAbsent) => dispatch(saveResultAbsent(objAbsent)),
-    updateMoodData: (data) => dispatch(updateMoodData(data))
+    updateMoodData: (data) => dispatch(updateMoodData(data)),
+    setAbsentionToCheck: (data) => dispatch(setAbsentionToCheck(data)),
+    getAbsentListCurrUser: (id) => dispatch(getAbsentListCurrUser(id))
   }
 }
 
