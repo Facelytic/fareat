@@ -88,7 +88,7 @@ class AddNewStudent extends Component {
                   <label className="label">Name</label>
                 </div>
                 <div className="control">
-                  <input className="input" type="text" placeholder="Fullname" onChange={(e) => this.setState({newStudentName: e.target.value})}/>
+                  <input className="input" value={this.state.newStudentName} type="text" placeholder="Fullname" onChange={(e) => this.setState({newStudentName: e.target.value})}/>
                 </div>
               </div>
               <br/>
@@ -98,7 +98,7 @@ class AddNewStudent extends Component {
                 </div>
                 <div className="control">
                   <div className="select is-fullwidth">
-                    <select onChange={(e) => this.setState({newStudentClass: e.target.value})}>
+                    <select value={this.state.newStudentClass} onChange={(e) => this.setState({newStudentClass: e.target.value})}>
                       <option>Select Class Name</option>
                       { this.state.classList.map( x => {
                         return (
@@ -222,6 +222,7 @@ class AddNewStudent extends Component {
             msg: "Add new student Success!",
             newStudentPhoto: "",
             newStudentName: "",
+            newStudentClass: "",
             namaPhoto: "",
           })
         })

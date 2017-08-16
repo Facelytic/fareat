@@ -148,7 +148,7 @@ var server = require('../app')
         })
       })
 
-    it('should list SINGLE Absent on /api/absents/<subject>/<class_name> GET and Return status 200', function(done){
+    it('should list SINGLE Absent on /api/absents/user/<id> GET and Return status 200', function(done){
       var createAbsent = new Absent({
         student_list: [{
           student_id: "598c675b85c0716d7fa75899",
@@ -174,7 +174,7 @@ var server = require('../app')
       })
     })
 
-    it('should list SINGLE Absent on /api/absents/<subject>/<class_name> GET and it\'s a JSON', function(done){
+    it('should list SINGLE Absent on /api/absents/user/<id> GET and it\'s a JSON', function(done){
       var createAbsent = new Absent({
         student_list: [{
           student_id: "598c675b85c0716d7fa75899",
@@ -200,7 +200,7 @@ var server = require('../app')
       })
     })
 
-    it(`should list SINGLE Absent on /api/absents/<subject>/<class_name>/api/absents GET and has properties:
+    it(`should list SINGLE Absent on /api/absents/user/<id> GET and has properties:
         1. student_list
         2. subject
         3. class_name,
@@ -223,6 +223,94 @@ var server = require('../app')
       createAbsent.save(function(err, data){
         chai.request(server)
         .get('/api/absents/user/'+data.user_id)
+        .end(function(err, res){
+          res.body[0].should.have.property('student_list')
+          res.body[0].should.have.property('subject')
+          res.body[0].should.have.property('class_name')
+          res.body[0].should.have.property('user_id')
+          res.body[0].class_name.should.equal("Happy Fox")
+          res.body[0].subject.should.equal("VueJs")
+          res.body[0].user_id.should.equal("598c672b85c0716d7fa75898")
+          done()
+        })
+      })
+    })
+
+    it('should list SINGLE Absent on /api/absents/user/<user_id>/class_name/<name> GET and Return status 200', function(done){
+      var createAbsent = new Absent({
+        student_list: [{
+          student_id: "598c675b85c0716d7fa75899",
+          pertemuan_1: "",
+          pertemuan_2: "",
+          pertemuan_3: "",
+          pertemuan_4: "",
+          pertemuan_5: "",
+          pertemuan_6: "",
+          pertemuan_7: ""
+          }],
+  	     "subject": "VueJs",
+         "class_name": "Happy Fox",
+  	      "user_id": "598c672b85c0716d7fa75898"
+      })
+      createAbsent.save(function(err, data){
+        chai.request(server)
+        .get('/api/absents/user/'+data.user_id+'/class_name/'+data.class_name)
+        .end(function(err, res){
+          res.should.have.status(200)
+          done()
+        })
+      })
+    })
+
+    it('should list SINGLE Absent on /api/absents/user/<user_id>/class_name/<name> GET and it\'s a JSON', function(done){
+      var createAbsent = new Absent({
+        student_list: [{
+          student_id: "598c675b85c0716d7fa75899",
+          pertemuan_1: "",
+          pertemuan_2: "",
+          pertemuan_3: "",
+          pertemuan_4: "",
+          pertemuan_5: "",
+          pertemuan_6: "",
+          pertemuan_7: ""
+          }],
+  	     "subject": "VueJs",
+         "class_name": "Happy Fox",
+  	      "user_id": "598c672b85c0716d7fa75898"
+      })
+      createAbsent.save(function(err, data){
+        chai.request(server)
+        .get('/api/absents/user/'+data.user_id+'/class_name/'+data.class_name)
+        .end(function(err, res){
+          res.should.be.json;
+          done()
+        })
+      })
+    })
+
+    it(`should list SINGLE Absent on /api/absents/user/<user_id>/class_name/<name> GET and has properties:
+        1. student_list
+        2. subject
+        3. class_name,
+        4. user_id`, function(done){
+      var createAbsent = new Absent({
+        student_list: [{
+          student_id: "598c675b85c0716d7fa75899",
+          pertemuan_1: "",
+          pertemuan_2: "",
+          pertemuan_3: "",
+          pertemuan_4: "",
+          pertemuan_5: "",
+          pertemuan_6: "",
+          pertemuan_7: ""
+          }],
+  	     "subject": "VueJs",
+         "class_name": "Happy Fox",
+  	      "user_id": "598c672b85c0716d7fa75898"
+      })
+      createAbsent.save(function(err, data){
+        chai.request(server)
+        .get('/api/absents/user/'+data.user_id+'/class_name/'+data.class_name)
         .end(function(err, res){
           res.body[0].should.have.property('student_list')
           res.body[0].should.have.property('subject')
@@ -337,6 +425,131 @@ var server = require('../app')
       createAbsent.save(function(err, data){
         chai.request(server)
         .put('/api/absents/'+data.student_list[0].student_id)
+        .end(function(err, res){
+          res.body.should.have.property('subject')
+          res.body.should.have.property('class_name')
+          res.body.should.have.property('user_id')
+          res.body.class_name.should.equal("Happy Fox")
+          res.body.subject.should.equal("VueJs")
+          res.body.user_id.should.equal("598c672b85c0716d7fa75898")
+          done()
+        })
+      })
+    })
+
+    it(`should update SINGLE Absent on /api/absents/new-student/<id> PUT and return status 200`, function(done){
+      var createAbsent = new Absent({
+        student_list: [{
+          student_id: "598c675b85c0716d7fa75899",
+          pertemuan_1: "",
+          pertemuan_2: "",
+          pertemuan_3: "",
+          pertemuan_4: "",
+          pertemuan_5: "",
+          pertemuan_6: "",
+          pertemuan_7: ""
+          }],
+  	     "subject": "VueJs",
+         "class_name": "Happy Fox",
+  	      "user_id": "598c672b85c0716d7fa75898"
+      })
+      createAbsent.save(function(err, data){
+        chai.request(server)
+        .put('/api/absents/new-student/'+data._id)
+        .send({
+          student_id: "598c675b85c0716d7fa75899"
+          })
+        .end(function(err, res){
+          res.should.have.status(200)
+          done()
+        })
+      })
+    })
+
+    it(`should list SINGLE Absent on /api/absents/new-student/<id> GET and it\'s a JSON`, function(done){
+      var createAbsent = new Absent({
+        student_list: [{
+          student_id: "598c675b85c0716d7fa75899",
+          pertemuan_1: "",
+          pertemuan_2: "",
+          pertemuan_3: "",
+          pertemuan_4: "",
+          pertemuan_5: "",
+          pertemuan_6: "",
+          pertemuan_7: ""
+          }],
+  	     "subject": "VueJs",
+         "class_name": "Happy Fox",
+  	      "user_id": "598c672b85c0716d7fa75898"
+      })
+      createAbsent.save(function(err, data){
+        chai.request(server)
+        .put('/api/absents/new-student/'+data._id)
+        .send({
+          student_id: "598c675b85c0716d7fa75899"
+          })
+        .end(function(err, res){
+          res.should.be.json
+          done()
+        })
+      })
+    })
+
+    it(`should list SINGLE Absent on /api/absents/new-student/<id> GET and data type Object`, function(done){
+      var createAbsent = new Absent({
+        student_list: [{
+          student_id: "598c675b85c0716d7fa75899",
+          pertemuan_1: "",
+          pertemuan_2: "",
+          pertemuan_3: "",
+          pertemuan_4: "",
+          pertemuan_5: "",
+          pertemuan_6: "",
+          pertemuan_7: ""
+          }],
+  	     "subject": "VueJs",
+         "class_name": "Happy Fox",
+  	      "user_id": "598c672b85c0716d7fa75898"
+      })
+      createAbsent.save(function(err, data){
+        chai.request(server)
+        .put('/api/absents/new-student/'+data._id)
+        .send({
+          student_id: "598c675b85c0716d7fa75899"
+          })
+        .end(function(err, res){
+          res.should.be.a('object')
+          done()
+        })
+      })
+    })
+
+    it(`should list SINGLE Absent on /api/absents/new-student/<id> GET and has properties:
+        1. student_list
+        2. subject
+        3. class_name,
+        4. user_id`, function(done){
+      var createAbsent = new Absent({
+        student_list: [{
+          student_id: "598c675b85c0716d7fa75899",
+          pertemuan_1: "",
+          pertemuan_2: "",
+          pertemuan_3: "",
+          pertemuan_4: "",
+          pertemuan_5: "",
+          pertemuan_6: "",
+          pertemuan_7: ""
+          }],
+  	     "subject": "VueJs",
+         "class_name": "Happy Fox",
+  	      "user_id": "598c672b85c0716d7fa75898"
+      })
+      createAbsent.save(function(err, data){
+        chai.request(server)
+        .put('/api/absents/new-student/'+data._id)
+        .send({
+          student_id: "598c675b85c0716d7fa75899"
+          })
         .end(function(err, res){
           res.body.should.have.property('subject')
           res.body.should.have.property('class_name')

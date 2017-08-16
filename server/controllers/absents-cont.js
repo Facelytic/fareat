@@ -5,14 +5,16 @@ module.exports = {
   create : (req, res)=>{
     Absent.find({
       user_id: req.body.user_id,
-      class: req.body.class_name,
+      class_name: req.body.class_name,
       subject: req.body.subject
     }, (err, result) => {
       if (err) {
         console.log(err);
       } else if (result.length > 0) {
+        console.log('sudah ada-----------');
         res.status(200).send('sudah ada')
       } else if (result.length === 0) {
+        console.log('result dari find by user_id, class_name, subject', result);
         Absent.create({
           student_list: req.body.student_id.map(x => {
               return {
@@ -54,18 +56,18 @@ module.exports = {
     })
   },
 
-  getOne: (req, res)=>{
-    Absent
-    .find({subject: req.query.s, class_name: req.query.c, user_id: req.query.u})
-    .populate('student_list.student_id')
-    .exec(function(err, result){
-      if(!err) {
-        res.status(200).send(result)
-      } else {
-        res.status(400).send(err)
-      }
-    })
-  },
+  // getOne: (req, res)=>{
+  //   Absent
+  //   .find({subject: req.query.s, class_name: req.query.c, user_id: req.query.u})
+  //   .populate('student_list.student_id')
+  //   .exec(function(err, result){
+  //     if(!err) {
+  //       res.status(200).send(result)
+  //     } else {
+  //       res.status(400).send(err)
+  //     }
+  //   })
+  // },
 
   getByClassNameAndUserID: (req, res) => {
     Absent.find({
