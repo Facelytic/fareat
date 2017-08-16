@@ -104,8 +104,8 @@ class DataStudent extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log('DataAbsent.js : stateDataStudent: ', state.Flag.dataStudent);
-  console.log('DataAbsent.js : stateDataStudent_detail: ', state.Flag.dataStudentDetail);
+  console.log('DataStudent.js : stateDataStudent: ', state.Flag.dataStudent);
+  console.log('DataStudent.js : stateDataStudent_detail: ', state.Flag.dataStudentDetail);
   return {
     dataStudent: state.Flag.dataStudent,
     dataStudentDetail: state.Flag.dataStudentDetail

@@ -132,7 +132,7 @@ module.exports = {
             pertemuan_6: req.body.pertemuan_6 || index[0].pertemuan_6,
             pertemuan_7: req.body.pertemuan_7 || index[0].pertemuan_7
           }
-        Absent.findOneAndUpdate({student_list: {$elemMatch: {student_id:req.params.student_id}}}, {$set: {"student_list.$": query,
+        Absent.findOneAndUpdate({student_list: {$elemMatch: {_id:index[0]._id}}}, {$set: {"student_list.$": query,
         subject: result.subject,
         class_name: result.class_name,
         user_id: result.user_id}}, {new: true}, (err, data)=>{

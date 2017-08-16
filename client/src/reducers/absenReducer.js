@@ -5,10 +5,6 @@ const initialState = {
   pertemuan: "",
   rawResult: [],
   moodData: [],
-  takeAbsent: '',
-  addNewStudent: '',
-  addNewAbsent: '',
-  addNewClass: '',
   absentList: [],
   dataStudent: [],
   dataStudentDetail: []

@@ -17,6 +17,11 @@ class InsertClass extends Component {
       classList: []
     }
   }
+  componentWillMount() {
+    if (this.props.currUser._id !== undefined) {
+      this.getClassListCurrUser()
+    }
+  }
 
   render() {
     return (
@@ -85,12 +90,6 @@ class InsertClass extends Component {
       alert('ERROR')
       console.log(err);
     })
-  }
-
-  componentWillMount() {
-    if (this.props.currUser._id !== undefined) {
-      this.getClassListCurrUser()
-    }
   }
 }
 
