@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import Webcam from 'react-webcam'
-import axios from 'axios'
+// import axios from 'axios'
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import Index from './Index'
+// import Index from './Index'
 import Header from './Header'
-import Footer from './Footer'
+// import Footer from './Footer'
 import MenuBar from './MenuBar'
-import FaceCompare from './FaceCompare'
+// import FaceCompare from './FaceCompare'
 import { setCurrUser, Flag_Login, setAbsentionToCheck, setImageToCompare, setPertemuan, getAbsentListCurrUser,
 checkCurrentUser, updateResponseCheckCurrentUser, clearMoodAndRawData } from '../actions'
 
@@ -34,43 +34,20 @@ class Home extends Component {
   }
   componentWillMount() {
     if (localStorage.id && localStorage.username) {
+      this.props.updateResponseCheckCurrentUser("")
       this.checkCurrentUser()
     } else {
+      console.log('Home.js, componentWillMount, localStorage tidak di temukan');
       this.props.updateResponseCheckCurrentUser("error")
     }
   }
 
   checkCurrentUser () {
-    let self = this
     var idUser = localStorage.getItem('id')
     var username = localStorage.getItem('username')
+    console.log("Home.js, masuk this.checkCurrentUser");
     this.props.checkCurrentUser(idUser,username)
     this.props.getAbsentListCurrUser(idUser)
-    // axios.get('http://localhost:3000/api/users/' + idUser)
-    // .then((resp) => {
-    //   if (resp.data.username === username) {
-    //     // console.log(resp.data);
-    //     // this.getAbsentListCurrUser()
-    //     self.props.flagLogin()
-    //     self.props.setCurrUser({
-    //       name: resp.data.name,
-    //       username: resp.data.username,
-    //       _id: resp.data._id
-    //     })
-    //     self.getAbsentListCurrUser(resp.data._id)
-    //     console.log('usernya benar');
-    //   } else {
-    //     console.log('usernya salah');
-    //     localStorage.clear()
-    //   }
-    // })
-    // .catch((err) => {
-    //   console.log('err dari checkCurrentUser',err)
-    //   localStorage.clear()
-    //   this.setState({
-    //     responseCheckCurrentUser: "error"
-    //   })
-    // })
   }
 
 
@@ -80,17 +57,6 @@ class Home extends Component {
     }
   }
 
-  getAbsentListCurrUser(id) {
-    // if (this.props.absentList.length === 0)
-    //   this.props.getAbsentListCurrUser(id)
-    console.log("Home.js, id dari getAbsentListCurrUser", id);
-    console.log("Home.js, this.props.absentList.length", this.props.absentList.length);
-    console.log("Home.js, this.props.absentList", this.props.absentList);
-    // if (this.props.absentList.length < 1) {
-    //   this.props.getAbsentListCurrUser(id)
-    // }
-  }
-
   render() {
     return (
       <div>
@@ -98,6 +64,7 @@ class Home extends Component {
           // localStorage.getItem('token') ?
           // this.checkCurrentUser() :
           // this.props.currUser._id == undefined ?
+
           this.props.responseCheckCurrentUser === "error" ?
           <div>
             <Redirect to="/" />

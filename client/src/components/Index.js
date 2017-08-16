@@ -3,11 +3,9 @@ import { connect } from 'react-redux'
 import {
   Redirect
 } from 'react-router-dom'
-import * as axios from 'axios'
 
-import { Get_Flag_SignIn, Flag_Login, setCurrUser } from '../actions'
+import { Flag_Login, setCurrUser } from '../actions'
 
-import bg from '../bg.jpg'
 import Header from './Header'
 import Footer from './Footer'
 import SignIn from './SignIn'
@@ -16,7 +14,7 @@ import SignUp from './SignUp'
 
 class Index extends Component {
   componentWillMount() {
-    if (localStorage.getItem('id') && localStorage.getItem('username') && localStorage.getItem('token')) {
+    if (localStorage.id && localStorage.username) {
       this.props.flagLogin()
     } else {
       localStorage.clear()
@@ -91,35 +89,10 @@ const styles = {
 
 }
 
-const checkCurrentUser = (props) => {
-  var idUser = localStorage.getItem('id')
-  var username = localStorage.getItem('username')
-  axios.get('http://localhost:3000/api/users/' + idUser)
-  .then((resp) => {
-    if (resp.data.username === username) {
-      // console.log(resp.data);
-      // this.getAbsentListCurrUser()
-      this.props.setCurrUser({
-        name: resp.data.name,
-        username: resp.data.username,
-        _id: resp.data._id
-      })
-      this.props.flagLogin()
-      console.log('usernya benar');
-    } else {
-      console.log('usernya salah');
-      localStorage.clear()
-    }
-  })
-  .catch((err) => {
-    console.log(err)
-    localStorage.clear()
-
-  })
-}
+// sudah ga di pakai, jadinya linter kuning doank
 
 const mapStateToProps = (state) => {
-  console.log( 'staenya::: ',state.IS_LOGIN.islogin)
+  console.log( 'Index.js, checkFlagLogin::: ',state.IS_LOGIN.islogin)
   return {
     FLAG: state.Flag.Flag,
     checkFlagLogin: state.IS_LOGIN.islogin

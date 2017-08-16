@@ -97,14 +97,10 @@ class NewAbsent extends Component {
       })
     } else {
       let self = this;
-      axios.get('http://localhost:3000/api/students/class/'+this.state.newAbsentClassName.split(' ').join('%20')+'/'+this.props.currUser._id)
+      axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/students/class/'+this.state.newAbsentClassName.split(' ').join('%20')+'/'+this.props.currUser._id)
       .then(response => {
         if (response.data.length > 0) {
-          // console.log('student_id (list)', response.data);
-          // console.log('subject', self.state.newAbsentSubject);
-          // console.log('class_name', self.state.newAbsentClassName);
-          // console.log('user_id', self.props.currUser._id);
-          axios.post('http://localhost:3000/api/absents', {
+          axios.post('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/absents', {
             student_id: response.data,
             subject: self.state.newAbsentSubject,
             class_name: self.state.newAbsentClassName,
@@ -150,7 +146,7 @@ class NewAbsent extends Component {
 
 
   getClassListCurrUser() {
-    axios.get('http://localhost:3000/api/classList/user/'+this.props.currUser._id)
+    axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/classList/user/'+this.props.currUser._id)
     .then(response => {
       this.setState({
         classList: response.data.map(x => x.name)
@@ -164,7 +160,7 @@ class NewAbsent extends Component {
   }
 
   getSubjectListCurrUser() {
-    axios.get('http://localhost:3000/api/subjectList/user/'+this.props.currUser._id)
+    axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/subjectList/user/'+this.props.currUser._id)
     .then(response => {
       this.setState({
         subjectList: response.data.map(x => x.name)

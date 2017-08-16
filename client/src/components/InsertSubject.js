@@ -21,7 +21,7 @@ class InsertSubject extends Component {
     return (
       <div>
         {
-          this.props.currUser._id == undefined ?
+          this.props.currUser.hasOwnProperty('_id') ?
           <Redirect to='/' /> :
           null
         }
@@ -52,7 +52,7 @@ class InsertSubject extends Component {
 
   insertClassGoGo() {
     if (this.state.subjectList.indexOf(this.state.newSubject) === -1) {
-      axios.post('http://localhost:3000/api/subjectList', {
+      axios.post('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/subjectList', {
         name: this.state.newSubject,
         user_id: this.props.currUser._id
       })
@@ -75,7 +75,7 @@ class InsertSubject extends Component {
 
 
   getSubjectListCurrUser() {
-    axios.get('http://localhost:3000/api/subjectList/user/'+this.props.currUser._id)
+    axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/subjectList/user/'+this.props.currUser._id)
     .then(response => {
       this.setState({
         subjectList: response.data.map(x => x.name)
@@ -88,7 +88,7 @@ class InsertSubject extends Component {
   }
 
   componentWillMount() {
-    if (this.props.currUser._id != undefined) {
+    if (this.props.currUser.hasOwnProperty('_id')) {
       this.getSubjectListCurrUser()
     }
   }

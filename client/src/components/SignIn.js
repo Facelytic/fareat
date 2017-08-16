@@ -53,7 +53,7 @@ class SignIn extends Component {
             </div>
             <div className="field">
               <hr/>
-              <a className="button" onClick={(e) => this.loginGoGo(this.state.objLogin)}>
+              <a className="button" onClick={(e) => this.props.loginGo(this.state.objLogin)}>
                 Sign In!
               </a>
               <a style={{color:'white'}}
@@ -67,10 +67,10 @@ class SignIn extends Component {
     )
   }
 
-  loginGoGo(obj) {
-    console.log('masuk sini');
+  async loginGoGo(obj) {
+    console.log('SignIn.js, LoginGoGo di jalankan');
     let self = this;
-    axios.post('http://localhost:3000/api/users/signin', obj)
+    axios.post('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/users/signin', obj)
     .then(response => {
       console.log(response);
       if (response.data === "Invalid password") {
@@ -87,8 +87,8 @@ class SignIn extends Component {
           }
         })
       } else {
-        localStorage.token = response.data.token
-        localStorage.username = response.data.username
+        localStorage["token"] = response.data.token
+        localStorage["username"] = response.data.username
         localStorage.id = response.data.id
         self.props.setCurrUser({
           name: response.data.name,
@@ -117,7 +117,6 @@ const styles = {
 }
 
 const mapStateToProps = (state) => {
-  console.log('ini di sign in :: ', state);
   return {
     checkFlagLogin: state.Flag.islogin
   }
@@ -127,7 +126,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getFlag: () => dispatch(Get_Flag_SignUp()),
     setCurrUser: (obj) => dispatch(setCurrUser(obj)),
-    flagLogin: () => dispatch(Flag_Login())
+    flagLogin: () => dispatch(Flag_Login()),
+    loginGo: (obj) => dispatch(loginGo(obj))
   }
 }
 
