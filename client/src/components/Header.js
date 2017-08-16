@@ -1,5 +1,5 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 const Header = () => {
   return (
@@ -7,7 +7,7 @@ const Header = () => {
       <nav className="navbar" style={{width: "80%", margin: "auto"}}>
         <div className="navbar-brand">
           <Link className="navbar-item" to="/home">
-            <img src="http://i.imgur.com/T5JKfhD.png" alt="Facelytic" width="112" height="28" />
+            <img src="http://i.imgur.com/T5JKfhD.png" alt="FACELYTIC - fase fase, litik litik" height="28" />
           </Link>
           <div className="navbar-burger burger" data-target="navMenuExample">
             <span></span>

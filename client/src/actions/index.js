@@ -16,13 +16,14 @@ export const clearMoodAndRawData = () => {
 }
 
 export const checkCurrentUser = (id, username) => {
+  console.log("actions.js masuk props.checkCurrentUser");
   return (dispatch, getState) => {
     axios.get('http://localhost:3000/api/users/' + id)
     .then((resp) => {
       if (resp.data.username === username) {
         // console.log(resp.data);
         // this.getAbsentListCurrUser()
-        dispatch(Flag_Login())
+        // dispatch(Flag_Login())
         dispatch(setCurrUser({
           name: resp.data.name,
           username: resp.data.username,
@@ -108,6 +109,7 @@ export const setPertemuan = (str) => {
 }
 
 export const Flag_Login = () => {
+  console.log("this.props.flagLogin di jalankan");
   return {
     type: 'SET_FLAG',
     payload: true
@@ -134,7 +136,7 @@ export const loginGo = (objLogin) => {
     const apiUrl = 'http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/users/signin'
     axios.post(apiUrl, {...objLogin})
     .then((resp) => {
-      if (resp.data.msg != "Invalid username" || resp.data.msg != "Invalid Password") {
+      if (resp.data.msg !== "Invalid username" || resp.data.msg !== "Invalid Password") {
         console.log(resp, 'ini reps after hit loginGo');
         localStorage.setItem('token', resp.data.token)
         localStorage.setItem('username', resp.data.username)
@@ -146,16 +148,10 @@ export const loginGo = (objLogin) => {
 }
 
 export const setCurrUser = (objUser) => {
-  return (dispatch, getState) => {
-    // dispatch(getAbsentListCurrUser(objUser._id))
-    dispatch(setCurrUser2(objUser))
-  }
-}
-
-export const setCurrUser2 = (obj) => {
+  console.log('actions.js setCurrUser: dijalankan');
   return {
     type: 'SET_CURR_USER',
-    payload: obj
+    payload: objUser
   }
 }
 

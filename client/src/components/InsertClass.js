@@ -21,7 +21,7 @@ class InsertClass extends Component {
   render() {
     return (
       <div>
-        { this.props.currUser._id == undefined ?
+        { this.props.currUser.hasOwnProperty('_id') ?
         <Redirect to='/' /> :
         null
       }

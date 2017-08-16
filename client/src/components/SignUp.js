@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 
 import { connect } from 'react-redux'
-import { Provider } from 'react-redux'
 
-import store from '../store'
 import { Get_Flag_SignIn, signupGo } from '../actions'
 
 class SignUp extends Component {
@@ -97,7 +95,6 @@ const styles = {
 }
 
 const mapStateToProps = (state) => {
-  console.log('SIGNUP :: ', state);
   return {
     checkFlagSignUp: state
   }

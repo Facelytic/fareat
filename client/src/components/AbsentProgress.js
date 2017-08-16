@@ -148,7 +148,6 @@ class AbsentProgress extends Component {
   getMood() {
     var rekognition = new AWS.Rekognition()
     var block = this.props.imageToCompare.split(";");
-    var contentType = block[0].split(":")[1];
     var realData = block[1].split(",")[1];
     var binaryImg = atob(realData);
     var length = binaryImg.length;
@@ -180,7 +179,6 @@ class AbsentProgress extends Component {
   prosesingCompareGo(image64, student, idx) {
     console.log('student di processingcompareGo',student);
     var block = image64.split(";");
-    var contentType = block[0].split(":")[1];
     var realData = block[1].split(",")[1];
     var binaryImg = atob(realData);
     var length = binaryImg.length;
@@ -190,10 +188,6 @@ class AbsentProgress extends Component {
       ua[i] = binaryImg.charCodeAt(i);
     }
     let self = this
-
-    var blob = new Blob([ab], {
-      type: "image/jpeg"
-    });
     var rekognition = new AWS.Rekognition()
     let params = {
       SimilarityThreshold: 0,
