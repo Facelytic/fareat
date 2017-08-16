@@ -6,12 +6,12 @@ const initialState = {
   rawResult: [],
   moodData: [],
   takeAbsent: '',
-  dataAbsent: '',
   addNewStudent: '',
   addNewAbsent: '',
   addNewClass: '',
   dataStudent: '',
-  absentList: []
+  absentList: [],
+  dataAbsent: []
 }
 
 export default (state=initialState, action) => {
@@ -44,6 +44,8 @@ export default (state=initialState, action) => {
       return {...state, moodData: action.payload}
     case "CLEAR_MOOD_AND_RAW_DATA":
       return {...state, moodData: action.payload, rawResult: action.payload}
+    case "FETCH_DATA_ABSENT":
+      return {...state, dataAbsent: [...state.dataAbsent, action.payload]}
     default:
       return state
   }

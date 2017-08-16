@@ -199,3 +199,22 @@ export const addNewStudentSTATUS = (isaktive) => {
 }
 
 // END MENUBAR
+
+export const Fetch_Absent = (obj) => {
+  return {
+    type: 'FETCH_DATA_ABSENT',
+    payload: obj
+  }
+}
+
+export const Fetch_DataAbsent = (idUser) => {
+  return (dispatch, getState) => {
+    const apiUrl = 'http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/classList/user/'+idUser
+    axios.get(apiUrl)
+    .then((resp) => {
+      dispatch(Fetch_Absent)
+      console.log('getbyuser class: ', resp.data);
+    })
+    .catch((err) => console.log(err))
+  }
+}

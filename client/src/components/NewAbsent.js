@@ -100,15 +100,7 @@ class NewAbsent extends Component {
       axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/students/class/'+this.state.newAbsentClassName.split(' ').join('%20')+'/'+this.props.currUser._id)
       .then(response => {
         if (response.data.length > 0) {
-<<<<<<< HEAD
           axios.post('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/absents', {
-=======
-          // console.log('student_id (list)', response.data);
-          // console.log('subject', self.state.newAbsentSubject);
-          // console.log('class_name', self.state.newAbsentClassName);
-          // console.log('user_id', self.props.currUser._id);
-          axios.post('http://localhost:3000/api/absents', {
->>>>>>> ee191b639ce54dda533fbed7563e5aaed089969c
             student_id: response.data,
             subject: self.state.newAbsentSubject,
             class_name: self.state.newAbsentClassName,
