@@ -121,7 +121,7 @@ module.exports = {
  update: (req, res)=>{
     Absent.findOne({student_list: {$elemMatch: {_id:req.params.student_id}}}, (err, result)=>{
       if(!err){
-        var index = result.student_list.filter( (x) => {return x.student_id == req.params.student_id})
+        var index = result.student_list.filter( (x) => {return x._id == req.params.student_id})
         var query = {
             student_id: index[0].student_id,
             pertemuan_1: req.body.pertemuan_1 || index[0].pertemuan_1,
