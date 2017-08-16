@@ -20,8 +20,12 @@ export default (state=initialState, action) => {
       return {...state, Flag: action.payload}
     case 'GET_FLAG_SIGNUP':
       return {...state, Flag: action.payload}
-    case "GET_ABSENT_LIST":
-      return {...state, absentList: action.payload}
+    case "GET_ABSENT_LIST_FULFILLED":
+      return {...state, absentList: action.payload.data}
+    case "GET_ABSENT_LIST_PENDING":
+      return {...state, absentList: []}
+    case "UPDATE_ABSENT_LIST":
+      return {...state, absentList: [...state.absentList, action.payload]}
     case "GET_STATUS_TAKE_ABSENT":
       return {...state, takeAbsent: action.payload}
     case "GET_STATUS_ADD_NEW_STUDENT":
@@ -38,6 +42,8 @@ export default (state=initialState, action) => {
       return {...state, rawResult: [...state.rawResult, action.payload]}
     case "UPDATE_MOOD_DATA":
       return {...state, moodData: action.payload}
+    case "CLEAR_MOOD_AND_RAW_DATA":
+      return {...state, moodData: action.payload, rawResult: action.payload}
     default:
       return state
   }

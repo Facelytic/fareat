@@ -15,17 +15,9 @@ import SignUp from './SignUp'
 
 
 class Index extends Component {
-  constructor() {
-    super()
-    this.state = {
-      checkLSLogin: ""
-    }
-  }
   componentWillMount() {
     if (localStorage.getItem('id') && localStorage.getItem('username') && localStorage.getItem('token')) {
-      this.setState({
-        checkLSLogin: true
-      })
+      this.props.flagLogin()
     } else {
       localStorage.clear()
     }
@@ -141,6 +133,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-// export default connect(mapStateToProps, mapDispatchToProps)(Index)
-export default connect(mapStateToProps, null)(Index)
-// export default connect(mapStateToProps, mapDispatchToProps)(Home)
+export default connect(mapStateToProps, mapDispatchToProps)(Index)

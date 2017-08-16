@@ -9,7 +9,8 @@ import Header from './Header'
 import Footer from './Footer'
 import MenuBar from './MenuBar'
 import FaceCompare from './FaceCompare'
-import { setCurrUser, Flag_Login, setAbsentionToCheck, setImageToCompare, setPertemuan, getAbsentListCurrUser } from '../actions'
+import { setCurrUser, Flag_Login, setAbsentionToCheck, setImageToCompare, setPertemuan, getAbsentListCurrUser,
+checkCurrentUser, updateResponseCheckCurrentUser, clearMoodAndRawData } from '../actions'
 
 // AWS.config.update({region:'us-east-1'});
 // AWS.config.accessKeyId = process.env.accessKeyId
@@ -28,17 +29,14 @@ class Home extends Component {
       absentList: "",
       pertemuanList: [],
       isTakingPicture: false,
-      dataAbsen: "",
-      responseCheckCurrentUser: ""
+      dataAbsen: ""
     }
   }
   componentWillMount() {
-    // console.log('localStorage', localStorage);
-    if (localStorage.token !== undefined) {
-      console.log('masuk componentWillMount localStorage gak undefined');
+    if (localStorage.id && localStorage.username) {
       this.checkCurrentUser()
     } else {
-      this.setState({responseCheckCurrentUser: "error"})
+      this.props.updateResponseCheckCurrentUser("error")
     }
   }
 
@@ -46,41 +44,51 @@ class Home extends Component {
     let self = this
     var idUser = localStorage.getItem('id')
     var username = localStorage.getItem('username')
-    axios.get('http://localhost:3000/api/users/' + idUser)
-    .then((resp) => {
-      if (resp.data.username === username) {
-        // console.log(resp.data);
-        // this.getAbsentListCurrUser()
-        self.props.flagLogin()
-        self.props.setCurrUser({
-          name: resp.data.name,
-          username: resp.data.username,
-          _id: resp.data._id
-        })
-        self.getAbsentListCurrUser(resp.data._id)
-        console.log('usernya benar');
-      } else {
-        console.log('usernya salah');
-        localStorage.clear()
-      }
-    })
-    .catch((err) => {
-      console.log('err dari checkCurrentUser',err)
-      localStorage.clear()
-      this.setState({
-        responseCheckCurrentUser: "error"
-      })
-    })
+    this.props.checkCurrentUser(idUser,username)
+    this.props.getAbsentListCurrUser(idUser)
+    // axios.get('http://localhost:3000/api/users/' + idUser)
+    // .then((resp) => {
+    //   if (resp.data.username === username) {
+    //     // console.log(resp.data);
+    //     // this.getAbsentListCurrUser()
+    //     self.props.flagLogin()
+    //     self.props.setCurrUser({
+    //       name: resp.data.name,
+    //       username: resp.data.username,
+    //       _id: resp.data._id
+    //     })
+    //     self.getAbsentListCurrUser(resp.data._id)
+    //     console.log('usernya benar');
+    //   } else {
+    //     console.log('usernya salah');
+    //     localStorage.clear()
+    //   }
+    // })
+    // .catch((err) => {
+    //   console.log('err dari checkCurrentUser',err)
+    //   localStorage.clear()
+    //   this.setState({
+    //     responseCheckCurrentUser: "error"
+    //   })
+    // })
+  }
+
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.absentToCheck !== nextProps.absentToCheck) {
+      this.props.clearMoodAndRawData()
+    }
   }
 
   getAbsentListCurrUser(id) {
-    axios.get('http://localhost:3000/api/absents/user/'+id)
-    .then(response => {
-      this.props.getAbsentListCurrUser(response.data)
-    })
-    .catch( err => {
-      console.log(err);
-    })
+    // if (this.props.absentList.length === 0)
+    //   this.props.getAbsentListCurrUser(id)
+    console.log("Home.js, id dari getAbsentListCurrUser", id);
+    console.log("Home.js, this.props.absentList.length", this.props.absentList.length);
+    console.log("Home.js, this.props.absentList", this.props.absentList);
+    // if (this.props.absentList.length < 1) {
+    //   this.props.getAbsentListCurrUser(id)
+    // }
   }
 
   render() {
@@ -90,7 +98,7 @@ class Home extends Component {
           // localStorage.getItem('token') ?
           // this.checkCurrentUser() :
           // this.props.currUser._id == undefined ?
-          this.state.responseCheckCurrentUser === "error" ?
+          this.props.responseCheckCurrentUser === "error" ?
           <div>
             <Redirect to="/" />
           </div>
@@ -262,10 +270,12 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log('state', state);
+  console.log('Home.js, state', state);
   return {
     currUser: state.IS_LOGIN.currUser,
-    absentList: state.Flag.absentList
+    absentList: state.Flag.absentList,
+    responseCheckCurrentUser: state.IS_LOGIN.responseCheckCurrentUser,
+    absentToCheck: state.Flag.absentToCheck
   }
 }
 
@@ -276,7 +286,10 @@ const mapDispatchToProps = (dispatch) => {
     setAbsentionToCheck: (obj) => dispatch(setAbsentionToCheck(obj)),
     setImageToCompare: (file) => dispatch(setImageToCompare(file)),
     setPertemuan: (str) => dispatch(setPertemuan(str)),
-    getAbsentListCurrUser: (data) => dispatch(getAbsentListCurrUser(data))
+    getAbsentListCurrUser: (data) => dispatch(getAbsentListCurrUser(data)),
+    checkCurrentUser: (id, username) => dispatch(checkCurrentUser(id, username)),
+    updateResponseCheckCurrentUser: (data) => dispatch(updateResponseCheckCurrentUser(data)),
+    clearMoodAndRawData: () => dispatch(clearMoodAndRawData())
   }
 }
 
