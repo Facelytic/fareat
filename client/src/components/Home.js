@@ -37,7 +37,7 @@ class Home extends Component {
       this.props.updateResponseCheckCurrentUser("")
       this.checkCurrentUser()
     } else {
-      console.log('Home.js, componentWillMount, localStorage tidak di temukan');
+      //console.log('Home.js, componentWillMount, localStorage tidak di temukan');
       this.props.updateResponseCheckCurrentUser("error")
     }
   }
@@ -45,7 +45,7 @@ class Home extends Component {
   checkCurrentUser () {
     var idUser = localStorage.getItem('id')
     var username = localStorage.getItem('username')
-    console.log("Home.js, masuk this.checkCurrentUser");
+    //console.log("Home.js, masuk this.checkCurrentUser");
     this.props.checkCurrentUser(idUser,username)
     this.props.getAbsentListCurrUser(idUser)
   }
@@ -189,7 +189,7 @@ class Home extends Component {
         pertemuanList: [7]
       })
     } else {
-      console.log(obj);
+      //console.log(obj);
       this.setState({
         pertemuanList: []
       })
@@ -237,7 +237,7 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log('Home.js, state', state);
+  //console.log('Home.js, state', state);
   return {
     currUser: state.IS_LOGIN.currUser,
     absentList: state.Flag.absentList,

@@ -19,7 +19,6 @@ const MenuBar = (props) => {
             <li><Link to="/create-new-absent">Add New Absent</Link></li>
             <li><Link to="/new-class">Create New Class</Link></li>
             <li><Link to="/data-student">Data Student</Link></li>
-            <li><Link to="/my-profile">My Profile</Link></li>
             <li><Link to="/log-out" >Log Out</Link></li>
           </ul>
         </div>

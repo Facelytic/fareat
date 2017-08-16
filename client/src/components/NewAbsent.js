@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Link, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { updateAbsentListCurrUser } from '../actions'
+import { getAbsentListCurrUser } from '../actions'
 import Header from './Header'
 // import Footer from './Footer'
 import MenuBar from './MenuBar'
@@ -37,9 +37,6 @@ class NewAbsent extends Component {
               <div className="field">
                 <p className="title is-3">Create New Absent</p>
               </div>
-              <div className="field">
-                <p className="subtitle is-4">please fill all the data yaa</p>
-              </div>
               <p className="subtitle is-6" style={{color: this.state.msg.color}}>{this.state.msg.msg}</p>
               <div className='field columns' style={{width: '50%', margin: 'auto'}}>
                 <div className='column'>
@@ -47,7 +44,7 @@ class NewAbsent extends Component {
                     <label className='label'>Subject</label>
                   </div>
                   <div className="select is-fullwidth">
-                    <select onChange={(e) => this.setState({newAbsentSubject: e.target.value})}>
+                    <select value={this.state.newAbsentSubject} onChange={(e) => this.setState({newAbsentSubject: e.target.value})}>
                       <option>Select Subject</option>
                       { this.state.subjectList.map( x => {
                         return (
@@ -65,7 +62,7 @@ class NewAbsent extends Component {
                     <label className='label'>Class</label>
                   </div>
                   <div className="select is-fullwidth">
-                    <select onChange={(e) => this.setState({newAbsentClassName: e.target.value})}>
+                    <select value={this.state.newAbsentClassName} onChange={(e) => this.setState({newAbsentClassName: e.target.value})}>
                       <option>Select Class</option>
                       { this.state.classList.map( x => {
                         return (
@@ -119,9 +116,11 @@ class NewAbsent extends Component {
                 msg: {
                   msg: "Create absent success!",
                   color: "#20e8b2"
-                }
+                },
+                newAbsentSubject: "",
+                newAbsentClassName: ""
               })
-              this.props.updateAbsentListCurrUser(rezponse.data)
+              this.props.getAbsentListCurrUser(self.props.currUser._id)
             }
           })
           .catch(err => {
@@ -187,7 +186,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateAbsentListCurrUser: (obj) => dispatch(updateAbsentListCurrUser(obj))
+    getAbsentListCurrUser: (id) => dispatch(getAbsentListCurrUser(id))
     // getFlag: () => dispatch(Get_Flag_SignUp()),
     // loginGo: (objLogin) => dispatch(loginGo(objLogin))
   }

@@ -60,7 +60,7 @@ class AbsentProgress extends Component {
                                    this.props.allData[idx].data === "Gak Masuk" ?
                                    <td>
                                      <div className='select is-fullwidth'>
-                                       <select id={"absent-nya-" + idx} onChange={(e) => console.log(e.target.value)}>
+                                       <select id={"absent-nya-" + idx}>
                                          <option value='Alpha'>Alpha</option>
                                          <option value='Sakit'>Sakit</option>
                                          <option value='Ijin'>Ijin</option>
@@ -124,8 +124,8 @@ class AbsentProgress extends Component {
     this.props.absentToCheck.student_list.forEach( (student, idx) => {
       let studentToUpdate = {...student}
       if (document.getElementById('absent-nya-'+idx).value === "Kesalahan Mesin") {
-        console.log('AbsentProgress.js, this.props.moodData', this.props.moodData);
-        console.log('AbsentProgress.js, this.props.allData', this.props.allData);
+        //console.log('AbsentProgress.js, this.props.moodData', this.props.moodData);
+        //console.log('AbsentProgress.js, this.props.allData', this.props.allData);
         studentToUpdate[pertemuan] = this.props.moodData.find( x => {
           return x.BoundingBox.Width === this.props.allData[idx].BoundingBox.Width && x.BoundingBox.Height === this.props.allData[idx].BoundingBox.Height && x.BoundingBox.Left === this.props.allData[idx].BoundingBox.Left && x.BoundingBox.Top === this.props.allData[idx].BoundingBox.Top
         }).Emotions[0].Type || "Masuk"
@@ -133,7 +133,7 @@ class AbsentProgress extends Component {
         studentToUpdate[pertemuan] = document.getElementById('absent-nya-'+idx).value || document.getElementById('mood-nya-'+idx).innerHTML || "Masuk"
       }
       this.props.saveResultAbsent(studentToUpdate)
-      console.log('studentToUpdate', studentToUpdate);
+      //console.log('studentToUpdate', studentToUpdate);
       if (idx === this.props.absentToCheck.student_list.length-1) {
         this.props.clearMoodAndRawData()
         this.props.setAbsentionToCheck("kosong")
@@ -171,13 +171,13 @@ class AbsentProgress extends Component {
         console.log(errSA, errSA.stack);
       } else {
         self.props.updateMoodData(dataSA.FaceDetails)
-        console.log('Emotions: ', dataSA);
+        //console.log('Emotions: ', dataSA);
       }
     })
   }
 
   prosesingCompareGo(image64, student, idx) {
-    console.log('student di processingcompareGo',student);
+    //console.log('student di processingcompareGo',student);
     var block = image64.split(";");
     var realData = block[1].split(",")[1];
     var binaryImg = atob(realData);
@@ -205,7 +205,7 @@ class AbsentProgress extends Component {
        if (err) {
          console.log(err, err.stack)
        } else {
-        console.log(student.student_id.photo, data); // successful response
+        //console.log(student.student_id.photo, data); // successful response
         if (data.FaceMatches[0].Similarity < 75) {
           if (self.props.allData.length === idx) {
             self.props.updateRawData("Gak Masuk", data.FaceMatches[0].Face.BoundingBox)
@@ -228,7 +228,7 @@ class AbsentProgress extends Component {
               console.log(errSA, errSA.stack);
             } else {
               self.props.updateMoodData(dataSA.FaceDetails)
-              console.log('Emotions: ', dataSA);
+              //console.log('Emotions: ', dataSA);
             }
           })
         }

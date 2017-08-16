@@ -92,7 +92,7 @@ const styles = {
 // sudah ga di pakai, jadinya linter kuning doank
 
 const mapStateToProps = (state) => {
-  console.log( 'Index.js, checkFlagLogin::: ',state.IS_LOGIN.islogin)
+  //console.log( 'Index.js, checkFlagLogin::: ',state.IS_LOGIN.islogin)
   return {
     FLAG: state.Flag.Flag,
     checkFlagLogin: state.IS_LOGIN.islogin

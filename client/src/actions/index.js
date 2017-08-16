@@ -16,7 +16,7 @@ export const clearMoodAndRawData = () => {
 }
 
 export const checkCurrentUser = (id, username) => {
-  console.log("actions.js masuk props.checkCurrentUser");
+  //console.log("actions.js masuk props.checkCurrentUser");
   return (dispatch, getState) => {
     axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/users/' + id)
     .then((resp) => {
@@ -29,14 +29,14 @@ export const checkCurrentUser = (id, username) => {
           username: resp.data.username,
           _id: resp.data._id
         }))
-        console.log('usernya benar');
+        //console.log('usernya benar');
       } else {
-        console.log('usernya salah');
+        //console.log('usernya salah');
         localStorage.clear()
       }
     })
     .catch((err) => {
-      console.log('err dari checkCurrentUser',err)
+      //console.log('err dari checkCurrentUser',err)
       localStorage.clear()
       dispatch(updateResponseCheckCurrentUser("error"))
       // this.setState({
@@ -109,7 +109,7 @@ export const setPertemuan = (str) => {
 }
 
 export const Flag_Login = () => {
-  console.log("this.props.flagLogin di jalankan");
+  //console.log("this.props.flagLogin di jalankan");
   return {
     type: 'SET_FLAG',
     payload: true
@@ -131,13 +131,13 @@ export const setAbsentionToCheck = (obj) => {
 }
 
 export const loginGo = (objLogin) => {
-  console.log('actions loginGo: ', objLogin);
+  //console.log('actions loginGo: ', objLogin);
   return (dispatch, getState) => {
     const apiUrl = 'http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/users/signin'
     axios.post(apiUrl, {...objLogin})
     .then((resp) => {
       if (resp.data.msg !== "Invalid username" || resp.data.msg !== "Invalid Password") {
-        console.log(resp, 'ini reps after hit loginGo');
+        //console.log(resp, 'ini reps after hit loginGo');
         localStorage.setItem('token', resp.data.token)
         localStorage.setItem('username', resp.data.username)
         localStorage.setItem('id', resp.data.id)
@@ -148,7 +148,7 @@ export const loginGo = (objLogin) => {
 }
 
 export const setCurrUser = (objUser) => {
-  console.log('actions.js setCurrUser: dijalankan');
+  //console.log('actions.js setCurrUser: dijalankan');
   return {
     type: 'SET_CURR_USER',
     payload: objUser
@@ -156,7 +156,7 @@ export const setCurrUser = (objUser) => {
 }
 
 export const signupGo = (objSignup) => {
-  console.log(objSignup);
+  //console.log(objSignup);
   return (dispatch, getState) => {
     const apiUrl = 'http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/users/signup'
     axios.post(apiUrl, {...objSignup})
@@ -169,12 +169,12 @@ export const signupGo = (objSignup) => {
 
 //update hasil absent to database
 export const saveResultAbsent = (objAbsent) => {
-  console.log('action, saveResultAbsent, objnya: ', objAbsent);
+  //console.log('action, saveResultAbsent, objnya: ', objAbsent);
   return (dispatch, getState) => {
     const apiUrl = 'http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/absents/'+objAbsent._id
     axios.put(apiUrl, objAbsent)
     .then((resp) => {
-      console.log('sukses update : ', resp.data);
+      //console.log('sukses update : ', resp.data);
     }).catch(err => console.log(err))
   }
 }
@@ -222,8 +222,8 @@ export const Fetch_Student_Detail = (obj) => {
 }
 
 export const Fetch_DataStudent_Detail = (className, idUser) => {
-  console.log('actions : ini clas apa: ', className);
-  console.log('actions : usernya siapa: ', idUser);
+  //console.log('actions : ini clas apa: ', className);
+  //console.log('actions : usernya siapa: ', idUser);
   return (dispatch, getState) => {
     const apiUrl = 'http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/students/class/'+className+'/'+idUser
     axios.get(apiUrl)
@@ -234,4 +234,9 @@ export const Fetch_DataStudent_Detail = (className, idUser) => {
   }
 }
 
-//http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/students/class/Happy Fox/598da04bf8d449390bfa3ab5
+export const Clear_Fetch_DataStudent_Detail = () => {
+  return {
+    type: 'FETCH_DATA_STUDENT_DETAIL',
+    payload: []
+  }
+}

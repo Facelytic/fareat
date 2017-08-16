@@ -25,16 +25,13 @@ class InsertClass extends Component {
 
   render() {
     return (
+      this.props.currUser.hasOwnProperty('_id') ?
       <div>
-        { this.props.currUser.hasOwnProperty('_id') ?
-        <Redirect to='/' /> :
-        null
-      }
         <Header></Header>
         <MenuBar></MenuBar>
         <div style={{backgroundColor: "#ECF0F1", width: "80%", margin: 'auto', padding: "20px 0"}}>
           <div className="field">
-            <p className="subtitle is-4">Insert New Class</p>
+            <p className="title is-3">Insert New Class</p>
           </div>
           <div className="field">
             <p className="subtitle is-6" style={{color: this.state.msgColor}}>{this.state.msg}</p>
@@ -51,7 +48,8 @@ class InsertClass extends Component {
           </div>
           <p className='button is-danger' style={{width: '10%'}} onClick={() => this.insertClassGoGo()}>Insert</p>
         </div>
-      </div>
+      </div>:
+      <Redirect to='/' />
     );
   }
 

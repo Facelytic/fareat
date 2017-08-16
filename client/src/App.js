@@ -6,7 +6,8 @@ import * as firebase from 'firebase'
 import { Provider } from 'react-redux'
 import {
   BrowserRouter as Router,
-  Route
+  Route,
+  Redirect
 } from 'react-router-dom'
 
 import './App.css';
@@ -22,6 +23,13 @@ import AbsentProgress from './components/AbsentProgress'
 import InsertSubject from './components/InsertSubject'
 import DataAbsent from './components/DataAbsent'
 import DataStudent from './components/DataStudent'
+
+const logout = () => {
+  localStorage.clear()
+  return (
+    <Redirect to='/'/>
+  )
+}
 
 class App extends Component {
   constructor() {
@@ -50,6 +58,7 @@ class App extends Component {
               <Route exact path="/data-absent" component={DataAbsent}/>
               <Route exact path="/data-student" component={DataStudent}/>
               <Route exact path="/absent/in-progress" component={AbsentProgress}/>
+              <Route exact path='/log-out' component={logout}/>
             </div>
           </Router>
         </div>
