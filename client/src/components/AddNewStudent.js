@@ -31,25 +31,25 @@ class AddNewStudent extends Component {
   }
 
   checkCurrentUser () {
-    var idUser = localStorage.getItem('id')
-    console.log('');
-    var username = localStorage.getItem('username')
-    axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/users/' + idUser)
-    .then((resp) => {
-      if (resp.data.username === username) {
-        console.log('usernya benar');
-      } else {
-        console.log('usernya salah');
-        localStorage.clear()
-      }
-    })
-    .catch((err) => {
-      console.log(err)
-      localStorage.clear()
-      this.setState({
-        responseCheckCurrentUser: "eror"
-      })
-    })
+    // var idUser = localStorage.getItem('id')
+    // console.log('');
+    // var username = localStorage.getItem('username')
+    // axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/users/' + idUser)
+    // .then((resp) => {
+    //   if (resp.data.username === username) {
+    //     console.log('usernya benar');
+    //   } else {
+    //     console.log('usernya salah');
+    //     localStorage.clear()
+    //   }
+    // })
+    // .catch((err) => {
+    //   console.log(err)
+    //   localStorage.clear()
+    //   this.setState({
+    //     responseCheckCurrentUser: "eror"
+    //   })
+    // })
   }
 
   render() {
@@ -163,11 +163,12 @@ class AddNewStudent extends Component {
     })
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (this.props.currUser._id !== undefined) {
+      console.log('componentWillMount mmemulai getClassListCurrUser()')
       this.getClassListCurrUser()
     } else {
-      this.setState({responseCheckCurrentUser: "error"})
+      // this.setState({responseCheckCurrentUser: "error"})
     }
   }
   // toS3() {

@@ -8,8 +8,8 @@ import MenuBar from './MenuBar'
 import { updateRawData, saveResultAbsent, updateMoodData, setAbsentionToCheck, getAbsentListCurrUser, clearMoodAndRawData } from '../actions'
 
 AWS.config.update({region:'us-east-1'});
-AWS.config.accessKeyId = process.env.accessKeyId
-AWS.config.secretAccessKey = process.env.secretAccessKey
+AWS.config.accessKeyId = "AKIAJPCQSW5RYCVRTRTA"
+AWS.config.secretAccessKey = "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"
 
 class AbsentProgress extends Component {
   render() {

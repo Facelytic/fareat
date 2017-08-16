@@ -18,7 +18,7 @@ export const clearMoodAndRawData = () => {
 export const checkCurrentUser = (id, username) => {
   console.log("actions.js masuk props.checkCurrentUser");
   return (dispatch, getState) => {
-    axios.get('http://localhost:3000/api/users/' + id)
+    axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/users/' + id)
     .then((resp) => {
       if (resp.data.username === username) {
         // console.log(resp.data);
@@ -56,7 +56,7 @@ export const updateResponseCheckCurrentUser = (data) => {
 export const getAbsentListCurrUser = (id) => {
     return {
       type: 'GET_ABSENT_LIST',
-      payload: axios.get('http://localhost:3000/api/absents/user/'+id)
+      payload: axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/absents/user/'+id)
     }
 }
 
@@ -69,7 +69,7 @@ export const updateAbsentListCurrUser = (data) => {
 
 export const deleteAbsent = (id) => {
   return (dispatch, getState) => {
-    axios.delete('http://localhost:3000/api/absents/'+id)
+    axios.delete('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/absents/'+id)
     .then(response => {
       dispatch(getAbsentListCurrUser(id))
     })
@@ -169,12 +169,12 @@ export const signupGo = (objSignup) => {
 
 //update hasil absent to database
 export const saveResultAbsent = (objAbsent) => {
-  console.log('objnya: ', objAbsent);
+  console.log('action, saveResultAbsent, objnya: ', objAbsent);
   return (dispatch, getState) => {
-    const apiUrl = 'http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/absents/'+objAbsent.student_id._id
+    const apiUrl = 'http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/absents/'+objAbsent._id
     axios.put(apiUrl, objAbsent)
     .then((resp) => {
-      console.log('sukses update : ', resp);
+      console.log('sukses update : ', resp.data);
     }).catch(err => console.log(err))
   }
 }
@@ -196,21 +196,42 @@ export const addNewStudentSTATUS = (isaktive) => {
 
 // END MENUBAR
 
-export const Fetch_Absent = (obj) => {
+export const Fetch_Student = (obj) => {
   return {
-    type: 'FETCH_DATA_ABSENT',
+    type: 'FETCH_DATA_STUDENT',
     payload: obj
   }
 }
 
-export const Fetch_DataAbsent = (idUser) => {
+export const Fetch_DataStudent = (idUser) => {
   return (dispatch, getState) => {
     const apiUrl = 'http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/classList/user/'+idUser
     axios.get(apiUrl)
     .then((resp) => {
-      dispatch(Fetch_Absent)
-      console.log('getbyuser class: ', resp.data);
+      dispatch(Fetch_Student(resp.data))
     })
     .catch((err) => console.log(err))
   }
 }
+
+export const Fetch_Student_Detail = (obj) => {
+  return {
+    type: 'FETCH_DATA_STUDENT_DETAIL',
+    payload: obj
+  }
+}
+
+export const Fetch_DataStudent_Detail = (className, idUser) => {
+  console.log('actions : ini clas apa: ', className);
+  console.log('actions : usernya siapa: ', idUser);
+  return (dispatch, getState) => {
+    const apiUrl = 'http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/students/class/'+className+'/'+idUser
+    axios.get(apiUrl)
+    .then((resp) => {
+      dispatch(Fetch_Student_Detail(resp.data))
+    })
+    .catch((err) => console.log(err))
+  }
+}
+
+//http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/students/class/Happy Fox/598da04bf8d449390bfa3ab5

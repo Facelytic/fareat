@@ -13,14 +13,14 @@ const MenuBar = (props) => {
       <div>
         <div className="tabs is-centered">
           <ul>
-            <li className={props.takeAbsent}><Link to="/home" onClick={(e) => props.takeAbsentSTATUS('is-active')}>Take Absent</Link></li>
-            <li className={props.statusMenuBar}><Link to="/data-absent" onClick={(e) => props.takeAbsentSTATUS('is-active')}>Data Absent</Link></li>
-            <li className={props.addNewStudent}><Link to="/create-new-student" onClick={(e) => props.addNewStudentSTATUS('is-active')}>Add New Student</Link></li>
-            <li className={props.statusMenuBar}><Link to="/create-new-absent">Add New Absent</Link></li>
-            <li className={props.statusMenuBar}><Link to="/new-class">Create New Class</Link></li>
-            <li className={props.statusMenuBar}><Link to="/data-student">Data Student</Link></li>
-            <li className={props.statusMenuBar}><Link to="/my-profile">My Profile</Link></li>
-            <li className={props.statusMenuBar}><Link to="/log-out" >Log Out</Link></li>
+            <li><Link to="/home">Take Absent</Link></li>
+            <li><Link to="/data-absent">Data Absent</Link></li>
+            <li><Link to="/create-new-student">Add New Student</Link></li>
+            <li><Link to="/create-new-absent">Add New Absent</Link></li>
+            <li><Link to="/new-class">Create New Class</Link></li>
+            <li><Link to="/data-student">Data Student</Link></li>
+            <li><Link to="/my-profile">My Profile</Link></li>
+            <li><Link to="/log-out" >Log Out</Link></li>
           </ul>
         </div>
       </div>
