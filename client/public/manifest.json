@@ -1,9 +1,9 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "FACELYTIC",
+  "name": "Change the way you absent with just one click",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "http://i.imgur.com/HAmbfdP.png",
       "sizes": "192x192",
       "type": "image/png"
     }

@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import * as firebase from 'firebase'
 import Webcam from 'react-webcam'
-import * as Chance from 'chance'
 import axios from 'axios'
 import { Link, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 // import * as AWS from 'aws-sdk'
-import chance from 'chance'
 import Header from './Header'
 // import Footer from './Footer'
 import MenuBar from './MenuBar'
@@ -60,7 +57,7 @@ class AddNewStudent extends Component {
       <div>
         {
           // this.state.responseCheckCurrentUser === "error" ?
-          this.props.currUser._id == undefined ?
+          this.props.currUser.hasOwnProperty('_id') ?
           <div>
             <Redirect to="/" />
           </div>

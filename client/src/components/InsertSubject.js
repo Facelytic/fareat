@@ -21,7 +21,7 @@ class InsertSubject extends Component {
     return (
       <div>
         {
-          this.props.currUser._id == undefined ?
+          this.props.currUser.hasOwnProperty('_id') ?
           <Redirect to='/' /> :
           null
         }
@@ -88,7 +88,7 @@ class InsertSubject extends Component {
   }
 
   componentWillMount() {
-    if (this.props.currUser._id != undefined) {
+    if (this.props.currUser.hasOwnProperty('_id')) {
       this.getSubjectListCurrUser()
     }
   }
