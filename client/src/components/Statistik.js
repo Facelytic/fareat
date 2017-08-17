@@ -14,7 +14,7 @@
 //     this.getClass()
 //   }
 //   getClass() {
-//     axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/classList')
+//     axios.get('https://erwar.id/api/classList')
 //     .then(resp => {
 //       console.log('response: ',resp.data)
 //       this.setState({

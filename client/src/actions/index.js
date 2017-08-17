@@ -18,7 +18,7 @@ export const clearMoodAndRawData = () => {
 export const checkCurrentUser = (id, username) => {
   //console.log("actions.js masuk props.checkCurrentUser");
   return (dispatch, getState) => {
-    axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/users/' + id)
+    axios.get('https://erwar.id/api/users/' + id)
     .then((resp) => {
       if (resp.data.username === username) {
         // console.log(resp.data);
@@ -56,7 +56,7 @@ export const updateResponseCheckCurrentUser = (data) => {
 export const getAbsentListCurrUser = (id) => {
     return {
       type: 'GET_ABSENT_LIST',
-      payload: axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/absents/user/'+id)
+      payload: axios.get('https://erwar.id/api/absents/user/'+id)
     }
 }
 
@@ -69,7 +69,7 @@ export const updateAbsentListCurrUser = (data) => {
 
 export const deleteAbsent = (id) => {
   return (dispatch, getState) => {
-    axios.delete('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/absents/'+id)
+    axios.delete('https://erwar.id/api/absents/'+id)
     .then(response => {
       dispatch(getAbsentListCurrUser(id))
     })
@@ -133,7 +133,7 @@ export const setAbsentionToCheck = (obj) => {
 export const loginGo = (objLogin) => {
   //console.log('actions loginGo: ', objLogin);
   return (dispatch, getState) => {
-    const apiUrl = 'http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/users/signin'
+    const apiUrl = 'https://erwar.id/api/users/signin'
     axios.post(apiUrl, {...objLogin})
     .then((resp) => {
       if (resp.data.msg !== "Invalid username" || resp.data.msg !== "Invalid Password") {
@@ -158,7 +158,7 @@ export const setCurrUser = (objUser) => {
 export const signupGo = (objSignup) => {
   //console.log(objSignup);
   return (dispatch, getState) => {
-    const apiUrl = 'http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/users/signup'
+    const apiUrl = 'https://erwar.id/api/users/signup'
     axios.post(apiUrl, {...objSignup})
     .then((resp) => {
       dispatch(Get_Flag_SignIn())
@@ -171,7 +171,7 @@ export const signupGo = (objSignup) => {
 export const saveResultAbsent = (objAbsent) => {
   //console.log('action, saveResultAbsent, objnya: ', objAbsent);
   return (dispatch, getState) => {
-    const apiUrl = 'http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/absents/'+objAbsent._id
+    const apiUrl = 'https://erwar.id/api/absents/'+objAbsent._id
     axios.put(apiUrl, objAbsent)
     .then((resp) => {
       //console.log('sukses update : ', resp.data);
@@ -205,7 +205,7 @@ export const Fetch_Student = (obj) => {
 
 export const Fetch_DataStudent = (idUser) => {
   return (dispatch, getState) => {
-    const apiUrl = 'http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/classList/user/'+idUser
+    const apiUrl = 'https://erwar.id/api/classList/user/'+idUser
     axios.get(apiUrl)
     .then((resp) => {
       dispatch(Fetch_Student(resp.data))
@@ -225,7 +225,7 @@ export const Fetch_DataStudent_Detail = (className, idUser) => {
   //console.log('actions : ini clas apa: ', className);
   //console.log('actions : usernya siapa: ', idUser);
   return (dispatch, getState) => {
-    const apiUrl = 'http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/students/class/'+className+'/'+idUser
+    const apiUrl = 'https://erwar.id/api/students/class/'+className+'/'+idUser
     axios.get(apiUrl)
     .then((resp) => {
       dispatch(Fetch_Student_Detail(resp.data))

@@ -45,7 +45,7 @@ class SignIn extends Component {
             </div>
             <div className="field">
               <p className="control has-icons-left">
-                <input onChange={(e) => this.input(e)} value={obj.password} name="password" className="input" type="password" placeholder="Password"/>
+                <input onChange={(e) => this.input(e)} value={obj.password} name="password" className="input" type="password" placeholder="Password" onKeyUp={(e) => { e.key === 'Enter' ? this.props.loginGo(this.state.objLogin) : null}}/>
                 <span className="icon is-small is-left">
                   <i className="fa fa-lock"></i>
                 </span>
@@ -70,7 +70,7 @@ class SignIn extends Component {
   async loginGoGo(obj) {
     console.log('SignIn.js, LoginGoGo di jalankan');
     let self = this;
-    axios.post('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/users/signin', obj)
+    axios.post('https://erwar.id/api/users/signin', obj)
     .then(response => {
       console.log(response);
       if (response.data === "Invalid password") {

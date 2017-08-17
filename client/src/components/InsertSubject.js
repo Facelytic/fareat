@@ -19,12 +19,8 @@ class InsertSubject extends Component {
 
   render() {
     return (
+      this.props.currUser.hasOwnProperty('_id') ?
       <div>
-        {
-          this.props.currUser.hasOwnProperty('_id') ?
-          <Redirect to='/' /> :
-          null
-        }
         <Header></Header>
         <MenuBar></MenuBar>
         <div style={{backgroundColor: "#ECF0F1", width: "80%", margin: 'auto', padding: "20px 0"}}>
@@ -46,15 +42,16 @@ class InsertSubject extends Component {
           </div>
           <p className='button is-danger' style={{width: '10%'}} onClick={() => this.insertClassGoGo()}>Create</p>
         </div>
-      </div>
+      </div> :
+      <Redirect to='/' />
     );
   }
 
   insertClassGoGo() {
     if (this.state.subjectList.indexOf(this.state.newSubject) === -1) {
-      axios.post('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/subjectList', {
+      axios.post('https://erwar.id/api/subjectList', {
         name: this.state.newSubject,
-        user_id: this.props.currUser._id
+        user_id: localStorage.id
       })
       .then(response => {
         this.setState({
@@ -75,7 +72,8 @@ class InsertSubject extends Component {
 
 
   getSubjectListCurrUser() {
-    axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/subjectList/user/'+this.props.currUser._id)
+    // axios.get('https://erwar.id/api/subjectList/user/'+this.props.currUser._id)
+    axios.get('https://erwar.id/api/subjectList/user/'+localStorage.id)
     .then(response => {
       this.setState({
         subjectList: response.data.map(x => x.name)
@@ -88,13 +86,21 @@ class InsertSubject extends Component {
   }
 
   componentWillMount() {
-    if (this.props.currUser.hasOwnProperty('_id')) {
+    // if (this.props.currUser.hasOwnProperty('_id')) {
+    //   this.getSubjectListCurrUser()
+    // }
+
+    if (localStorage.getItem('id')) {
+      console.log('masuk');
       this.getSubjectListCurrUser()
+    } else {
+      console.log('gak ada');
     }
   }
 }
 
 const mapStateToProps = (state) => {
+  console.log(state);
   return {
     currUser: state.IS_LOGIN.currUser
   }

@@ -94,10 +94,10 @@ class NewAbsent extends Component {
       })
     } else {
       let self = this;
-      axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/students/class/'+this.state.newAbsentClassName.split(' ').join('%20')+'/'+this.props.currUser._id)
+      axios.get('https://erwar.id/api/students/class/'+this.state.newAbsentClassName.split(' ').join('%20')+'/'+this.props.currUser._id)
       .then(response => {
         if (response.data.length > 0) {
-          axios.post('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/absents', {
+          axios.post('https://erwar.id/api/absents', {
             student_id: response.data,
             subject: self.state.newAbsentSubject,
             class_name: self.state.newAbsentClassName,
@@ -145,7 +145,7 @@ class NewAbsent extends Component {
 
 
   getClassListCurrUser() {
-    axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/classList/user/'+this.props.currUser._id)
+    axios.get('https://erwar.id/api/classList/user/'+this.props.currUser._id)
     .then(response => {
       this.setState({
         classList: response.data.map(x => x.name)
@@ -159,7 +159,7 @@ class NewAbsent extends Component {
   }
 
   getSubjectListCurrUser() {
-    axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/subjectList/user/'+this.props.currUser._id)
+    axios.get('https://erwar.id/api/subjectList/user/'+this.props.currUser._id)
     .then(response => {
       this.setState({
         subjectList: response.data.map(x => x.name)

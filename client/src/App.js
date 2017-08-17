@@ -24,11 +24,16 @@ import InsertSubject from './components/InsertSubject'
 import DataAbsent from './components/DataAbsent'
 import DataStudent from './components/DataStudent'
 
-const logout = () => {
-  localStorage.clear()
-  return (
-    <Redirect to='/'/>
-  )
+class logout extends Component {
+  render() {
+    return (
+      <Redirect to='/'/>
+    )
+  }
+
+  componentWillMount() {
+    localStorage.clear()
+  }
 }
 
 class App extends Component {

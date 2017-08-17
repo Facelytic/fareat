@@ -118,7 +118,7 @@ class AddNewStudent extends Component {
   }
 
   getClassListCurrUser() {
-    axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/classList/user/'+this.props.currUser._id)
+    axios.get('https://erwar.id/api/classList/user/'+this.props.currUser._id)
     .then(response => {
       this.setState({
         classList: response.data.map(x => x.name)
@@ -147,7 +147,7 @@ class AddNewStudent extends Component {
         colorMsg: "red"
       })
     } else {
-      axios.post('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/students', {
+      axios.post('https://erwar.id/api/students', {
         name: this.state.newStudentName,
         className: this.state.newStudentClass,
         user_id: this.props.currUser._id
@@ -155,7 +155,7 @@ class AddNewStudent extends Component {
       .then(function(response) {
         //console.log(response.data);
         let namaNya = response.data.name.toLowerCase().split(' ').join('-')
-        axios.put(`http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/students/${response.data._id}`, {
+        axios.put(`https://erwar.id/api/students/${response.data._id}`, {
           photo: `${response.data._id}_${namaNya}.jpg`
         })
         .then(rezponse => {
@@ -203,10 +203,10 @@ class AddNewStudent extends Component {
   }
 
   insertNewStudentToAbsent(id) {
-    axios.get('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/absents/user/'+this.props.currUser._id+'/class_name/'+this.state.newStudentClass)
+    axios.get('https://erwar.id/api/absents/user/'+this.props.currUser._id+'/class_name/'+this.state.newStudentClass)
     .then(response => {
       response.data.forEach( data => {
-        axios.put('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/absents/new-student/'+data._id, {
+        axios.put('https://erwar.id/api/absents/new-student/'+data._id, {
           student_id: id
         })
         .then(response => {
@@ -251,7 +251,7 @@ class AddNewStudent extends Component {
   }
 
   postImageStudent() {
-    axios.post('http://server-dev.ap-southeast-1.elasticbeanstalk.com/api/students', {
+    axios.post('https://erwar.id/api/students', {
       name: this.state.newStudentName,
       // photo: this.state.newStudentPhoto,
       class: this.state.newStudentClass,

@@ -22,39 +22,33 @@ class Index extends Component {
   }
   render() {
     return (
+      this.props.checkFlagLogin ?
       <div>
+        <Redirect to="/home"/>
+      </div> :
+      <div className="index">
+        <Header></Header>
+        <div className="main" style={styles.body}>
+          <div className="columns">
+            <div className="column is-5 is-offset-1">
+              <h1 style={styles.slogan}>CHANGE YOUR ABSENT JUST BY CLICK AT ONCE USING FACELYTIC APPS.</h1>
+              <h3 style={styles.sloganMini}>aquire your good absent to increase your productivity.</h3>
+            </div>
+            <div className="column is-5">
+              <div className="column is-8 is-offset-4">
 
-        {
-          this.props.checkFlagLogin ?
-          <div>
-            <Redirect to="/home"/>
-          </div>
-          : null
-        }
-        <div className="index">
-          <Header></Header>
-          <div className="main" style={styles.body}>
-            <div className="columns">
-              <div className="column is-5 is-offset-1">
-                <h1 style={styles.slogan}>CHANGE YOUR ABSENT JUST BY CLICK AT ONCE USING FACELYTIC APPS.</h1>
-                <h3 style={styles.sloganMini}>aquire your good absent to increase your productivity.</h3>
-              </div>
-              <div className="column is-5">
-                <div className="column is-8 is-offset-4">
-
-                  {
-                    this.props.FLAG === "issignup" ?
-                    <SignUp></SignUp>
-                    :
-                    <SignIn></SignIn>
-                  }
-                </div>
+                {
+                  this.props.FLAG === "issignup" ?
+                  <SignUp></SignUp>
+                  :
+                  <SignIn></SignIn>
+                }
               </div>
             </div>
           </div>
-          <Footer></Footer>
         </div>
-    </div>
+        <Footer></Footer>
+      </div>
     )
   }
 }
